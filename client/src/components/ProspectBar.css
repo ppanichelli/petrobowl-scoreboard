@@ -1,0 +1,42 @@
+.prospect-bar {
+  width: 100%;
+  max-width: 900px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.prospect-bar__labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+.prospect-bar__title { color: rgba(255,255,255,0.5); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.prospect-bar__label--a strong, .prospect-bar__label--b strong { color: var(--pb-gold); font-size: 1.1rem; }
+
+.prospect-bar__track {
+  height: 20px;
+  border-radius: 999px;
+  overflow: hidden;
+  display: flex;
+  background: rgba(255,255,255,0.08);
+}
+
+.prospect-bar__fill {
+  height: 100%;
+  transition: width 0.5s ease;
+}
+.prospect-bar__fill--a { background: var(--pb-blue-mid); }
+.prospect-bar__fill--b { background: var(--pb-gold); }
+
+.prospect-bar__pct {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+}

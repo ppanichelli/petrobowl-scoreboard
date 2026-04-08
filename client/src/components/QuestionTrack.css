@@ -1,0 +1,20 @@
+.q-track {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.q-dot {
+  width: clamp(18px, 2.5vw, 32px);
+  height: clamp(18px, 2.5vw, 32px);
+  border-radius: 50%;
+  display: inline-block;
+  border: 2px solid rgba(255,255,255,0.15);
+  transition: background 0.3s, transform 0.2s;
+}
+
+.q-dot--empty    { background: transparent; }
+.q-dot--correct  { background: var(--pb-green); border-color: var(--pb-green); box-shadow: 0 0 8px rgba(0,200,83,0.5); }
+.q-dot--incorrect{ background: var(--pb-red);   border-color: var(--pb-red);   box-shadow: 0 0 8px rgba(255,23,68,0.5); }
+.q-dot--skip     { background: var(--pb-gray);  border-color: var(--pb-gray); }

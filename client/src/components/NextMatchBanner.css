@@ -1,0 +1,51 @@
+.next-banner {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  background: var(--pb-dark);
+  background-image: radial-gradient(ellipse at center, rgba(0,114,206,0.15) 0%, transparent 70%);
+  padding: 3rem;
+}
+
+.next-banner__label {
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+
+.next-banner__stage {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--pb-gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.next-banner__teams {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.next-banner__team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  text-align: center;
+}
+.next-banner__team .fi { font-size: 3rem; }
+.next-banner__team img { width: 100px; height: 100px; object-fit: contain; }
+.next-banner__team span { font-family: var(--font-title); font-size: 2.5rem; font-weight: 700; }
+.next-banner__team small { color: rgba(255,255,255,0.55); max-width: 200px; }
+
+.next-banner__vs {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  color: rgba(255,255,255,0.3);
+}

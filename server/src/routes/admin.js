@@ -1,0 +1,331 @@
+const express      = require('express')
+const { v4: uuidv4 } = require('uuid')
+const db           = require('../db/db')
+const requireAdmin = require('../middleware/requireAdmin')
+const { calcOdds } = require('../lib/odds')
+const { processPayout } = require('../lib/payout')
+const { saveSnapshot }  = require('../lib/snapshot')
+
+const router = express.Router()
+router.use(requireAdmin)
+
+// ── Session check ──────────────────────────────────────────────────────────
+router.get('/me', (req, res) => res.json({ ok: true }))
+
+// ── List teams ─────────────────────────────────────────────────────────────
+router.get('/teams', (req, res) => {
+  res.json(db.prepare('SELECT * FROM teams ORDER BY short_name ASC').all())
+})
+
+// ── List all matches ───────────────────────────────────────────────────────
+router.get('/matches', (req, res) => {
+  const matches = db.prepare(`
+    SELECT m.*,
+           ta.short_name AS team_a_short, ta.country_code AS team_a_cc,
+           tb.short_name AS team_b_short, tb.country_code AS team_b_cc
+    FROM matches m
+    JOIN teams ta ON ta.id = m.team_a_id
+    JOIN teams tb ON tb.id = m.team_b_id
+    ORDER BY m.created_at ASC
+  `).all()
+  res.json(matches)
+})
+
+// ── Load a batch of upcoming matches ──────────────────────────────────────
+router.post('/matches/batch', (req, res) => {
+  const { matches } = req.body
+  if (!Array.isArray(matches) || matches.length === 0) {
+    return res.status(400).json({ error: 'matches array required' })
+  }
+
+  const batchId = uuidv4()
+  const insert = db.prepare(`
+    INSERT INTO matches (id, team_a_id, team_b_id, stage, total_questions, batch_id)
+    VALUES (@id, @team_a_id, @team_b_id, @stage, @total_questions, @batch_id)
+  `)
+
+  const run = db.transaction(() => {
+    for (const m of matches) {
+      insert.run({
+        id: uuidv4(),
+        team_a_id: m.team_a_id,
+        team_b_id: m.team_b_id,
+        stage: m.stage,
+        total_questions: m.total_questions,
+        batch_id: batchId,
+      })
+    }
+  })
+  run()
+
+  // Emit socket notification (attached to req by index.js)
+  req.io.emit('notifications', { type: 'new_batch', batchId })
+
+  res.json({ ok: true, batchId })
+})
+
+// ── Delete a match (only if status = setup) ────────────────────────────────
+router.delete('/matches/:id', (req, res) => {
+  const match = db.prepare('SELECT * FROM matches WHERE id = ?').get(req.params.id)
+  if (!match) return res.status(404).json({ error: 'Not found' })
+  if (match.status !== 'setup') return res.status(400).json({ error: 'Cannot delete a started or finished match' })
+
+  db.transaction(() => {
+    db.prepare('DELETE FROM prospects WHERE match_id = ?').run(req.params.id)
+    db.prepare('DELETE FROM matches WHERE id = ?').run(req.params.id)
+  })()
+
+  res.json({ ok: true })
+})
+
+// ── Start match (lock prospects, freeze odds) ──────────────────────────────
+router.post('/matches/:id/start', (req, res) => {
+  const match = db.prepare('SELECT * FROM matches WHERE id = ?').get(req.params.id)
+  if (!match) return res.status(404).json({ error: 'Not found' })
+  if (match.status !== 'setup') return res.status(400).json({ error: 'Match already started' })
+
+  const counts = db.prepare(`
+    SELECT
+      SUM(CASE WHEN prospected_team_id = ? THEN 1 ELSE 0 END) AS cnt_a,
+      SUM(CASE WHEN prospected_team_id = ? THEN 1 ELSE 0 END) AS cnt_b
+    FROM prospects WHERE match_id = ?
+  `).get(match.team_a_id, match.team_b_id, match.id)
+
+  const prospectsA = counts.cnt_a || 0
+  const prospectsB = counts.cnt_b || 0
+  const { oddsA, oddsB } = calcOdds(prospectsA, prospectsB)
+
+  db.transaction(() => {
+    db.prepare(`
+      UPDATE matches SET
+        status = 'live',
+        prospecting_open = 0,
+        frozen_odds_a = ?,
+        frozen_odds_b = ?,
+        frozen_prospects_a = ?,
+        frozen_prospects_b = ?
+      WHERE id = ?
+    `).run(oddsA, oddsB, prospectsA, prospectsB, match.id)
+
+    db.prepare('UPDATE prospects SET is_locked = 1 WHERE match_id = ?').run(match.id)
+  })()
+
+  const updated = db.prepare('SELECT * FROM matches WHERE id = ?').get(match.id)
+  req.io.to(`match:${match.id}`).emit('match_started', updated)
+
+  res.json(updated)
+})
+
+// ── Log a scoring action ───────────────────────────────────────────────────
+router.post('/matches/:id/action', (req, res) => {
+  const { action_type } = req.body
+  const validTypes = ['correct_a', 'correct_b', 'incorrect_a', 'incorrect_b', 'skip']
+  if (!validTypes.includes(action_type)) return res.status(400).json({ error: 'Invalid action_type' })
+
+  const match = db.prepare('SELECT * FROM matches WHERE id = ?').get(req.params.id)
+  if (!match) return res.status(404).json({ error: 'Not found' })
+  if (match.status !== 'live') return res.status(400).json({ error: 'Match not live' })
+
+  // Determine current question number from non-undone actions
+  const actions = db.prepare(
+    'SELECT * FROM actions WHERE match_id = ? AND is_undone = 0 ORDER BY sequence ASC'
+  ).all(match.id)
+
+  // Question advances on: correct_a, correct_b, skip, and when BOTH teams have answered the same question
+  const currentQuestion = computeCurrentQuestion(actions) + 1
+  const seq = (db.prepare('SELECT MAX(sequence) AS s FROM actions WHERE match_id = ?').get(match.id).s || 0) + 1
+
+  let scoreADelta = 0
+  let scoreBDelta = 0
+  if (action_type === 'correct_a') scoreADelta = 10
+  if (action_type === 'correct_b') scoreBDelta = 10
+  if (action_type === 'incorrect_a') scoreADelta = -5
+  if (action_type === 'incorrect_b') scoreBDelta = -5
+
+  db.transaction(() => {
+    db.prepare(`
+      INSERT INTO actions (id, match_id, sequence, question_number, action_type)
+      VALUES (?, ?, ?, ?, ?)
+    `).run(uuidv4(), match.id, seq, currentQuestion, action_type)
+
+    if (scoreADelta || scoreBDelta) {
+      db.prepare(`
+        UPDATE matches SET score_a = score_a + ?, score_b = score_b + ? WHERE id = ?
+      `).run(scoreADelta, scoreBDelta, match.id)
+    }
+  })()
+
+  const updated = db.prepare('SELECT * FROM matches WHERE id = ?').get(match.id)
+  const allActions = db.prepare(
+    'SELECT * FROM actions WHERE match_id = ? AND is_undone = 0 ORDER BY sequence ASC'
+  ).all(match.id)
+
+  req.io.to(`match:${match.id}`).emit('score_update', { match: updated, actions: allActions })
+
+  res.json({ match: updated, actions: allActions })
+})
+
+// ── Undo last action ───────────────────────────────────────────────────────
+router.post('/matches/:id/undo', (req, res) => {
+  const match = db.prepare('SELECT * FROM matches WHERE id = ?').get(req.params.id)
+  if (!match) return res.status(404).json({ error: 'Not found' })
+  if (match.status !== 'live') return res.status(400).json({ error: 'Match not live' })
+
+  const last = db.prepare(`
+    SELECT * FROM actions WHERE match_id = ? AND is_undone = 0
+    ORDER BY sequence DESC LIMIT 1
+  `).get(match.id)
+
+  if (!last) return res.status(400).json({ error: 'Nothing to undo' })
+
+  let scoreADelta = 0
+  let scoreBDelta = 0
+  if (last.action_type === 'correct_a')   scoreADelta = -10
+  if (last.action_type === 'correct_b')   scoreBDelta = -10
+  if (last.action_type === 'incorrect_a') scoreADelta = 5
+  if (last.action_type === 'incorrect_b') scoreBDelta = 5
+
+  db.transaction(() => {
+    db.prepare('UPDATE actions SET is_undone = 1 WHERE id = ?').run(last.id)
+    if (scoreADelta || scoreBDelta) {
+      db.prepare('UPDATE matches SET score_a = score_a + ?, score_b = score_b + ? WHERE id = ?')
+        .run(scoreADelta, scoreBDelta, match.id)
+    }
+  })()
+
+  const updated  = db.prepare('SELECT * FROM matches WHERE id = ?').get(match.id)
+  const allActions = db.prepare(
+    'SELECT * FROM actions WHERE match_id = ? AND is_undone = 0 ORDER BY sequence ASC'
+  ).all(match.id)
+
+  req.io.to(`match:${match.id}`).emit('score_update', { match: updated, actions: allActions })
+  res.json({ match: updated, actions: allActions })
+})
+
+// ── Full match reset ───────────────────────────────────────────────────────
+router.post('/matches/:id/reset', (req, res) => {
+  const match = db.prepare('SELECT * FROM matches WHERE id = ?').get(req.params.id)
+  if (!match) return res.status(404).json({ error: 'Not found' })
+  if (match.status !== 'live') return res.status(400).json({ error: 'Match not live' })
+
+  db.transaction(() => {
+    db.prepare('UPDATE actions SET is_undone = 1 WHERE match_id = ?').run(match.id)
+    db.prepare('UPDATE matches SET score_a = 0, score_b = 0 WHERE id = ?').run(match.id)
+  })()
+
+  const updated = db.prepare('SELECT * FROM matches WHERE id = ?').get(match.id)
+  req.io.to(`match:${match.id}`).emit('score_update', { match: updated, actions: [] })
+  res.json({ match: updated, actions: [] })
+})
+
+// ── Finish match ───────────────────────────────────────────────────────────
+router.post('/matches/:id/finish', (req, res) => {
+  const match = db.prepare('SELECT * FROM matches WHERE id = ?').get(req.params.id)
+  if (!match) return res.status(404).json({ error: 'Not found' })
+  if (match.status !== 'live') return res.status(400).json({ error: 'Match not live' })
+
+  const isDraw   = match.score_a === match.score_b
+  const winnerId = isDraw ? null : (match.score_a > match.score_b ? match.team_a_id : match.team_b_id)
+
+  db.prepare(`
+    UPDATE matches SET status = 'finished', is_draw = ?, winner_id = ?, finished_at = datetime('now')
+    WHERE id = ?
+  `).run(isDraw ? 1 : 0, winnerId, match.id)
+
+  processPayout(match.id)
+  saveSnapshot(match.id)
+
+  const updated = db.prepare('SELECT * FROM matches WHERE id = ?').get(match.id)
+  req.io.to(`match:${match.id}`).emit('match_finished', updated)
+  req.io.emit('leaderboard', { type: 'leaderboard_update' })
+
+  res.json(updated)
+})
+
+// ── Create tiebreaker ──────────────────────────────────────────────────────
+router.post('/matches/:id/tiebreaker', (req, res) => {
+  const parent = db.prepare('SELECT * FROM matches WHERE id = ?').get(req.params.id)
+  if (!parent) return res.status(404).json({ error: 'Not found' })
+  if (!parent.is_draw) return res.status(400).json({ error: 'Match is not a draw' })
+
+  const tbId = uuidv4()
+  db.prepare(`
+    INSERT INTO matches (id, team_a_id, team_b_id, stage, total_questions, parent_match_id, batch_id)
+    VALUES (?, ?, ?, 'tiebreaker', 5, ?, ?)
+  `).run(tbId, parent.team_a_id, parent.team_b_id, parent.id, parent.batch_id)
+
+  res.json(db.prepare('SELECT * FROM matches WHERE id = ?').get(tbId))
+})
+
+// ── Generate PINs ──────────────────────────────────────────────────────────
+router.post('/pins/generate', (req, res) => {
+  const { count = 50 } = req.body
+  const insert = db.prepare('INSERT OR IGNORE INTO participants (pin) VALUES (?)')
+  const existing = new Set(
+    db.prepare('SELECT pin FROM participants').all().map(r => r.pin)
+  )
+  const generated = []
+  const run = db.transaction(() => {
+    while (generated.length < count) {
+      const pin = String(Math.floor(Math.random() * 1_000_000)).padStart(6, '0')
+      if (!existing.has(pin)) {
+        existing.add(pin)
+        insert.run(pin)
+        generated.push(pin)
+      }
+    }
+  })
+  run()
+  res.json({ ok: true, pins: generated })
+})
+
+// ── Database reset ─────────────────────────────────────────────────────────
+router.post('/database/reset', (req, res) => {
+  if (req.body.confirm !== 'RESET') {
+    return res.status(400).json({ error: 'Send { confirm: "RESET" } to confirm' })
+  }
+
+  db.transaction(() => {
+    db.prepare('DELETE FROM leaderboard_snapshots').run()
+    db.prepare('DELETE FROM prospects').run()
+    db.prepare('DELETE FROM actions').run()
+    db.prepare('DELETE FROM matches').run()
+    db.prepare('DELETE FROM participants').run()
+  })()
+
+  res.json({ ok: true, message: 'Database reset complete. Teams and admin accounts preserved.' })
+})
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+// Returns how many questions have been fully resolved (i.e., we're on the NEXT one)
+function computeCurrentQuestion(actions) {
+  // A question is resolved when we see correct_x, skip,
+  // or when incorrect_x is followed by any action for the other team on the same question,
+  // or when both teams answered incorrectly on the same question.
+  // Simplified: track question number from the action log.
+  let question = 0
+  let pendingRebuttal = false // true = opposing team still has a chance
+
+  for (const a of actions) {
+    if (a.action_type === 'correct_a' || a.action_type === 'correct_b') {
+      question++
+      pendingRebuttal = false
+    } else if (a.action_type === 'skip') {
+      question++
+      pendingRebuttal = false
+    } else if (a.action_type === 'incorrect_a' || a.action_type === 'incorrect_b') {
+      if (pendingRebuttal) {
+        // Second team also missed → move on
+        question++
+        pendingRebuttal = false
+      } else {
+        pendingRebuttal = true
+      }
+    }
+  }
+
+  return question
+}
+
+module.exports = router

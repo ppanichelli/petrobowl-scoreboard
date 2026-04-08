@@ -1,0 +1,99 @@
+.scoreboard {
+  min-height: 100vh;
+  background: var(--pb-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 3rem;
+  gap: 2rem;
+  background-image:
+    radial-gradient(ellipse at top, rgba(0,114,206,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse at bottom, rgba(0,59,113,0.3) 0%, transparent 70%);
+}
+
+.scoreboard--idle {
+  justify-content: center;
+  gap: 2rem;
+}
+.idle-logo img { width: 280px; opacity: 0.8; }
+.idle-text { color: rgba(255,255,255,0.5); font-size: 1.2rem; }
+
+/* Stage label */
+.scoreboard__stage {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--pb-gold);
+  text-align: center;
+}
+
+/* Main row */
+.scoreboard__main {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  gap: 2rem;
+}
+
+/* Center score */
+.scoreboard__center {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.score {
+  font-family: var(--font-title);
+  font-size: clamp(5rem, 12vw, 10rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--pb-white);
+  min-width: 2ch;
+  text-align: center;
+  transition: color 0.1s;
+}
+.score--flash {
+  color: var(--pb-gold);
+  animation: scoreFlash 0.8s ease-out forwards;
+}
+.score__sep {
+  font-size: clamp(3rem, 8vw, 7rem);
+  color: rgba(255,255,255,0.3);
+}
+
+@keyframes scoreFlash {
+  0%   { color: var(--pb-gold); transform: scale(1.15); }
+  60%  { color: var(--pb-gold); transform: scale(1.08); }
+  100% { color: var(--pb-white); transform: scale(1); }
+}
+
+/* Question tracks */
+.scoreboard__tracks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* Streak badge */
+.streak-badge {
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--pb-gold);
+  background: rgba(242,169,0,0.12);
+  border: 1px solid rgba(242,169,0,0.4);
+  padding: 0.5rem 2rem;
+  border-radius: 999px;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

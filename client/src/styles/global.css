@@ -1,0 +1,84 @@
+/* ── PetroBowl Design Tokens ───────────────────────────────────────────── */
+:root {
+  --pb-blue:      #003B71;
+  --pb-blue-mid:  #0072CE;
+  --pb-gold:      #F2A900;
+  --pb-white:     #FFFFFF;
+  --pb-dark:      #1A1A2E;
+  --pb-green:     #00C853;
+  --pb-red:       #FF1744;
+  --pb-gray:      #555577;
+  --pb-bg:        #0d0d1a;
+
+  /* Typography */
+  --font-title: 'Myriad Variable Concept', 'Barlow', 'Arial Black', sans-serif;
+  --font-body:  'Stolzl', 'Barlow', 'Arial', sans-serif;
+}
+
+/* ── Reset ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  background: var(--pb-bg);
+  color: var(--pb-white);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: opacity 0.15s, transform 0.1s;
+}
+button:active { transform: scale(0.97); }
+
+input, select {
+  font-family: var(--font-body);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  color: var(--pb-white);
+  padding: 0.5rem 0.8rem;
+  font-size: 1rem;
+  width: 100%;
+  outline: none;
+}
+input:focus, select:focus {
+  border-color: var(--pb-blue-mid);
+}
+select option { background: var(--pb-dark); }
+
+/* ── Utility classes ───────────────────────────────────────────────────── */
+.btn-primary   { background: var(--pb-blue-mid); color: #fff; }
+.btn-secondary { background: rgba(255,255,255,0.12); color: #fff; }
+.btn-danger    { background: var(--pb-red); color: #fff; }
+.btn-correct   { background: var(--pb-green); color: #fff; font-size: 1.1rem; padding: 1rem; }
+.btn-incorrect { background: var(--pb-red); color: #fff; font-size: 1.1rem; padding: 1rem; }
+.btn-skip      { background: var(--pb-gray); color: #fff; font-size: 1.1rem; padding: 1rem; }
+.btn-undo      { background: var(--pb-gold); color: var(--pb-dark); font-size: 1.1rem; padding: 1rem; }
+.btn-sm        { padding: 0.3rem 0.7rem; font-size: 0.8rem; }
+
+.badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.badge--setup    { background: var(--pb-gray); }
+.badge--live     { background: var(--pb-green); color: #000; animation: pulse 1.5s infinite; }
+.badge--finished { background: var(--pb-blue); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+/* fi flag icons sizing */
+.fi { font-size: 1.4rem; border-radius: 2px; }

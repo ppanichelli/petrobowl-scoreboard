@@ -1,0 +1,24 @@
+.match-result__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.4s ease-out;
+  z-index: 100;
+}
+
+.match-result__text {
+  font-family: var(--font-title);
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.match-result__text--win  { color: var(--pb-gold); text-shadow: 0 0 40px rgba(242,169,0,0.6); }
+.match-result__text--draw { color: var(--pb-white); }
+
+@keyframes fadeIn  { from { opacity: 0 } to { opacity: 1 } }
+@keyframes zoomIn  { from { transform: scale(0.5); opacity: 0 } to { transform: scale(1); opacity: 1 } }

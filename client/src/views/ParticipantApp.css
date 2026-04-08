@@ -1,0 +1,154 @@
+.p-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--pb-dark);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.p-app__notification {
+  background: var(--pb-gold);
+  color: var(--pb-dark);
+  padding: 0.7rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+}
+
+.p-app__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+  background: rgba(0,59,113,0.7);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.p-app__logo { height: 28px; }
+.p-app__user { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
+
+.p-tab {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+}
+.p-tab h2 { font-family: var(--font-title); font-size: 1rem; color: var(--pb-gold); letter-spacing: 0.05em; }
+
+/* Home stats */
+.p-home__stats { display: flex; gap: 1rem; }
+.p-stat {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+.p-stat__value { font-family: var(--font-title); font-size: 2.5rem; font-weight: 700; color: var(--pb-gold); }
+.p-stat__label { font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* Match cards */
+.p-match-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.p-match-card--live { border-color: var(--pb-green); }
+
+.p-match-card__stage { font-size: 0.75rem; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.1em; }
+
+.p-match-card__teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.p-match-card__team {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+}
+.p-match-card__team--b { flex-direction: row-reverse; }
+.p-match-card__odds { color: var(--pb-gold); font-family: var(--font-title); font-size: 1.1rem; }
+.p-match-card__vs { color: rgba(255,255,255,0.3); font-size: 0.8rem; }
+
+.p-match-card__buttons { display: flex; gap: 0.6rem; }
+.p-prospect-btn {
+  flex: 1;
+  background: rgba(0,114,206,0.2);
+  border: 1px solid rgba(0,114,206,0.4);
+  color: var(--pb-white);
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: background 0.2s, border-color 0.2s;
+}
+.p-prospect-btn.active {
+  background: var(--pb-blue-mid);
+  border-color: var(--pb-blue-mid);
+}
+
+.p-match-card__locked {
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.05em;
+}
+
+/* Leaderboard */
+.p-leaderboard { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.p-leaderboard th, .p-leaderboard td {
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  text-align: left;
+}
+.p-leaderboard th { color: rgba(255,255,255,0.4); font-size: 0.75rem; text-transform: uppercase; }
+.p-leaderboard__me td { background: rgba(242,169,0,0.1); color: var(--pb-gold); }
+
+/* History */
+.p-history-item {
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  border-left: 3px solid transparent;
+}
+.p-history-item--win     { border-left-color: var(--pb-green); }
+.p-history-item--loss    { border-left-color: var(--pb-red); }
+.p-history-item--void    { border-left-color: var(--pb-gray); }
+.p-history-item--pending { border-left-color: var(--pb-gold); }
+.p-history-item__match { font-weight: 700; }
+.p-history-item__pick, .p-history-item__result { font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+.p-history-item--win .p-history-item__result { color: var(--pb-green); font-weight: 700; }
+
+/* Bottom nav */
+.p-app__nav {
+  display: flex;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.3);
+}
+.p-app__nav button {
+  flex: 1;
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  padding: 0.8rem;
+  border-radius: 0;
+  font-size: 0.8rem;
+  border-top: 2px solid transparent;
+}
+.p-app__nav button.active {
+  color: var(--pb-gold);
+  border-top-color: var(--pb-gold);
+}
+
+.p-empty { color: rgba(255,255,255,0.3); text-align: center; padding: 2rem; font-size: 0.9rem; }
