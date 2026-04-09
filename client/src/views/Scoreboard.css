@@ -58,7 +58,7 @@
 }
 .score--flash {
   color: var(--pb-gold);
-  animation: scoreFlash 0.8s ease-out forwards;
+  animation: scoreFlash 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 .score__sep {
   font-size: clamp(3rem, 8vw, 7rem);
@@ -66,8 +66,8 @@
 }
 
 @keyframes scoreFlash {
-  0%   { color: var(--pb-gold); transform: scale(1.15); }
-  60%  { color: var(--pb-gold); transform: scale(1.08); }
+  0%   { color: var(--pb-gold); transform: scale(1.1); }
+  55%  { color: var(--pb-gold); transform: scale(1.04); }
   100% { color: var(--pb-white); transform: scale(1); }
 }
 

@@ -55,7 +55,7 @@ export default function AllMatches() {
         <h2 className="all-matches__heading">Upcoming &amp; Live</h2>
         {upcoming.length === 0
           ? <p className="all-matches__empty">No upcoming matches.</p>
-          : upcoming.map(m => <UpcomingCard key={m.id} m={m} />)
+          : upcoming.map((m, i) => <UpcomingCard key={m.id} m={m} index={i} />)
         }
       </section>
 
@@ -63,17 +63,17 @@ export default function AllMatches() {
         <h2 className="all-matches__heading">Completed</h2>
         {history.length === 0
           ? <p className="all-matches__empty">No completed matches yet.</p>
-          : history.map(m => <HistoryCard key={m.id} m={m} />)
+          : history.map((m, i) => <HistoryCard key={m.id} m={m} index={i} />)
         }
       </section>
     </div>
   )
 }
 
-function UpcomingCard({ m }) {
+function UpcomingCard({ m, index }) {
   const isLive = m.status === 'live'
   return (
-    <div className={`am-card ${isLive ? 'am-card--live' : ''}`}>
+    <div className={`am-card ${isLive ? 'am-card--live' : ''}`} style={{ '--card-i': index }}>
       <div className="am-card__stage">
         {isLive && <span className="am-card__live-dot" />}
         {fmt(m.stage)}
@@ -100,12 +100,12 @@ function UpcomingCard({ m }) {
   )
 }
 
-function HistoryCard({ m }) {
+function HistoryCard({ m, index }) {
   const isDraw = m.is_draw
   const winnerA = !isDraw && m.winner_id === m.team_a_id
   const winnerB = !isDraw && m.winner_id === m.team_b_id
   return (
-    <div className="am-card am-card--finished">
+    <div className="am-card am-card--finished" style={{ '--card-i': index }}>
       <div className="am-card__stage">{fmt(m.stage)}</div>
       <div className="am-card__row">
         <div className={`am-card__team ${winnerA ? 'am-card__team--winner' : ''}`}>

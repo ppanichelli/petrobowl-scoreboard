@@ -11,10 +11,28 @@
   border-radius: 50%;
   display: inline-block;
   border: 2px solid rgba(255,255,255,0.15);
-  transition: background 0.3s, transform 0.2s;
+  background: transparent;
 }
 
-.q-dot--empty    { background: transparent; }
+/* Entry pop when a dot gets a result */
+.q-dot--correct,
+.q-dot--incorrect,
+.q-dot--skip {
+  animation: dotPop 0.22s cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation-delay: calc(var(--i, 0) * 18ms);
+}
+
 .q-dot--correct  { background: var(--pb-green); border-color: var(--pb-green); box-shadow: 0 0 8px rgba(0,200,83,0.5); }
 .q-dot--incorrect{ background: var(--pb-red);   border-color: var(--pb-red);   box-shadow: 0 0 8px rgba(255,23,68,0.5); }
 .q-dot--skip     { background: var(--pb-gray);  border-color: var(--pb-gray); }
+
+@keyframes dotPop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .q-dot--correct, .q-dot--incorrect, .q-dot--skip {
+    animation: none;
+  }
+}

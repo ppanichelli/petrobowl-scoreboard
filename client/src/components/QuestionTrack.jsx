@@ -11,7 +11,7 @@ export default function QuestionTrack({ team, total, actions }) {
   return (
     <div className={`q-track q-track--${team}`}>
       {dots.map((d, i) => (
-        <span key={i} className={`q-dot q-dot--${d}`} title={`Q${i + 1}: ${d}`} />
+        <span key={i} className={`q-dot q-dot--${d}`} style={{ '--i': i }} title={`Q${i + 1}: ${d}`} />
       ))}
     </div>
   )
