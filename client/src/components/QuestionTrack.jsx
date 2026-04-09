@@ -18,49 +18,63 @@ export default function QuestionTrack({ team, total, actions }) {
 }
 
 function buildDots(team, total, actions) {
-  // Build per-question outcome for this team
+  // Build per-question outcome for both teams independently, then return the requested team's array.
   // States: 'empty' | 'correct' | 'incorrect' | 'skip'
-  const dots = Array(total).fill('empty')
+  const dotsA = Array(total).fill('empty')
+  const dotsB = Array(total).fill('empty')
   let questionIdx = 0
-  let pendingRebuttal = false // which team gets the rebuttal
+  // null = neither team has answered this question yet
+  // 'a'  = team A answered incorrectly first (B gets rebuttal)
+  // 'b'  = team B answered incorrectly first (A gets rebuttal)
+  let pendingRebuttal = null
 
   for (const a of actions) {
     if (questionIdx >= total) break
 
     if (a.action_type === 'correct_a') {
-      if (team === 'a') dots[questionIdx] = 'correct'
-      else dots[questionIdx] = 'empty' // b had no chance
+      dotsA[questionIdx] = 'correct'
+      // dotsB keeps whatever it had (empty, or incorrect if they answered first)
       questionIdx++
-      pendingRebuttal = false
+      pendingRebuttal = null
     } else if (a.action_type === 'correct_b') {
-      if (team === 'b') dots[questionIdx] = 'correct'
-      else dots[questionIdx] = 'empty'
+      dotsB[questionIdx] = 'correct'
+      // dotsA keeps whatever it had
       questionIdx++
-      pendingRebuttal = false
+      pendingRebuttal = null
     } else if (a.action_type === 'skip') {
-      dots[questionIdx] = 'skip'
-      questionIdx++
-      pendingRebuttal = false
-    } else if (a.action_type === 'incorrect_a') {
-      if (team === 'a') dots[questionIdx] = 'incorrect'
-      if (!pendingRebuttal) {
-        pendingRebuttal = true
+      if (pendingRebuttal === 'a') {
+        // A already answered wrong; B passes on rebuttal
+        dotsB[questionIdx] = 'skip'
+      } else if (pendingRebuttal === 'b') {
+        // B already answered wrong; A passes on rebuttal
+        dotsA[questionIdx] = 'skip'
       } else {
-        // b also missed
+        // Neither had answered; both skip
+        dotsA[questionIdx] = 'skip'
+        dotsB[questionIdx] = 'skip'
+      }
+      questionIdx++
+      pendingRebuttal = null
+    } else if (a.action_type === 'incorrect_a') {
+      dotsA[questionIdx] = 'incorrect'
+      if (pendingRebuttal === 'b') {
+        // B already answered wrong too → question done
         questionIdx++
-        pendingRebuttal = false
+        pendingRebuttal = null
+      } else {
+        pendingRebuttal = 'a'
       }
     } else if (a.action_type === 'incorrect_b') {
-      if (team === 'b') dots[questionIdx] = 'incorrect'
-      if (!pendingRebuttal) {
-        pendingRebuttal = true
-      } else {
-        // a also missed
+      dotsB[questionIdx] = 'incorrect'
+      if (pendingRebuttal === 'a') {
+        // A already answered wrong too → question done
         questionIdx++
-        pendingRebuttal = false
+        pendingRebuttal = null
+      } else {
+        pendingRebuttal = 'b'
       }
     }
   }
 
-  return dots
+  return team === 'a' ? dotsA : dotsB
 }

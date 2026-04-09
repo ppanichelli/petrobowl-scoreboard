@@ -9,6 +9,21 @@ const { saveSnapshot }  = require('../lib/snapshot')
 const router = express.Router()
 router.use(requireAdmin)
 
+// Helper: fetch a match row with full team info (names, logos, flags)
+function getMatchFull(id) {
+  return db.prepare(`
+    SELECT m.*,
+           ta.short_name AS team_a_short, ta.full_name AS team_a_full,
+           ta.country_code AS team_a_cc, ta.logo_url AS team_a_logo,
+           tb.short_name AS team_b_short, tb.full_name AS team_b_full,
+           tb.country_code AS team_b_cc, tb.logo_url AS team_b_logo
+    FROM matches m
+    JOIN teams ta ON ta.id = m.team_a_id
+    JOIN teams tb ON tb.id = m.team_b_id
+    WHERE m.id = ?
+  `).get(id)
+}
+
 // ── Session check ──────────────────────────────────────────────────────────
 router.get('/me', (req, res) => res.json({ ok: true }))
 
@@ -110,7 +125,7 @@ router.post('/matches/:id/start', (req, res) => {
     db.prepare('UPDATE prospects SET is_locked = 1 WHERE match_id = ?').run(match.id)
   })()
 
-  const updated = db.prepare('SELECT * FROM matches WHERE id = ?').get(match.id)
+  const updated = getMatchFull(match.id)
   req.io.to(`match:${match.id}`).emit('match_started', updated)
 
   res.json(updated)
@@ -155,7 +170,7 @@ router.post('/matches/:id/action', (req, res) => {
     }
   })()
 
-  const updated = db.prepare('SELECT * FROM matches WHERE id = ?').get(match.id)
+  const updated = getMatchFull(match.id)
   const allActions = db.prepare(
     'SELECT * FROM actions WHERE match_id = ? AND is_undone = 0 ORDER BY sequence ASC'
   ).all(match.id)
@@ -193,7 +208,7 @@ router.post('/matches/:id/undo', (req, res) => {
     }
   })()
 
-  const updated  = db.prepare('SELECT * FROM matches WHERE id = ?').get(match.id)
+  const updated  = getMatchFull(match.id)
   const allActions = db.prepare(
     'SELECT * FROM actions WHERE match_id = ? AND is_undone = 0 ORDER BY sequence ASC'
   ).all(match.id)
@@ -213,7 +228,7 @@ router.post('/matches/:id/reset', (req, res) => {
     db.prepare('UPDATE matches SET score_a = 0, score_b = 0 WHERE id = ?').run(match.id)
   })()
 
-  const updated = db.prepare('SELECT * FROM matches WHERE id = ?').get(match.id)
+  const updated = getMatchFull(match.id)
   req.io.to(`match:${match.id}`).emit('score_update', { match: updated, actions: [] })
   res.json({ match: updated, actions: [] })
 })
@@ -235,7 +250,7 @@ router.post('/matches/:id/finish', (req, res) => {
   processPayout(match.id)
   saveSnapshot(match.id)
 
-  const updated = db.prepare('SELECT * FROM matches WHERE id = ?').get(match.id)
+  const updated = getMatchFull(match.id)
   req.io.to(`match:${match.id}`).emit('match_finished', updated)
   req.io.emit('leaderboard', { type: 'leaderboard_update' })
 

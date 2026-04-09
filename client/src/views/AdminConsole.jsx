@@ -221,11 +221,12 @@ export default function AdminConsole() {
           ) : (
             <>
               <div className="live-header">
-                <h2>{liveMatch.team_a_short} vs {liveMatch.team_b_short}</h2>
                 <div className="live-score">
+                  <span className="live-score__team">{liveMatch.team_a_short}</span>
                   <span className="live-score__a">{liveMatch.score_a}</span>
-                  <span>:</span>
+                  <span className="live-score__sep">-</span>
                   <span className="live-score__b">{liveMatch.score_b}</span>
+                  <span className="live-score__team">{liveMatch.team_b_short}</span>
                 </div>
                 <div className="live-progress">
                   Q {liveActions.length + 1} / {liveMatch.total_questions}
@@ -233,12 +234,18 @@ export default function AdminConsole() {
               </div>
 
               <div className="scoring-grid">
-                <button className="btn-correct" onClick={() => doAction('correct_a')}>✅ Correct A</button>
-                <button className="btn-correct" onClick={() => doAction('correct_b')}>✅ Correct B</button>
-                <button className="btn-incorrect" onClick={() => doAction('incorrect_a')}>❌ Incorrect A</button>
-                <button className="btn-incorrect" onClick={() => doAction('incorrect_b')}>❌ Incorrect B</button>
-                <button className="btn-skip" onClick={() => doAction('skip')}>⏭ Skip</button>
-                <button className="btn-undo" onClick={doUndo}>↩ Undo</button>
+                <div className="scoring-col">
+                  <button className="btn-correct" onClick={() => doAction('correct_a')}>✅ Correct {liveMatch.team_a_short}</button>
+                  <button className="btn-incorrect" onClick={() => doAction('incorrect_a')}>❌ Incorrect {liveMatch.team_a_short}</button>
+                </div>
+                <div className="scoring-col scoring-col--mid">
+                  <button className="btn-skip" onClick={() => doAction('skip')}>⏭ Skip</button>
+                  <button className="btn-undo" onClick={doUndo}>↩ Undo</button>
+                </div>
+                <div className="scoring-col">
+                  <button className="btn-correct" onClick={() => doAction('correct_b')}>✅ Correct {liveMatch.team_b_short}</button>
+                  <button className="btn-incorrect" onClick={() => doAction('incorrect_b')}>❌ Incorrect {liveMatch.team_b_short}</button>
+                </div>
               </div>
 
               <div className="live-controls">

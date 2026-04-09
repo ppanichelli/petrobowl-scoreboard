@@ -81,8 +81,20 @@
   padding-bottom: 1rem;
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
-.live-header h2 { font-family: var(--font-title); font-size: 1.5rem; }
-.live-score { font-family: var(--font-title); font-size: 3rem; font-weight: 700; color: var(--pb-gold); }
+.live-score {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-title);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--pb-gold);
+}
+.live-score__team {
+  font-size: 1.4rem;
+  color: rgba(255,255,255,0.7);
+}
+.live-score__sep { color: rgba(255,255,255,0.4); }
 .live-progress { color: rgba(255,255,255,0.5); }
 
 .scoring-grid {
@@ -90,6 +102,13 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 0.8rem;
 }
+.scoring-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.scoring-col button { width: 100%; }
+.scoring-col--mid button { background: rgba(255,255,255,0.08); }
 
 .live-controls {
   display: flex;
