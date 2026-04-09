@@ -13,11 +13,12 @@ export default function NextMatch() {
   }, [])
 
   useEffect(() => {
-    if (!socket) return
+    if (!socket || !match) return
+    socket.emit('join_match', match.id)
     const onStarted = () => navigate('/')
     socket.on('match_started', onStarted)
     return () => socket.off('match_started', onStarted)
-  }, [socket, navigate])
+  }, [socket, match?.id, navigate])
 
   if (!match) return <div style={{ color: '#fff', textAlign: 'center', padding: '4rem' }}>No upcoming match.</div>
   return <NextMatchBanner match={match} />

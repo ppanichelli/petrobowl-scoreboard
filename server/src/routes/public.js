@@ -1,6 +1,7 @@
-const express = require('express')
-const db      = require('../db/db')
-const router  = express.Router()
+const express         = require('express')
+const db              = require('../db/db')
+const { calcOdds }    = require('../lib/odds')
+const router          = express.Router()
 
 // Current live match
 router.get('/matches/live', (req, res) => {
@@ -68,6 +69,27 @@ router.get('/leaderboard', (req, res) => {
   res.json(ranked)
 })
 
+// All setup + live matches (for the public schedule view)
+router.get('/matches/upcoming', (req, res) => {
+  const matches = db.prepare(`
+    SELECT m.*,
+           ta.short_name AS team_a_short, ta.country_code AS team_a_cc,
+           tb.short_name AS team_b_short, tb.country_code AS team_b_cc,
+           (SELECT COUNT(*) FROM prospects WHERE match_id = m.id AND prospected_team_id = m.team_a_id) AS votes_a,
+           (SELECT COUNT(*) FROM prospects WHERE match_id = m.id AND prospected_team_id = m.team_b_id) AS votes_b
+    FROM matches m
+    JOIN teams ta ON ta.id = m.team_a_id
+    JOIN teams tb ON tb.id = m.team_b_id
+    WHERE m.status IN ('setup', 'live')
+    ORDER BY m.created_at ASC
+  `).all()
+  const withOdds = matches.map(m => {
+    const { oddsA, oddsB } = calcOdds(m.votes_a || 0, m.votes_b || 0)
+    return { ...m, odds_a: oddsA, odds_b: oddsB }
+  })
+  res.json(withOdds)
+})
+
 // Open matches with vote counts (for the public prospects display)
 router.get('/matches/open', (req, res) => {
   const matches = db.prepare(`
@@ -82,7 +104,11 @@ router.get('/matches/open', (req, res) => {
     WHERE m.status = 'setup' AND m.prospecting_open = 1
     ORDER BY m.created_at ASC
   `).all()
-  res.json(matches)
+  const withOdds = matches.map(m => {
+    const { oddsA, oddsB } = calcOdds(m.votes_a || 0, m.votes_b || 0)
+    return { ...m, odds_a: oddsA, odds_b: oddsB }
+  })
+  res.json(withOdds)
 })
 
 module.exports = router

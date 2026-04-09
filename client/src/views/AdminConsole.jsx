@@ -240,9 +240,21 @@ export default function AdminConsole() {
       {/* ── LIVE SCORING TAB ─────────────────────────────────────────────── */}
       {tab === 'live' && (
         <div className="admin-tab">
-          {!liveMatch || liveMatch.status !== 'live' ? (
-            <p className="admin-tab__empty">No match is currently live. Start one from the Matches tab.</p>
-          ) : (
+          {/* Case 1: match finished in a draw → show tiebreaker prompt */}
+          {liveMatch?.status === 'finished' && liveMatch.is_draw ? (
+            <div className="tiebreaker-panel">
+              <div className="live-score" style={{ justifyContent: 'center', marginBottom: '1rem' }}>
+                <span className="live-score__team">{liveMatch.team_a_short}</span>
+                <span className="live-score__a">{liveMatch.score_a}</span>
+                <span className="live-score__sep">-</span>
+                <span className="live-score__b">{liveMatch.score_b}</span>
+                <span className="live-score__team">{liveMatch.team_b_short}</span>
+              </div>
+              <p>Match ended in a draw!</p>
+              <button className="btn-primary" onClick={doTiebreaker}>Start Tiebreaker</button>
+            </div>
+          ) : liveMatch?.status === 'live' ? (
+          /* Case 2: match is live → show scoring UI */
             <>
               <div className="live-header">
                 <div className="live-score">
@@ -284,13 +296,6 @@ export default function AdminConsole() {
                 <button className="btn-primary" onClick={doFinish}>🏁 End Match</button>
               </div>
 
-              {liveMatch.status === 'finished' && liveMatch.is_draw && (
-                <div className="tiebreaker-panel">
-                  <p>Match ended in a draw!</p>
-                  <button className="btn-primary" onClick={doTiebreaker}>Start Tiebreaker</button>
-                </div>
-              )}
-
               <div className="action-log">
                 <h3>Action Log</h3>
                 <div className="action-log__list">
@@ -302,6 +307,9 @@ export default function AdminConsole() {
                 </div>
               </div>
             </>
+          ) : (
+          /* Case 3: no live match */
+            <p className="admin-tab__empty">No match is currently live. Start one from the Matches tab.</p>
           )}
         </div>
       )}

@@ -116,7 +116,7 @@ export default function ParticipantApp() {
         <div className="p-tab">
           <div className="p-home__stats">
             <div className="p-stat">
-              <div className="p-stat__value">{me?.total_points ?? 0}</div>
+              <div className="p-stat__value">{Number(me?.total_points ?? 0).toFixed(1)}</div>
               <div className="p-stat__label">Points</div>
             </div>
             <div className="p-stat">
@@ -204,7 +204,7 @@ export default function ParticipantApp() {
                     <td>{row.rank}</td>
                     <td>{row.display_name}</td>
                     <td>{row.country_code && <span className={`fi fi-${row.country_code.toLowerCase()}`} />}</td>
-                    <td>{row.total_points}</td>
+                    <td>{Number(row.total_points).toFixed(1)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -234,7 +234,7 @@ export default function ParticipantApp() {
                   ? 'Pending'
                   : p.payout === 0
                     ? (p.match_status === 'finished' && !p.is_draw ? 'Wrong (0 pts)' : 'Void (draw)')
-                    : `+${p.payout} pts`
+                    : `+${Number(p.payout).toFixed(1)} pts`
                 }
               </div>
             </div>

@@ -1,5 +1,5 @@
 .scoreboard {
-  min-height: 100vh;
+  min-height: calc(100vh - 52px);
   background: var(--pb-dark);
   display: flex;
   flex-direction: column;
