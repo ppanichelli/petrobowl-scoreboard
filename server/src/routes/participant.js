@@ -96,7 +96,12 @@ router.post('/prospect', (req, res) => {
   `).get(match.team_a_id, match.team_b_id, match_id)
 
   const { oddsA, oddsB } = calcOdds(counts.cnt_a || 0, counts.cnt_b || 0)
-  req.io.to(`odds:${match_id}`).emit('odds_update', { match_id, oddsA, oddsB })
+  req.io.to(`odds:${match_id}`).emit('odds_update', {
+    match_id,
+    oddsA, oddsB,
+    votes_a: counts.cnt_a || 0,
+    votes_b: counts.cnt_b || 0,
+  })
 
   res.json({ ok: true, oddsA, oddsB })
 })
@@ -124,6 +129,7 @@ router.get('/leaderboard', (req, res) => {
   const rows = db.prepare(`
     SELECT pin, display_name, country_code, total_points
     FROM participants
+    WHERE display_name IS NOT NULL AND display_name != ''
     ORDER BY total_points DESC
     LIMIT 100
   `).all()

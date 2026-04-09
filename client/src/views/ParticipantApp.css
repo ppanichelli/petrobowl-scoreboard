@@ -152,3 +152,35 @@
 }
 
 .p-empty { color: rgba(255,255,255,0.3); text-align: center; padding: 2rem; font-size: 0.9rem; }
+
+.p-save-btn {
+  width: 100%;
+  background: var(--pb-gold);
+  color: var(--pb-dark);
+  font-weight: 700;
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+.p-saved-confirm {
+  text-align: center;
+  color: var(--pb-green);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.3rem 0;
+}
+
+.p-lb-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.8rem 0;
+}
+.p-lb-pagination button {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  padding: 0.4rem 0.9rem;
+}
+.p-lb-pagination button:disabled { opacity: 0.3; }
+.p-lb-pagination span { color: rgba(255,255,255,0.5); font-size: 0.85rem; }

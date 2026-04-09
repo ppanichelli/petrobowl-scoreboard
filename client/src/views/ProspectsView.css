@@ -1,0 +1,122 @@
+.prospects-view {
+  min-height: 100vh;
+  background: var(--pb-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.prospects-view__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background: rgba(0,59,113,0.6);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.prospects-view__logo { height: 36px; }
+.prospects-view__header h1 {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  color: var(--pb-gold);
+  letter-spacing: 0.08em;
+}
+
+.prospects-idle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  min-height: 100vh;
+  color: rgba(255,255,255,0.4);
+}
+.prospects-idle img { height: 60px; opacity: 0.6; }
+
+.prospects-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.prospects-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.prospects-card__stage {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.prospects-card__teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.prospects-card__team {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+}
+.prospects-card__team--b {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.prospects-card__name {
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.prospects-card__odds {
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--pb-gold);
+  min-width: 3rem;
+}
+.prospects-card__vs {
+  color: rgba(255,255,255,0.3);
+  font-size: 0.9rem;
+}
+
+.prospects-card__bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.prospects-card__bar {
+  display: flex;
+  height: 14px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.08);
+}
+.prospects-card__bar-a {
+  background: var(--pb-blue-mid);
+  transition: width 0.5s ease;
+}
+.prospects-card__bar-b {
+  background: var(--pb-gold);
+  transition: width 0.5s ease;
+}
+
+.prospects-card__total {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.3);
+  text-align: center;
+}

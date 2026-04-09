@@ -3,6 +3,7 @@
   inset: 0;
   background: rgba(0,0,0,0.75);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.4s ease-out;
@@ -19,6 +20,19 @@
 }
 .match-result__text--win  { color: var(--pb-gold); text-shadow: 0 0 40px rgba(242,169,0,0.6); }
 .match-result__text--draw { color: var(--pb-white); }
+
+.match-result__next-btn {
+  margin-top: 2rem;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 1.2rem;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  animation: fadeIn 0.8s ease-out 1s both;
+}
+.match-result__next-btn:hover { background: rgba(255,255,255,0.25); }
 
 @keyframes fadeIn  { from { opacity: 0 } to { opacity: 1 } }
 @keyframes zoomIn  { from { transform: scale(0.5); opacity: 0 } to { transform: scale(1); opacity: 1 } }

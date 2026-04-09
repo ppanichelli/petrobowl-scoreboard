@@ -32,18 +32,25 @@ router.get('/teams', (req, res) => {
   res.json(db.prepare('SELECT * FROM teams ORDER BY short_name ASC').all())
 })
 
-// ── List all matches ───────────────────────────────────────────────────────
+// ── List all matches (with live vote counts + odds) ───────────────────────
 router.get('/matches', (req, res) => {
   const matches = db.prepare(`
     SELECT m.*,
            ta.short_name AS team_a_short, ta.country_code AS team_a_cc,
-           tb.short_name AS team_b_short, tb.country_code AS team_b_cc
+           tb.short_name AS team_b_short, tb.country_code AS team_b_cc,
+           (SELECT COUNT(*) FROM prospects WHERE match_id = m.id AND prospected_team_id = m.team_a_id) AS votes_a,
+           (SELECT COUNT(*) FROM prospects WHERE match_id = m.id AND prospected_team_id = m.team_b_id) AS votes_b
     FROM matches m
     JOIN teams ta ON ta.id = m.team_a_id
     JOIN teams tb ON tb.id = m.team_b_id
     ORDER BY m.created_at ASC
   `).all()
-  res.json(matches)
+
+  const withOdds = matches.map(m => {
+    const { oddsA, oddsB } = calcOdds(m.votes_a || 0, m.votes_b || 0)
+    return { ...m, odds_a: oddsA, odds_b: oddsB }
+  })
+  res.json(withOdds)
 })
 
 // ── Load a batch of upcoming matches ──────────────────────────────────────
@@ -176,6 +183,20 @@ router.post('/matches/:id/action', (req, res) => {
   ).all(match.id)
 
   req.io.to(`match:${match.id}`).emit('score_update', { match: updated, actions: allActions })
+
+  // Auto-finish when all questions are resolved
+  if (computeCurrentQuestion(allActions) >= match.total_questions) {
+    const isDraw   = updated.score_a === updated.score_b
+    const winnerId = isDraw ? null : (updated.score_a > updated.score_b ? updated.team_a_id : updated.team_b_id)
+    db.prepare(`UPDATE matches SET status='finished', is_draw=?, winner_id=?, finished_at=datetime('now') WHERE id=?`)
+      .run(isDraw ? 1 : 0, winnerId, match.id)
+    processPayout(match.id)
+    saveSnapshot(match.id)
+    const finished = getMatchFull(match.id)
+    req.io.to(`match:${match.id}`).emit('match_finished', finished)
+    req.io.emit('leaderboard', { type: 'leaderboard_update' })
+    return res.json({ match: finished, actions: allActions, autoFinished: true })
+  }
 
   res.json({ match: updated, actions: allActions })
 })

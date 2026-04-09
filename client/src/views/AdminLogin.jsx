@@ -13,7 +13,7 @@ export default function AdminLogin() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     const ok = await login(username, password)
-    if (ok) navigate('/admin')
+    if (ok) navigate('/timekeeper')
     else setError('Invalid username or password')
   }
 

@@ -59,12 +59,30 @@ router.get('/leaderboard', (req, res) => {
   const rows = db.prepare(`
     SELECT pin, display_name, country_code, total_points
     FROM participants
+    WHERE display_name IS NOT NULL AND display_name != ''
     ORDER BY total_points DESC
     LIMIT 100
   `).all()
 
   const ranked = rows.map((r, i) => ({ rank: i + 1, ...r }))
   res.json(ranked)
+})
+
+// Open matches with vote counts (for the public prospects display)
+router.get('/matches/open', (req, res) => {
+  const matches = db.prepare(`
+    SELECT m.*,
+           ta.short_name AS team_a_short, ta.full_name AS team_a_full, ta.country_code AS team_a_cc,
+           tb.short_name AS team_b_short, tb.full_name AS team_b_full, tb.country_code AS team_b_cc,
+           (SELECT COUNT(*) FROM prospects WHERE match_id = m.id AND prospected_team_id = m.team_a_id) AS votes_a,
+           (SELECT COUNT(*) FROM prospects WHERE match_id = m.id AND prospected_team_id = m.team_b_id) AS votes_b
+    FROM matches m
+    JOIN teams ta ON ta.id = m.team_a_id
+    JOIN teams tb ON tb.id = m.team_b_id
+    WHERE m.status = 'setup' AND m.prospecting_open = 1
+    ORDER BY m.created_at ASC
+  `).all()
+  res.json(matches)
 })
 
 module.exports = router

@@ -13,6 +13,10 @@ export default function ParticipantApp() {
   const [history, setHistory]   = useState([])
   const [notification, setNotification] = useState(null)
   const [me, setMe]             = useState(participant)
+  const [pendingPicks, setPendingPicks] = useState({}) // matchId → teamId
+  const [savedNotif, setSavedNotif] = useState(null)
+  const [lbPage, setLbPage]     = useState(0)
+  const LB_PAGE_SIZE = 20
 
   useEffect(() => {
     loadAll()
@@ -27,9 +31,15 @@ export default function ParticipantApp() {
       }
     })
     socket.on('leaderboard', () => loadLeaderboard())
+    socket.on('odds_update', ({ match_id, oddsA, oddsB }) => {
+      setMatches(prev => prev.map(m =>
+        m.id === match_id ? { ...m, odds_a: oddsA, odds_b: oddsB } : m
+      ))
+    })
     return () => {
       socket.off('notifications')
       socket.off('leaderboard')
+      socket.off('odds_update')
     }
   }, [socket])
 
@@ -43,7 +53,12 @@ export default function ParticipantApp() {
 
   async function loadMatches() {
     const r = await fetch('/api/participant/matches')
-    if (r.ok) setMatches(await r.json())
+    if (r.ok) {
+      const data = await r.json()
+      setMatches(data)
+      // Join odds rooms for open matches
+      if (socket) data.filter(m => m.status === 'setup').forEach(m => socket.emit('join_odds', m.id))
+    }
   }
 
   async function loadLeaderboard() {
@@ -56,13 +71,20 @@ export default function ParticipantApp() {
     if (r.ok) setHistory(await r.json())
   }
 
-  async function placeProsect(matchId, teamId) {
+  async function saveProspect(matchId) {
+    const teamId = pendingPicks[matchId]
+    if (!teamId) return
     const r = await fetch('/api/participant/prospect', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ match_id: matchId, team_id: teamId }),
     })
-    if (r.ok) loadMatches()
+    if (r.ok) {
+      setPendingPicks(p => { const n = {...p}; delete n[matchId]; return n })
+      setSavedNotif(matchId)
+      setTimeout(() => setSavedNotif(null), 2500)
+      loadMatches()
+    }
   }
 
   return (
@@ -114,21 +136,31 @@ export default function ParticipantApp() {
                 </div>
               </div>
 
-              {m.status === 'setup' && !m.prospecting_open === false && (
-                <div className="p-match-card__buttons">
-                  <button
-                    className={`p-prospect-btn ${m.my_prospect === m.team_a_id ? 'active' : ''}`}
-                    onClick={() => placeProsect(m.id, m.team_a_id)}
-                  >
-                    Prospect {m.team_a_short}
-                  </button>
-                  <button
-                    className={`p-prospect-btn ${m.my_prospect === m.team_b_id ? 'active' : ''}`}
-                    onClick={() => placeProsect(m.id, m.team_b_id)}
-                  >
-                    Prospect {m.team_b_short}
-                  </button>
-                </div>
+              {m.status === 'setup' && m.prospecting_open && (
+                <>
+                  <div className="p-match-card__buttons">
+                    <button
+                      className={`p-prospect-btn ${(pendingPicks[m.id] ?? m.my_prospect) === m.team_a_id ? 'active' : ''}`}
+                      onClick={() => setPendingPicks(p => ({ ...p, [m.id]: m.team_a_id }))}
+                    >
+                      {m.team_a_short}
+                    </button>
+                    <button
+                      className={`p-prospect-btn ${(pendingPicks[m.id] ?? m.my_prospect) === m.team_b_id ? 'active' : ''}`}
+                      onClick={() => setPendingPicks(p => ({ ...p, [m.id]: m.team_b_id }))}
+                    >
+                      {m.team_b_short}
+                    </button>
+                  </div>
+                  {pendingPicks[m.id] && (
+                    <button className="p-save-btn" onClick={() => saveProspect(m.id)}>
+                      Save Prospect
+                    </button>
+                  )}
+                  {savedNotif === m.id && (
+                    <div className="p-saved-confirm">✓ Prospect saved!</div>
+                  )}
+                </>
               )}
               {!m.prospecting_open && (
                 <div className="p-match-card__locked">Prospects Locked</div>
@@ -139,26 +171,37 @@ export default function ParticipantApp() {
       )}
 
       {/* ── LEADERBOARD ───────────────────────────────────────────────────── */}
-      {tab === 'leaderboard' && (
-        <div className="p-tab">
-          <h2>Leaderboard</h2>
-          <table className="p-leaderboard">
-            <thead>
-              <tr><th>#</th><th>Name</th><th>Country</th><th>Points</th></tr>
-            </thead>
-            <tbody>
-              {leaderboard.map(row => (
-                <tr key={row.pin} className={row.isMe ? 'p-leaderboard__me' : ''}>
-                  <td>{row.rank}</td>
-                  <td>{row.display_name || row.pin}</td>
-                  <td>{row.country_code && <span className={`fi fi-${row.country_code.toLowerCase()}`} />}</td>
-                  <td>{row.total_points}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      {tab === 'leaderboard' && (() => {
+        const page = leaderboard.slice(lbPage * LB_PAGE_SIZE, (lbPage + 1) * LB_PAGE_SIZE)
+        const totalPages = Math.ceil(leaderboard.length / LB_PAGE_SIZE)
+        return (
+          <div className="p-tab">
+            <h2>Leaderboard</h2>
+            <table className="p-leaderboard">
+              <thead>
+                <tr><th>#</th><th>Name</th><th>Country</th><th>Points</th></tr>
+              </thead>
+              <tbody>
+                {page.map(row => (
+                  <tr key={row.pin} className={row.isMe ? 'p-leaderboard__me' : ''}>
+                    <td>{row.rank}</td>
+                    <td>{row.display_name}</td>
+                    <td>{row.country_code && <span className={`fi fi-${row.country_code.toLowerCase()}`} />}</td>
+                    <td>{row.total_points}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {totalPages > 1 && (
+              <div className="p-lb-pagination">
+                <button onClick={() => setLbPage(p => Math.max(0, p - 1))} disabled={lbPage === 0}>‹ Prev</button>
+                <span>{lbPage + 1} / {totalPages}</span>
+                <button onClick={() => setLbPage(p => Math.min(totalPages - 1, p + 1))} disabled={lbPage >= totalPages - 1}>Next ›</button>
+              </div>
+            )}
+          </div>
+        )
+      })()}
 
       {/* ── HISTORY ───────────────────────────────────────────────────────── */}
       {tab === 'history' && (

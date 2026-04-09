@@ -45,7 +45,11 @@ export default function AdminConsole() {
 
   async function loadMatches() {
     const r = await fetch('/api/admin/matches')
-    if (r.ok) setMatches(await r.json())
+    if (r.ok) {
+      const data = await r.json()
+      setMatches(data)
+      if (socket) data.filter(m => m.status === 'setup').forEach(m => socket.emit('join_odds', m.id))
+    }
   }
 
   const notify = (msg) => { setMessage(msg); setTimeout(() => setMessage(''), 3000) }
@@ -55,9 +59,25 @@ export default function AdminConsole() {
     if (!socket || !liveMatch) return
     socket.emit('join_match', liveMatch.id)
     const onScore = ({ match: m, actions: a }) => { setLiveMatch(m); setLiveActions(a) }
+    const onFinished = (m) => { setLiveMatch(m); loadMatches() }
     socket.on('score_update', onScore)
-    return () => socket.off('score_update', onScore)
+    socket.on('match_finished', onFinished)
+    return () => { socket.off('score_update', onScore); socket.off('match_finished', onFinished) }
   }, [socket, liveMatch?.id])
+
+  // ── Socket: odds updates for matches table ────────────────────────────────
+  useEffect(() => {
+    if (!socket) return
+    // Re-join odds rooms now that socket is ready
+    matches.filter(m => m.status === 'setup').forEach(m => socket.emit('join_odds', m.id))
+    const onOdds = ({ match_id, oddsA, oddsB, votes_a, votes_b }) => {
+      setMatches(prev => prev.map(m =>
+        m.id === match_id ? { ...m, odds_a: oddsA, odds_b: oddsB, votes_a: votes_a ?? m.votes_a, votes_b: votes_b ?? m.votes_b } : m
+      ))
+    }
+    socket.on('odds_update', onOdds)
+    return () => socket.off('odds_update', onOdds)
+  }, [socket, matches.length])
 
   // ── Batch submit ──────────────────────────────────────────────────────────
   async function submitBatch() {
@@ -186,7 +206,7 @@ export default function AdminConsole() {
           <h2>All Matches</h2>
           <table className="matches-table">
             <thead>
-              <tr><th>Stage</th><th>Teams</th><th>Status</th><th>Score</th><th>Actions</th></tr>
+              <tr><th>Stage</th><th>Teams</th><th>Status</th><th>Score</th><th>Votes A</th><th>Votes B</th><th>Odds A</th><th>Odds B</th><th>Actions</th></tr>
             </thead>
             <tbody>
               {matches.map(m => (
@@ -195,6 +215,10 @@ export default function AdminConsole() {
                   <td>{m.team_a_short} vs {m.team_b_short}</td>
                   <td><span className={`badge badge--${m.status}`}>{m.status}</span></td>
                   <td>{m.score_a} – {m.score_b}</td>
+                  <td>{m.votes_a ?? 0}</td>
+                  <td>{m.votes_b ?? 0}</td>
+                  <td>{m.odds_a != null ? `${m.odds_a}×` : '—'}</td>
+                  <td>{m.odds_b != null ? `${m.odds_b}×` : '—'}</td>
                   <td>
                     {m.status === 'setup' && (
                       <>
@@ -229,7 +253,7 @@ export default function AdminConsole() {
                   <span className="live-score__team">{liveMatch.team_b_short}</span>
                 </div>
                 <div className="live-progress">
-                  Q {liveActions.length + 1} / {liveMatch.total_questions}
+                  Q {computeCurrentQuestion(liveActions)} / {liveMatch.total_questions}
                 </div>
               </div>
 
@@ -298,6 +322,18 @@ export default function AdminConsole() {
       )}
     </div>
   )
+
+  function computeCurrentQuestion(actions) {
+    let q = 0, pending = false
+    for (const a of actions) {
+      if (a.action_type === 'correct_a' || a.action_type === 'correct_b' || a.action_type === 'skip') {
+        q++; pending = false
+      } else if (a.action_type === 'incorrect_a' || a.action_type === 'incorrect_b') {
+        if (pending) { q++; pending = false } else pending = true
+      }
+    }
+    return q + 1
+  }
 
   function addRow() {
     setBatchRows(r => [...r, { team_a_id: '', team_b_id: '', stage: 'group', total_questions: 15 }])

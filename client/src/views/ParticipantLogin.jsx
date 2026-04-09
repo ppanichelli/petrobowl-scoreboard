@@ -31,12 +31,17 @@ export default function ParticipantLogin() {
     else navigate('/p')
   }
 
+  const [profileError, setProfileError] = useState('')
+
   const handleProfile = async (e) => {
     e.preventDefault()
+    if (!displayName.trim()) return setProfileError('Please enter your name.')
+    if (!country) return setProfileError('Please select your country.')
+    setProfileError('')
     await fetch('/api/participant/profile', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ display_name: displayName || null, country_code: country || null }),
+      body: JSON.stringify({ display_name: displayName.trim(), country_code: country }),
     })
     navigate('/p')
   }
@@ -71,21 +76,23 @@ export default function ParticipantLogin() {
         {step === 'profile' && (
           <>
             <h1>Welcome!</h1>
-            <p>Optionally add your name and country before you start prospecting.</p>
+            <p>Enter your name and country to start prospecting.</p>
             <form onSubmit={handleProfile}>
               <input
                 type="text"
-                placeholder="Your name (optional)"
+                placeholder="Your name"
                 value={displayName}
                 onChange={e => setDisplayName(e.target.value)}
                 maxLength={50}
+                required
               />
-              <select value={country} onChange={e => setCountry(e.target.value)}>
-                <option value="">Select country (optional)</option>
+              <select value={country} onChange={e => setCountry(e.target.value)} required>
+                <option value="">Select country…</option>
                 {COUNTRIES.map(c => (
                   <option key={c.code} value={c.code}>{c.name}</option>
                 ))}
               </select>
+              {profileError && <p className="p-login__error">{profileError}</p>}
               <button type="submit">Continue</button>
             </form>
           </>
