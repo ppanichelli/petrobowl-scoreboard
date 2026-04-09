@@ -1,5 +1,7 @@
 const express      = require('express')
 const { v4: uuidv4 } = require('uuid')
+const path         = require('path')
+const fs           = require('fs')
 const db           = require('../db/db')
 const requireAdmin = require('../middleware/requireAdmin')
 const { calcOdds } = require('../lib/odds')
@@ -321,6 +323,8 @@ router.post('/database/reset', (req, res) => {
     return res.status(400).json({ error: 'Send { confirm: "RESET" } to confirm' })
   }
 
+  const PIN_COUNT = 500
+
   db.transaction(() => {
     db.prepare('DELETE FROM leaderboard_snapshots').run()
     db.prepare('DELETE FROM prospects').run()
@@ -329,7 +333,29 @@ router.post('/database/reset', (req, res) => {
     db.prepare('DELETE FROM participants').run()
   })()
 
-  res.json({ ok: true, message: 'Database reset complete. Teams and admin accounts preserved.' })
+  // Generate fresh PINs
+  const insert = db.prepare('INSERT OR IGNORE INTO participants (pin) VALUES (?)')
+  const generated = []
+  const seen = new Set()
+  db.transaction(() => {
+    while (generated.length < PIN_COUNT) {
+      const pin = String(Math.floor(Math.random() * 1_000_000)).padStart(6, '0')
+      if (!seen.has(pin)) {
+        seen.add(pin)
+        insert.run(pin)
+        generated.push(pin)
+      }
+    }
+  })()
+
+  // Save PINs to file
+  const dataDir = path.join(__dirname, '../../data')
+  fs.mkdirSync(dataDir, { recursive: true })
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
+  const filePath = path.join(dataDir, `pins_${timestamp}.txt`)
+  fs.writeFileSync(filePath, generated.join('\n'), 'utf8')
+
+  res.json({ ok: true, message: `Database reset complete. ${PIN_COUNT} new PINs generated.`, pins_file: filePath })
 })
 
 // ── Helpers ────────────────────────────────────────────────────────────────

@@ -1,21 +1,20 @@
 /**
- * Parimutuel odds calculation (×10 display scale).
- * Returns { oddsA, oddsB } as integers (scaled by 10).
+ * Parimutuel odds calculation.
+ * Returns { oddsA, oddsB } rounded to one decimal place.
+ * Minimum odds are 1.0 (stake returned).
  */
 function calcOdds(prospectsA, prospectsB) {
   const total = prospectsA + prospectsB
 
-  // Edge: no prospects at all → display 10/10 (even)
-  if (total === 0) return { oddsA: 10, oddsB: 10 }
+  if (total === 0) return { oddsA: 2.0, oddsB: 2.0 }
 
-  // Edge: all on one side → that side gets 10, other gets 10 (no division by zero)
-  const rawA = prospectsA === 0 ? 10 : Math.round((total / prospectsA) * 10)
-  const rawB = prospectsB === 0 ? 10 : Math.round((total / prospectsB) * 10)
+  const round1 = v => Math.round(v * 10) / 10
+  const rawA = prospectsA === 0 ? 10 : round1(total / prospectsA)
+  const rawB = prospectsB === 0 ? 10 : round1(total / prospectsB)
 
-  // Minimum payout is always 10 (stake returned)
   return {
-    oddsA: Math.max(10, rawA),
-    oddsB: Math.max(10, rawB),
+    oddsA: Math.max(1.0, rawA),
+    oddsB: Math.max(1.0, rawB),
   }
 }
 

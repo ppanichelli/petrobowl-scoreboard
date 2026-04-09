@@ -75,7 +75,7 @@
   gap: 0.5rem;
   font-weight: 700;
 }
-.p-match-card__team--b { flex-direction: row-reverse; }
+.p-match-card__team--b { justify-content: flex-end; }
 .p-match-card__odds { color: var(--pb-gold); font-family: var(--font-title); font-size: 1.1rem; }
 .p-match-card__vs { color: rgba(255,255,255,0.3); font-size: 0.8rem; }
 
@@ -162,6 +162,24 @@
   border-radius: 8px;
   font-size: 0.9rem;
 }
+.p-prospect-btn--locked {
+  opacity: 0.4;
+  cursor: default;
+}
+.p-prospect-btn--picked {
+  opacity: 1;
+  background: rgba(242,169,0,0.2);
+  border-color: var(--pb-gold);
+  color: var(--pb-gold);
+}
+.p-prospect-error {
+  text-align: center;
+  color: var(--pb-red);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.3rem 0;
+}
+
 .p-saved-confirm {
   text-align: center;
   color: var(--pb-green);

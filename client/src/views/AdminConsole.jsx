@@ -217,8 +217,8 @@ export default function AdminConsole() {
                   <td>{m.score_a} – {m.score_b}</td>
                   <td>{m.votes_a ?? 0}</td>
                   <td>{m.votes_b ?? 0}</td>
-                  <td>{m.odds_a != null ? `${m.odds_a}×` : '—'}</td>
-                  <td>{m.odds_b != null ? `${m.odds_b}×` : '—'}</td>
+                  <td>{m.odds_a != null ? `${Number(m.odds_a).toFixed(1)}×` : '—'}</td>
+                  <td>{m.odds_b != null ? `${Number(m.odds_b).toFixed(1)}×` : '—'}</td>
                   <td>
                     {m.status === 'setup' && (
                       <>
@@ -257,20 +257,27 @@ export default function AdminConsole() {
                 </div>
               </div>
 
-              <div className="scoring-grid">
-                <div className="scoring-col">
-                  <button className="btn-correct" onClick={() => doAction('correct_a')}>✅ Correct {liveMatch.team_a_short}</button>
-                  <button className="btn-incorrect" onClick={() => doAction('incorrect_a')}>❌ Incorrect {liveMatch.team_a_short}</button>
-                </div>
-                <div className="scoring-col scoring-col--mid">
-                  <button className="btn-skip" onClick={() => doAction('skip')}>⏭ Skip</button>
-                  <button className="btn-undo" onClick={doUndo}>↩ Undo</button>
-                </div>
-                <div className="scoring-col">
-                  <button className="btn-correct" onClick={() => doAction('correct_b')}>✅ Correct {liveMatch.team_b_short}</button>
-                  <button className="btn-incorrect" onClick={() => doAction('incorrect_b')}>❌ Incorrect {liveMatch.team_b_short}</button>
-                </div>
-              </div>
+              {(() => {
+                const lastAction = liveActions.length > 0 ? liveActions[liveActions.length - 1].action_type : null
+                const teamALocked = lastAction === 'incorrect_a'
+                const teamBLocked = lastAction === 'incorrect_b'
+                return (
+                  <div className="scoring-grid">
+                    <div className="scoring-col">
+                      <button className="btn-correct" onClick={() => doAction('correct_a')} disabled={teamALocked}>✅ Correct {liveMatch.team_a_short}</button>
+                      <button className="btn-incorrect" onClick={() => doAction('incorrect_a')} disabled={teamALocked}>❌ Incorrect {liveMatch.team_a_short}</button>
+                    </div>
+                    <div className="scoring-col scoring-col--mid">
+                      <button className="btn-skip" onClick={() => doAction('skip')}>⏭ Skip</button>
+                      <button className="btn-undo" onClick={doUndo}>↩ Undo</button>
+                    </div>
+                    <div className="scoring-col">
+                      <button className="btn-correct" onClick={() => doAction('correct_b')} disabled={teamBLocked}>✅ Correct {liveMatch.team_b_short}</button>
+                      <button className="btn-incorrect" onClick={() => doAction('incorrect_b')} disabled={teamBLocked}>❌ Incorrect {liveMatch.team_b_short}</button>
+                    </div>
+                  </div>
+                )
+              })()}
 
               <div className="live-controls">
                 <button className="btn-danger" onClick={doReset}>🔄 Full Reset</button>

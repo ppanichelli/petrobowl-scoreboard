@@ -72,8 +72,7 @@
   flex: 1;
 }
 .prospects-card__team--b {
-  flex-direction: row-reverse;
-  text-align: right;
+  justify-content: flex-end;
 }
 .prospects-card__name {
   font-family: var(--font-title);

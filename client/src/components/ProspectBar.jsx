@@ -10,11 +10,11 @@ export default function ProspectBar({ oddsA, oddsB, prospectsA, prospectsB, team
     <div className="prospect-bar">
       <div className="prospect-bar__labels">
         <span className="prospect-bar__label prospect-bar__label--a">
-          {teamAShort} <strong>{oddsA}×</strong>
+          {teamAShort} <strong>{Number(oddsA).toFixed(1)}×</strong>
         </span>
         <span className="prospect-bar__title">Prospects</span>
         <span className="prospect-bar__label prospect-bar__label--b">
-          <strong>{oddsB}×</strong> {teamBShort}
+          <strong>{Number(oddsB).toFixed(1)}×</strong> {teamBShort}
         </span>
       </div>
       <div className="prospect-bar__track">

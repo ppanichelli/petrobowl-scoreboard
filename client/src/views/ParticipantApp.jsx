@@ -15,6 +15,7 @@ export default function ParticipantApp() {
   const [me, setMe]             = useState(participant)
   const [pendingPicks, setPendingPicks] = useState({}) // matchId → teamId
   const [savedNotif, setSavedNotif] = useState(null)
+  const [prospectError, setProspectError] = useState(null) // { matchId, msg }
   const [lbPage, setLbPage]     = useState(0)
   const LB_PAGE_SIZE = 20
 
@@ -84,6 +85,13 @@ export default function ParticipantApp() {
       setSavedNotif(matchId)
       setTimeout(() => setSavedNotif(null), 2500)
       loadMatches()
+    } else {
+      const err = await r.json().catch(() => ({}))
+      const msg = r.status === 401
+        ? 'You must be logged in to place a prospect.'
+        : (err.error || 'Could not save — the match may have already started.')
+      setProspectError({ matchId, msg })
+      setTimeout(() => setProspectError(null), 3000)
     }
   }
 
@@ -126,11 +134,11 @@ export default function ParticipantApp() {
                 <div className="p-match-card__team">
                   <span className={`fi fi-${m.team_a_cc?.toLowerCase()}`} />
                   <span>{m.team_a_short}</span>
-                  <strong className="p-match-card__odds">{m.odds_a}×</strong>
+                  <strong className="p-match-card__odds">{m.odds_a != null ? `${Number(m.odds_a).toFixed(1)}×` : '—'}</strong>
                 </div>
                 <span className="p-match-card__vs">VS</span>
                 <div className="p-match-card__team p-match-card__team--b">
-                  <strong className="p-match-card__odds">{m.odds_b}×</strong>
+                  <strong className="p-match-card__odds">{m.odds_b != null ? `${Number(m.odds_b).toFixed(1)}×` : '—'}</strong>
                   <span>{m.team_b_short}</span>
                   <span className={`fi fi-${m.team_b_cc?.toLowerCase()}`} />
                 </div>
@@ -142,20 +150,17 @@ export default function ParticipantApp() {
                     <button
                       className={`p-prospect-btn ${(pendingPicks[m.id] ?? m.my_prospect) === m.team_a_id ? 'active' : ''}`}
                       onClick={() => setPendingPicks(p => ({ ...p, [m.id]: m.team_a_id }))}
-                    >
-                      {m.team_a_short}
-                    </button>
+                    >{m.team_a_short}</button>
                     <button
                       className={`p-prospect-btn ${(pendingPicks[m.id] ?? m.my_prospect) === m.team_b_id ? 'active' : ''}`}
                       onClick={() => setPendingPicks(p => ({ ...p, [m.id]: m.team_b_id }))}
-                    >
-                      {m.team_b_short}
-                    </button>
+                    >{m.team_b_short}</button>
                   </div>
                   {pendingPicks[m.id] && (
-                    <button className="p-save-btn" onClick={() => saveProspect(m.id)}>
-                      Save Prospect
-                    </button>
+                    <button className="p-save-btn" onClick={() => saveProspect(m.id)}>Save Prospect</button>
+                  )}
+                  {prospectError?.matchId === m.id && (
+                    <div className="p-prospect-error">{prospectError.msg}</div>
                   )}
                   {savedNotif === m.id && (
                     <div className="p-saved-confirm">✓ Prospect saved!</div>
@@ -163,7 +168,19 @@ export default function ParticipantApp() {
                 </>
               )}
               {!m.prospecting_open && (
-                <div className="p-match-card__locked">Prospects Locked</div>
+                <>
+                  <div className="p-match-card__buttons">
+                    <button
+                      className={`p-prospect-btn p-prospect-btn--locked ${m.my_prospect === m.team_a_id ? 'p-prospect-btn--picked' : ''}`}
+                      disabled
+                    >{m.team_a_short}{m.my_prospect === m.team_a_id ? ' ✓' : ''}</button>
+                    <button
+                      className={`p-prospect-btn p-prospect-btn--locked ${m.my_prospect === m.team_b_id ? 'p-prospect-btn--picked' : ''}`}
+                      disabled
+                    >{m.team_b_short}{m.my_prospect === m.team_b_id ? ' ✓' : ''}</button>
+                  </div>
+                  <div className="p-match-card__locked">Prospects Locked</div>
+                </>
               )}
             </div>
           ))}

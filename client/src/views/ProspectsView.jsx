@@ -60,15 +60,16 @@ export default function ProspectsView() {
                 <div className="prospects-card__team">
                   <span className={`fi fi-${m.team_a_cc?.toLowerCase()}`} />
                   <span className="prospects-card__name">{m.team_a_short}</span>
-                  <span className="prospects-card__odds">{m.odds_a != null ? `${m.odds_a}×` : '—'}</span>
+                  <span className="prospects-card__odds">{m.odds_a != null ? `${Number(m.odds_a).toFixed(1)}×` : '—'}</span>
                 </div>
                 <span className="prospects-card__vs">VS</span>
                 <div className="prospects-card__team prospects-card__team--b">
-                  <span className="prospects-card__odds">{m.odds_b != null ? `${m.odds_b}×` : '—'}</span>
+                  <span className="prospects-card__odds">{m.odds_b != null ? `${Number(m.odds_b).toFixed(1)}×` : '—'}</span>
                   <span className="prospects-card__name">{m.team_b_short}</span>
                   <span className={`fi fi-${m.team_b_cc?.toLowerCase()}`} />
                 </div>
               </div>
+
 
               <div className="prospects-card__bar-labels">
                 <span>{pctA}% ({m.votes_a || 0} votes)</span>
