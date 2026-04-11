@@ -90,6 +90,89 @@
   width: 100%;
   max-width: 1600px;
   gap: clamp(0.5rem, 1.5vw, 2rem);
+  position: relative; /* anchor for fire atmosphere pseudo-elements */
+}
+
+/* Ensure grid children sit above the atmosphere layer */
+.scoreboard__main > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Fire atmosphere: deep amber cloud bleeding in from the burning side ──── */
+.scoreboard__main--fire-a::before,
+.scoreboard__main--fire-b::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  height: 180%;
+  width: 60%;
+  pointer-events: none;
+  z-index: 0;
+  animation: atmoBreath 3.4s ease-in-out infinite alternate;
+}
+
+.scoreboard__main--fire-a::before {
+  left: -5%;
+  background: radial-gradient(
+    ellipse at 15% 55%,
+    oklch(44% 0.20 40 / 0.32) 0%,
+    oklch(36% 0.16 34 / 0.16) 42%,
+    transparent 68%
+  );
+}
+
+.scoreboard__main--fire-b::before {
+  right: -5%;
+  left: auto;
+  background: radial-gradient(
+    ellipse at 85% 55%,
+    oklch(44% 0.20 40 / 0.32) 0%,
+    oklch(36% 0.16 34 / 0.16) 42%,
+    transparent 68%
+  );
+}
+
+@keyframes atmoBreath {
+  from { opacity: 0.55; transform: scaleX(0.88); }
+  to   { opacity: 1.00; transform: scaleX(1.12); }
+}
+
+/* Streak atmosphere: faint cold shimmer on the active side */
+.scoreboard__main--streak-a::before,
+.scoreboard__main--streak-b::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  height: 140%;
+  width: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: streakAtmo 5s ease-in-out infinite alternate;
+}
+
+.scoreboard__main--streak-a::before {
+  left: 0;
+  background: radial-gradient(
+    ellipse at 10% 50%,
+    oklch(85% 0.04 240 / 0.07) 0%,
+    transparent 60%
+  );
+}
+
+.scoreboard__main--streak-b::before {
+  right: 0;
+  left: auto;
+  background: radial-gradient(
+    ellipse at 90% 50%,
+    oklch(85% 0.04 240 / 0.07) 0%,
+    transparent 60%
+  );
+}
+
+@keyframes streakAtmo {
+  from { opacity: 0.5; }
+  to   { opacity: 1.0; }
 }
 
 /* ── Score panel ─────────────────────────────────────────────────────────── */
@@ -174,14 +257,54 @@
   font-family: var(--font-display);
   font-size: clamp(1.2rem, 2.5vw, 2rem);
   font-weight: 900;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--pb-gold);
   padding: var(--space-sm) var(--space-2xl);
   animation: streakAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+.streak-badge__name {
+  color: oklch(97% 0.012 250);
+}
+
+/* ON FIRE variant: larger, amber-hot, pulsing heat glow */
+.streak-badge--fire {
+  font-size: clamp(2rem, 4.5vw, 4rem);
+  color: oklch(82% 0.26 62);
+  letter-spacing: 0.10em;
+  filter:
+    drop-shadow(0 0 16px oklch(62% 0.24 48 / 0.80))
+    drop-shadow(0 0 56px oklch(50% 0.20 40 / 0.50));
+  animation:
+    streakAppear   0.5s cubic-bezier(0.16, 1, 0.3, 1) both,
+    fireTextBreathe 2.0s ease-in-out infinite alternate;
+}
+
+.streak-badge--fire .streak-badge__name {
+  color: oklch(97% 0.018 75);
+}
+
+@keyframes fireTextBreathe {
+  from {
+    filter:
+      drop-shadow(0 0 14px oklch(62% 0.24 48 / 0.70))
+      drop-shadow(0 0 44px oklch(50% 0.20 40 / 0.40));
+  }
+  to {
+    filter:
+      drop-shadow(0 0 24px oklch(68% 0.26 55 / 1.00))
+      drop-shadow(0 0 80px oklch(54% 0.22 44 / 0.70));
+  }
+}
+
 @keyframes streakAppear {
   from { opacity: 0; transform: translateY(10px) scale(0.96); }
   to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .streak-badge--fire {
+    animation: streakAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
 }

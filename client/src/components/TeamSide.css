@@ -9,6 +9,8 @@
   align-items: center;
   gap: clamp(0.8rem, 2.5vw, 2rem);
   min-width: 0;
+  position: relative;         /* anchor for pseudo-element effects */
+  overflow: visible;
   transition: opacity 0.4s ease;
 }
 
@@ -114,4 +116,136 @@
 
 .team-side--leading .team-side__full {
   color: oklch(68% 0.018 250);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STREAK & FIRE STATES
+   streak (3–4 correct): cold electric sweep across the team block
+   onfire (5+  correct): amber heat corona + rising ember field
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Streak: diagonal white-light camera-flash sweep ──────────────────────── */
+.team-side--streak::before {
+  content: '';
+  position: absolute;
+  inset: -20% -8%;
+  background: linear-gradient(
+    108deg,
+    transparent 22%,
+    oklch(97% 0.004 240 / 0.06) 42%,
+    oklch(99% 0.002 250 / 0.30) 50%,
+    oklch(97% 0.004 240 / 0.06) 58%,
+    transparent 78%
+  );
+  pointer-events: none;
+  z-index: 2;
+  animation: streakSweepA 4.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.team-side--b.team-side--streak::before {
+  animation-name: streakSweepB;
+}
+
+@keyframes streakSweepA {
+  0%    { transform: translateX(-200%) skewX(-12deg); opacity: 0; }
+  4%    { opacity: 1; }
+  28%   { transform: translateX(200%)  skewX(-12deg); opacity: 0; }
+  100%  { transform: translateX(-200%) skewX(-12deg); opacity: 0; }
+}
+@keyframes streakSweepB {
+  0%    { transform: translateX(200%)  skewX(12deg);  opacity: 0; }
+  4%    { opacity: 1; }
+  28%   { transform: translateX(-200%) skewX(12deg);  opacity: 0; }
+  100%  { transform: translateX(200%)  skewX(12deg);  opacity: 0; }
+}
+
+/* ── On Fire: amber corona (::before) ─────────────────────────────────────── */
+.team-side--onfire::before {
+  content: '';
+  position: absolute;
+  inset: -70% -35%;
+  background: radial-gradient(
+    ellipse at center,
+    oklch(56% 0.24 46 / 0.60) 0%,
+    oklch(44% 0.20 38 / 0.38) 32%,
+    oklch(34% 0.15 30 / 0.16) 58%,
+    transparent 74%
+  );
+  pointer-events: none;
+  z-index: 0;
+  animation: fireCorona 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes fireCorona {
+  from { transform: scale(0.86) translateY(4%);  opacity: 0.65; }
+  to   { transform: scale(1.14) translateY(-3%); opacity: 1.00; }
+}
+
+/* ── On Fire: rising ember sparks (::after) ───────────────────────────────── */
+/*
+   Two staggered waves baked into the box-shadow field:
+   Wave 1 — sparks at low Y offsets (near bottom of element)
+   Wave 2 — sparks at mid Y offsets (already risen partway)
+   translateY animation lifts both waves; opacity fade hides reset.
+*/
+.team-side--onfire::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  left: 48%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: oklch(88% 0.26 68);
+  box-shadow:
+    /* Wave 1 — starting near bottom */
+    -78px   -8px  5px 0px oklch(84% 0.24 65 / 0.90),
+    -48px  -32px  3px 1px oklch(78% 0.21 58 / 0.75),
+    -16px  -18px  4px 0px oklch(92% 0.27 72 / 0.85),
+     18px  -44px  3px 0px oklch(72% 0.19 52 / 0.65),
+     56px  -12px  5px 1px oklch(86% 0.25 67 / 0.78),
+     82px  -58px  3px 0px oklch(74% 0.20 55 / 0.62),
+     36px  -88px  4px 0px oklch(90% 0.26 70 / 0.55),
+    -58px -104px  3px 1px oklch(66% 0.17 45 / 0.45),
+    -98px  -68px  4px 0px oklch(80% 0.22 62 / 0.60),
+    -132px -28px  3px 0px oklch(70% 0.18 50 / 0.50),
+    /* Wave 2 — already risen ~120px */
+    -64px -138px  4px 0px oklch(84% 0.24 65 / 0.55),
+    -38px -162px  3px 1px oklch(78% 0.21 58 / 0.40),
+      8px -148px  4px 0px oklch(92% 0.27 72 / 0.50),
+     44px -174px  3px 0px oklch(72% 0.19 52 / 0.35),
+     90px -132px  4px 1px oklch(86% 0.25 67 / 0.42),
+    -22px -190px  3px 0px oklch(74% 0.20 55 / 0.30);
+  pointer-events: none;
+  z-index: 3;
+  animation: embersRise 2.8s ease-out infinite;
+}
+
+@keyframes embersRise {
+  0%   { transform: translateX(-50%) translateY(0px);    opacity: 1; }
+  55%  { opacity: 0.55; }
+  100% { transform: translateX(-50%) translateY(-200px); opacity: 0; }
+}
+
+/* Incandescent glow on short name when on fire */
+.team-side--onfire .team-side__short {
+  color: oklch(97% 0.012 75);
+  filter:
+    drop-shadow(0 0 18px oklch(72% 0.26 58 / 0.85))
+    drop-shadow(0 0 52px oklch(56% 0.22 44 / 0.55));
+  transition: color 0.5s ease, filter 0.5s ease;
+}
+
+/* Override trailing opacity — a team on fire is never dim */
+.team-side--onfire.team-side--trailing {
+  opacity: 1;
+}
+
+/* ── Reduced motion ────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .team-side--streak::before,
+  .team-side--onfire::before,
+  .team-side--onfire::after {
+    animation: none;
+  }
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSocket } from '../hooks/useSocket'
+import ProspectBar from '../components/ProspectBar'
 import './AllMatches.css'
 
 const STAGE_LABEL = {
@@ -91,11 +92,17 @@ function UpcomingCard({ m, index }) {
           <span className={`fi fi-${m.team_b_cc?.toLowerCase()}`} />
         </div>
       </div>
-      {(m.votes_a != null || m.votes_b != null) && (
-        <div className="am-card__votes">
-          {m.votes_a || 0} votes · {m.votes_b || 0} votes
-        </div>
-      )}
+      <div className="am-card__prospects">
+        <ProspectBar
+          variant={isLive ? 'live' : 'prematch'}
+          oddsA={isLive ? m.frozen_odds_a : m.odds_a}
+          oddsB={isLive ? m.frozen_odds_b : m.odds_b}
+          prospectsA={isLive ? m.frozen_prospects_a : m.votes_a}
+          prospectsB={isLive ? m.frozen_prospects_b : m.votes_b}
+          teamAShort={m.team_a_short}
+          teamBShort={m.team_b_short}
+        />
+      </div>
     </div>
   )
 }

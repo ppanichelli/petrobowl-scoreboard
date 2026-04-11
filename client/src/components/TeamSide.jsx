@@ -1,13 +1,17 @@
 import React from 'react'
 import './TeamSide.css'
 
-export default function TeamSide({ side, shortName, fullName, countryCode, logoUrl, isLeading, isTrailing }) {
+export default function TeamSide({ side, shortName, fullName, countryCode, logoUrl, streak, isLeading, isTrailing }) {
+  const isOnFire  = streak >= 5
+  const isStreak  = streak >= 3 && !isOnFire
   return (
     <div className={[
       'team-side',
       `team-side--${side}`,
       isLeading  ? 'team-side--leading'  : '',
       isTrailing ? 'team-side--trailing' : '',
+      isStreak   ? 'team-side--streak'   : '',
+      isOnFire   ? 'team-side--onfire'   : '',
     ].filter(Boolean).join(' ')}>
 
       <div className="team-side__logo">

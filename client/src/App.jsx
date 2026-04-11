@@ -8,6 +8,7 @@ import AdminConsole    from './views/AdminConsole'
 import ParticipantLogin from './views/ParticipantLogin'
 import ParticipantApp  from './views/ParticipantApp'
 import ProspectsView   from './views/ProspectsView'
+import AllMatches      from './views/AllMatches'
 import { AdminAuthProvider, useAdminAuth } from './hooks/useAdminAuth'
 import { ParticipantAuthProvider, useParticipantAuth } from './hooks/useParticipantAuth'
 
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="/"          element={<Scoreboard />} />
           <Route path="/next"      element={<NextMatch />} />
           <Route path="/prospects" element={<ProspectsView />} />
+          <Route path="/matches"   element={<AllMatches />} />
 
           {/* Admin (timekeeper) */}
           <Route path="/timekeeper/login" element={<AdminLogin />} />

@@ -26,9 +26,8 @@ export default function Scoreboard() {
       .then(data => {
         if (data) { setMatch(data.match); setActions(data.actions) }
       })
-    fetch('/api/matches/next').then(r => r.json()).then(nm => {
+    fetch('/api/matches/next', { cache: 'no-store' }).then(r => r.json()).then(nm => {
       setNextMatch(nm)
-      // Will join odds room once socket is ready (handled in socket effect)
     })
   }, [])
 
@@ -57,31 +56,23 @@ export default function Scoreboard() {
     const handleStarted = (m) => { setMatch(m); setNextMatch(null) }
     const handleFinished = (m) => {
       setMatch(m)
-      fetch('/api/matches/next').then(r => r.json()).then(nm => {
+      fetch('/api/matches/next', { cache: 'no-store' }).then(r => r.json()).then(nm => {
         setNextMatch(nm)
-        // Join odds room for the new next match so we get live updates
-        if (nm?.id) socket.emit('join_odds', nm.id)
       })
     }
 
-    // Live odds updates for the pre-match prospect bar
-    const handleOdds = ({ match_id, oddsA, oddsB, votes_a, votes_b }) => {
-      setNextMatch(prev => {
-        if (!prev || prev.id !== match_id) return prev
-        return { ...prev, odds_a: oddsA, odds_b: oddsB, votes_a, votes_b }
-      })
-    }
-
-    // Re-join rooms whenever socket reconnects (rooms are lost on disconnect)
+    // Re-join rooms and re-fetch on reconnect (socket rooms are lost on disconnect)
     const handleReconnect = () => {
       if (matchIdRef.current) socket.emit('join_match', matchIdRef.current)
       if (nextMatchIdRef.current) socket.emit('join_odds', nextMatchIdRef.current)
+      fetch('/api/matches/next', { cache: 'no-store' }).then(r => r.json()).then(nm => {
+        setNextMatch(nm)
+      })
     }
 
     socket.on('score_update', handleScore)
     socket.on('match_started', handleStarted)
     socket.on('match_finished', handleFinished)
-    socket.on('odds_update', handleOdds)
     socket.on('connect', handleReconnect)
 
     if (match?.id) socket.emit('join_match', match.id)
@@ -90,14 +81,24 @@ export default function Scoreboard() {
       socket.off('score_update', handleScore)
       socket.off('match_started', handleStarted)
       socket.off('match_finished', handleFinished)
-      socket.off('odds_update', handleOdds)
       socket.off('connect', handleReconnect)
     }
   }, [socket, match?.id])
 
-  // Join odds room for pre-match prospect bar live updates
+  // Join next-match odds room and keep votes/odds live — same pattern as NextMatch.jsx
   useEffect(() => {
-    if (socket && nextMatch?.id) socket.emit('join_odds', nextMatch.id)
+    if (!socket || !nextMatch?.id) return
+
+    socket.emit('join_odds', nextMatch.id)
+
+    const handleOdds = ({ match_id, oddsA, oddsB, votes_a, votes_b }) => {
+      setNextMatch(prev => {
+        if (!prev || prev.id !== match_id) return prev
+        return { ...prev, odds_a: oddsA, odds_b: oddsB, votes_a, votes_b }
+      })
+    }
+    socket.on('odds_update', handleOdds)
+    return () => socket.off('odds_update', handleOdds)
   }, [socket, nextMatch?.id])
 
   const streakA = calcStreak(actions, 'a')
@@ -144,7 +145,11 @@ export default function Scoreboard() {
       </div>
 
       {/* Main confrontation row */}
-      <div className="scoreboard__main">
+      <div className={[
+        'scoreboard__main',
+        streakA >= 5 ? 'scoreboard__main--fire-a' : streakA >= 3 ? 'scoreboard__main--streak-a' : '',
+        streakB >= 5 ? 'scoreboard__main--fire-b' : streakB >= 3 ? 'scoreboard__main--streak-b' : '',
+      ].filter(Boolean).join(' ')}>
         <TeamSide
           side="a"
           shortName={match.team_a_short}
@@ -203,14 +208,20 @@ export default function Scoreboard() {
         <QuestionTrack team="b" label={match.team_b_short} total={match.total_questions} actions={actions} />
       </div>
 
-      {(streakA >= 3 || streakB >= 3) && (
-        <div className="streak-badge">
-          {streakA >= 5 || streakB >= 5
-            ? `${streakA >= 5 ? match.team_a_short : match.team_b_short} ON FIRE`
-            : `${streakA >= 3 ? match.team_a_short : match.team_b_short} on a streak`
-          }
-        </div>
-      )}
+      {(streakA >= 3 || streakB >= 3) && (() => {
+        const onFire     = streakA >= 5 || streakB >= 5
+        const teamName   = streakA >= 5 ? match.team_a_short : streakA >= 3 ? match.team_a_short : match.team_b_short
+        const fireTeam   = streakA >= 5 ? match.team_a_short : match.team_b_short
+        const streakTeam = streakA >= 3 ? match.team_a_short : match.team_b_short
+        return (
+          <div className={`streak-badge${onFire ? ' streak-badge--fire' : ''}`}>
+            {onFire
+              ? <><span className="streak-badge__name">{fireTeam}</span>{' '}ON FIRE</>
+              : <><span className="streak-badge__name">{streakTeam}</span>{' '}on a streak</>
+            }
+          </div>
+        )
+      })()}
 
       {match.status === 'live' && match.frozen_odds_a && (
         <ProspectBar
