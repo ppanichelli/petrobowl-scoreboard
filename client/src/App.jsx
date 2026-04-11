@@ -1,16 +1,13 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
-import PublicLayout      from './components/PublicLayout'
-import Scoreboard        from './views/Scoreboard'
-import NextMatch         from './views/NextMatch'
-import AllMatches        from './views/AllMatches'
-import PublicLeaderboard from './views/PublicLeaderboard'
-import AdminLogin        from './views/AdminLogin'
-import AdminConsole      from './views/AdminConsole'
-import ParticipantLogin  from './views/ParticipantLogin'
-import ParticipantApp    from './views/ParticipantApp'
-import ProspectsView     from './views/ProspectsView'
+import Scoreboard      from './views/Scoreboard'
+import NextMatch       from './views/NextMatch'
+import AdminLogin      from './views/AdminLogin'
+import AdminConsole    from './views/AdminConsole'
+import ParticipantLogin from './views/ParticipantLogin'
+import ParticipantApp  from './views/ParticipantApp'
+import ProspectsView   from './views/ProspectsView'
 import { AdminAuthProvider, useAdminAuth } from './hooks/useAdminAuth'
 import { ParticipantAuthProvider, useParticipantAuth } from './hooks/useParticipantAuth'
 
@@ -31,14 +28,10 @@ export default function App() {
     <AdminAuthProvider>
       <ParticipantAuthProvider>
         <Routes>
-          {/* Public screens — all share the top nav */}
-          <Route element={<PublicLayout />}>
-            <Route path="/"            element={<Scoreboard />} />
-            <Route path="/next"        element={<NextMatch />} />
-            <Route path="/matches"     element={<AllMatches />} />
-            <Route path="/leaderboard" element={<PublicLeaderboard />} />
-            <Route path="/prospects"   element={<ProspectsView />} />
-          </Route>
+          {/* Public / LED screens */}
+          <Route path="/"          element={<Scoreboard />} />
+          <Route path="/next"      element={<NextMatch />} />
+          <Route path="/prospects" element={<ProspectsView />} />
 
           {/* Admin (timekeeper) */}
           <Route path="/timekeeper/login" element={<AdminLogin />} />
