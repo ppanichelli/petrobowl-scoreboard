@@ -1,8 +1,28 @@
 .q-track {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  width: 100%;
+}
+
+.q-track__label {
+  font-family: var(--font-display);
+  font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: oklch(55% 0.02 250);
+  flex-shrink: 0;
+  width: 4ch; /* fixed width so dots align between the two rows */
+  text-align: right;
+  margin-right: 0.4rem;
+}
+
+.q-track__dots {
+  display: flex;
   gap: 0.4rem;
   flex-wrap: wrap;
-  justify-content: center;
 }
 
 .q-dot {
