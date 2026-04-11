@@ -16,5 +16,13 @@ db.pragma('foreign_keys = ON')
 const sql = fs.readFileSync(SCHEMA, 'utf8')
 db.exec(sql)
 
+// Add columns that may not exist in older databases
+const alterations = [
+  `ALTER TABLE teams ADD COLUMN logo_small_url TEXT NOT NULL DEFAULT '/assets/logos/default_small.png'`,
+]
+for (const stmt of alterations) {
+  try { db.exec(stmt) } catch (e) { /* column already exists — safe to ignore */ }
+}
+
 db.close()
 console.log('Migration complete →', DB_PATH)

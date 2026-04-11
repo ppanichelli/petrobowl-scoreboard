@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS teams (
   city         TEXT NOT NULL,
   country      TEXT NOT NULL,
   country_code TEXT NOT NULL CHECK(length(country_code) = 2),
-  logo_url     TEXT NOT NULL DEFAULT '/assets/logos/default.png'
+  logo_url       TEXT NOT NULL DEFAULT '/assets/logos/default.png',
+  logo_small_url TEXT NOT NULL DEFAULT '/assets/logos/default_small.png'
 );
 
 CREATE TABLE IF NOT EXISTS admin_users (

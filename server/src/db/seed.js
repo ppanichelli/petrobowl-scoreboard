@@ -16,14 +16,14 @@ db.pragma('foreign_keys = ON')
 
 // ── Teams ──────────────────────────────────────────────────────────────────
 const teams = [
-  { id: 'ufrj', full_name: 'Universidade Federal do Rio de Janeiro', short_name: 'UFRJ', city: 'Rio de Janeiro', country: 'Brazil',    country_code: 'BR', logo_url: '/assets/logos/ufrj.png' },
-  { id: 'itba', full_name: 'Instituto Tecnológico de Buenos Aires',   short_name: 'ITBA', city: 'Buenos Aires',   country: 'Argentina', country_code: 'AR', logo_url: '/assets/logos/itba.png' },
-  { id: 'ug',   full_name: 'University of Guyana',                    short_name: 'UG',   city: 'Georgetown',     country: 'Guyana',    country_code: 'GY', logo_url: '/assets/logos/ug.png'   },
+  { id: 'ufrj', full_name: 'Universidade Federal do Rio de Janeiro', short_name: 'UFRJ', city: 'Rio de Janeiro', country: 'Brazil',    country_code: 'BR', logo_url: '/assets/logos/ufrj.png',       logo_small_url: '/assets/logos/ufrj_small.png'       },
+  { id: 'itba', full_name: 'Instituto Tecnológico de Buenos Aires',   short_name: 'ITBA', city: 'Buenos Aires',   country: 'Argentina', country_code: 'AR', logo_url: '/assets/logos/itba.png',       logo_small_url: '/assets/logos/itba_small.png'       },
+  { id: 'ug',   full_name: 'University of Guyana',                    short_name: 'UG',   city: 'Georgetown',     country: 'Guyana',    country_code: 'GY', logo_url: '/assets/logos/ug.png',         logo_small_url: '/assets/logos/ug_small.png'         },
 ]
 
 const insertTeam = db.prepare(`
-  INSERT OR IGNORE INTO teams (id, full_name, short_name, city, country, country_code, logo_url)
-  VALUES (@id, @full_name, @short_name, @city, @country, @country_code, @logo_url)
+  INSERT OR IGNORE INTO teams (id, full_name, short_name, city, country, country_code, logo_url, logo_small_url)
+  VALUES (@id, @full_name, @short_name, @city, @country, @country_code, @logo_url, @logo_small_url)
 `)
 for (const t of teams) insertTeam.run(t)
 console.log(`Teams: ${teams.length} upserted`)
