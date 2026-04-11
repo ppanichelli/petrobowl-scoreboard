@@ -270,9 +270,9 @@ export default function AdminConsole() {
               </div>
 
               {(() => {
-                const lastAction = liveActions.length > 0 ? liveActions[liveActions.length - 1].action_type : null
-                const teamALocked = lastAction === 'incorrect_a'
-                const teamBLocked = lastAction === 'incorrect_b'
+                const rebuttal = computeRebuttalState(liveActions)
+                const teamALocked = rebuttal === 'a'
+                const teamBLocked = rebuttal === 'b'
                 return (
                   <div className="scoring-grid">
                     <div className="scoring-col">
@@ -339,15 +339,39 @@ export default function AdminConsole() {
   )
 
   function computeCurrentQuestion(actions) {
-    let q = 0, pending = false
+    let q = 0, pending = null
     for (const a of actions) {
       if (a.action_type === 'correct_a' || a.action_type === 'correct_b' || a.action_type === 'skip') {
-        q++; pending = false
-      } else if (a.action_type === 'incorrect_a' || a.action_type === 'incorrect_b') {
-        if (pending) { q++; pending = false } else pending = true
+        q++; pending = null
+      } else if (a.action_type === 'incorrect_a') {
+        if (pending === 'b') { q++; pending = null }
+        else if (!pending)   { pending = 'a' }
+      } else if (a.action_type === 'incorrect_b') {
+        if (pending === 'a') { q++; pending = null }
+        else if (!pending)   { pending = 'b' }
       }
     }
     return q + 1
+  }
+
+  // Returns which team is locked for the current question:
+  // 'a' → A already answered incorrectly, B has rebuttal (A locked)
+  // 'b' → B already answered incorrectly, A has rebuttal (B locked)
+  // null → fresh question, both teams free to answer
+  function computeRebuttalState(actions) {
+    let pending = null
+    for (const a of actions) {
+      if (a.action_type === 'correct_a' || a.action_type === 'correct_b' || a.action_type === 'skip') {
+        pending = null
+      } else if (a.action_type === 'incorrect_a') {
+        if (pending === 'b') pending = null      // both missed → question over, reset
+        else if (!pending)   pending = 'a'       // A missed first → B gets rebuttal, A locked
+      } else if (a.action_type === 'incorrect_b') {
+        if (pending === 'a') pending = null      // both missed → question over, reset
+        else if (!pending)   pending = 'b'       // B missed first → A gets rebuttal, B locked
+      }
+    }
+    return pending
   }
 
   function addRow() {

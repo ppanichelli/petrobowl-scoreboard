@@ -10,6 +10,8 @@ const authRoutes        = require('./routes/auth')
 const adminRoutes       = require('./routes/admin')
 const participantRoutes = require('./routes/participant')
 const publicRoutes      = require('./routes/public')
+const db                = require('./db/db')
+const { calcOdds }      = require('./lib/odds')
 
 const app    = express()
 const server = http.createServer(app)
@@ -57,7 +59,25 @@ if (fs.existsSync(PUBLIC_DIR)) {
 // ── Socket.IO ──────────────────────────────────────────────────────────────
 io.on('connection', (socket) => {
   socket.on('join_match', (matchId) => socket.join(`match:${matchId}`))
-  socket.on('join_odds',  (matchId) => socket.join(`odds:${matchId}`))
+  socket.on('join_odds', (matchId) => {
+    socket.join(`odds:${matchId}`)
+    // Immediately send current vote counts so the client has the latest state on join
+    try {
+      const match = db.prepare('SELECT team_a_id, team_b_id FROM matches WHERE id = ?').get(matchId)
+      if (match) {
+        const counts = db.prepare(`
+          SELECT
+            SUM(CASE WHEN prospected_team_id = ? THEN 1 ELSE 0 END) AS cnt_a,
+            SUM(CASE WHEN prospected_team_id = ? THEN 1 ELSE 0 END) AS cnt_b
+          FROM prospects WHERE match_id = ?
+        `).get(match.team_a_id, match.team_b_id, matchId)
+        const votes_a = counts.cnt_a || 0
+        const votes_b = counts.cnt_b || 0
+        const { oddsA, oddsB } = calcOdds(votes_a, votes_b)
+        socket.emit('odds_update', { match_id: matchId, oddsA, oddsB, votes_a, votes_b })
+      }
+    } catch (_) { /* non-fatal — client will still get live updates */ }
+  })
   socket.on('leave_match', (matchId) => socket.leave(`match:${matchId}`))
   socket.on('leave_odds',  (matchId) => socket.leave(`odds:${matchId}`))
 })

@@ -1,51 +1,188 @@
+/* ── NextMatchBanner ─────────────────────────────────────────────────────── */
 .next-banner {
-  min-height: 100vh;
+  min-height: calc(100vh - 52px);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  background: var(--pb-dark);
-  background-image: radial-gradient(ellipse at center, rgba(0,114,206,0.15) 0%, transparent 70%);
-  padding: 3rem;
+  gap: var(--space-xl);
+  padding: var(--space-2xl) var(--space-xl) var(--space-lg);
+
+  background:
+    radial-gradient(ellipse 70% 40% at 50% 0%,   oklch(28% 0.06 250) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 25% at 50% 100%,  oklch(18% 0.05 250) 0%, transparent 60%),
+    oklch(12% 0.025 250);
 }
 
-.next-banner__label {
-  font-size: 1rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
+/* ── Top: event logos + stage ────────────────────────────────────────────── */
+.next-banner__top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.next-banner__event-logos {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.next-banner__pb-logo {
+  height: clamp(90px, 12vw, 160px);
+  object-fit: contain;
+}
+
+.next-banner__reg-logo {
+  height: clamp(54px, 7.5vw, 100px);
+  object-fit: contain;
+  opacity: 0.82;
 }
 
 .next-banner__stage {
-  font-family: var(--font-title);
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--pb-gold);
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2.5rem);
+  font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--pb-gold);
+  line-height: 1;
 }
 
-.next-banner__teams {
-  display: flex;
+/* ── Matchup row ─────────────────────────────────────────────────────────── */
+.next-banner__matchup {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto 1fr;
   align-items: center;
-  gap: 3rem;
+  gap: clamp(1rem, 3vw, 3rem);
+  width: 100%;
+  max-width: 1400px;
 }
 
-.next-banner__team {
+/* ── Team identity ───────────────────────────────────────────────────────── */
+.next-banner__identity {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.next-banner__identity--a {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.next-banner__identity--b {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.next-banner__short {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  color: oklch(96% 0.008 250);
+}
+
+.next-banner__flag {
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  border-radius: 3px;
+  margin-top: 0.15em;
+}
+
+.next-banner__full {
+  font-family: var(--font-title);
+  font-size: clamp(0.7rem, 1.1vw, 0.95rem);
+  font-weight: 600;
+  color: oklch(74% 0.02 250);
+  line-height: 1.4;
+  max-width: 24ch;
+}
+
+/* ── Team logos ──────────────────────────────────────────────────────────── */
+.next-banner__logo img {
+  display: block;
+  width: clamp(80px, 11vw, 150px);
+  height: clamp(80px, 11vw, 150px);
+  object-fit: contain;
+  filter: drop-shadow(0 4px 24px oklch(35% 0.09 250 / 0.5));
+}
+
+/* ── VS divider ─────────────────────────────────────────────────────────── */
+.next-banner__vs {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.8rem;
-  text-align: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
 }
-.next-banner__team .fi { font-size: 3rem; }
-.next-banner__team img { width: 100px; height: 100px; object-fit: contain; }
-.next-banner__team span { font-family: var(--font-title); font-size: 2.5rem; font-weight: 700; }
-.next-banner__team small { color: rgba(255,255,255,0.55); max-width: 200px; }
 
-.next-banner__vs {
+.next-banner__vs-text {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2vw, 1.6rem);
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  color: oklch(38% 0.03 250);
+}
+
+.next-banner__vs-line {
+  display: block;
+  width: 1px;
+  height: clamp(32px, 5vw, 60px);
+  background: oklch(28% 0.04 250);
+}
+
+/* ── Community prediction ────────────────────────────────────────────────── */
+.next-banner__prospects {
+  width: 100%;
+  max-width: 1000px;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.next-banner__footer {
+  margin-top: auto;
+  width: 100%;
+  max-width: 1400px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: var(--space-md) 0;
+  border-top: 1px solid oklch(22% 0.04 250);
+}
+
+.next-banner__footer-left {
+  /* intentionally empty — balances the sponsor section */
+}
+
+.next-banner__footer-center {
+  display: flex;
+  justify-content: center;
+}
+
+.next-banner__spe-logo {
+  height: clamp(36px, 5vw, 56px);
+  object-fit: contain;
+  opacity: 0.65;
+}
+
+.next-banner__footer-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+.next-banner__sponsor-label {
   font-family: var(--font-title);
-  font-size: 2rem;
-  color: rgba(255,255,255,0.3);
+  font-size: clamp(0.52rem, 0.8vw, 0.68rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: oklch(48% 0.015 250);
+}
+
+.next-banner__ypf-logo {
+  height: clamp(24px, 3.5vw, 40px);
+  object-fit: contain;
+  opacity: 0.82;
 }

@@ -360,30 +360,25 @@ router.post('/database/reset', (req, res) => {
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-// Returns how many questions have been fully resolved (i.e., we're on the NEXT one)
+// Returns how many questions have been fully resolved (i.e., how many are done).
+// pendingRebuttal tracks WHICH team already answered incorrectly ('a' | 'b' | null)
+// so that pressing incorrect_a twice never falsely advances the counter.
 function computeCurrentQuestion(actions) {
-  // A question is resolved when we see correct_x, skip,
-  // or when incorrect_x is followed by any action for the other team on the same question,
-  // or when both teams answered incorrectly on the same question.
-  // Simplified: track question number from the action log.
   let question = 0
-  let pendingRebuttal = false // true = opposing team still has a chance
+  let pendingRebuttal = null // 'a' | 'b' | null
 
   for (const a of actions) {
-    if (a.action_type === 'correct_a' || a.action_type === 'correct_b') {
+    if (a.action_type === 'correct_a' || a.action_type === 'correct_b' || a.action_type === 'skip') {
       question++
-      pendingRebuttal = false
-    } else if (a.action_type === 'skip') {
-      question++
-      pendingRebuttal = false
-    } else if (a.action_type === 'incorrect_a' || a.action_type === 'incorrect_b') {
-      if (pendingRebuttal) {
-        // Second team also missed → move on
-        question++
-        pendingRebuttal = false
-      } else {
-        pendingRebuttal = true
-      }
+      pendingRebuttal = null
+    } else if (a.action_type === 'incorrect_a') {
+      if (pendingRebuttal === 'b') { question++; pendingRebuttal = null }  // both missed → advance
+      else if (!pendingRebuttal)   { pendingRebuttal = 'a' }               // A missed first → B gets rebuttal
+      // if pendingRebuttal === 'a': ignore duplicate (same team can't answer twice)
+    } else if (a.action_type === 'incorrect_b') {
+      if (pendingRebuttal === 'a') { question++; pendingRebuttal = null }  // both missed → advance
+      else if (!pendingRebuttal)   { pendingRebuttal = 'b' }               // B missed first → A gets rebuttal
+      // if pendingRebuttal === 'b': ignore duplicate
     }
   }
 

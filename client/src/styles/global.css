@@ -1,3 +1,6 @@
+/* ── Google Fonts ───────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Saira+Condensed:wght@400;600;700&display=swap');
+
 /* ── PetroBowl Design Tokens ───────────────────────────────────────────── */
 :root {
   --pb-blue:      #003B71;
@@ -11,8 +14,18 @@
   --pb-bg:        #0d0d1a;
 
   /* Typography */
-  --font-title: 'Myriad Variable Concept', 'Barlow', 'Arial Black', sans-serif;
-  --font-body:  'Stolzl', 'Barlow', 'Arial', sans-serif;
+  --font-display: 'Big Shoulders Display', 'Barlow Condensed', 'Arial Black', sans-serif;
+  --font-title:   'Saira Condensed', 'Myriad Variable Concept', 'Barlow', sans-serif;
+  --font-body:    'Stolzl', 'Barlow', 'Arial', sans-serif;
+
+  /* Spacing scale */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
 }
 
 /* ── Reset ─────────────────────────────────────────────────────────────── */

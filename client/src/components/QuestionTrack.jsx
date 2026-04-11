@@ -5,14 +5,17 @@ import './QuestionTrack.css'
  * Renders one row of question outcome dots for a team.
  * team: 'a' | 'b'
  */
-export default function QuestionTrack({ team, total, actions }) {
+export default function QuestionTrack({ team, label, total, actions }) {
   const dots = buildDots(team, total, actions)
 
   return (
     <div className={`q-track q-track--${team}`}>
-      {dots.map((d, i) => (
-        <span key={i} className={`q-dot q-dot--${d}`} style={{ '--i': i }} title={`Q${i + 1}: ${d}`} />
-      ))}
+      {label && <span className="q-track__label">{label}</span>}
+      <div className="q-track__dots">
+        {dots.map((d, i) => (
+          <span key={i} className={`q-dot q-dot--${d}`} style={{ '--i': i }} title={`Q${i + 1}: ${d}`} />
+        ))}
+      </div>
     </div>
   )
 }
