@@ -22,8 +22,8 @@
 
 .prospect-bar__title {
   font-family: var(--font-title);
-  font-size: clamp(0.6rem, 1vw, 0.75rem);
-  font-weight: 700;
+  font-size: clamp(0.6rem, 1vw, 0.95rem);
+  font-weight: 800;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: oklch(68% 0.02 250);
@@ -31,8 +31,8 @@
 
 .prospect-bar__status {
   font-family: var(--font-title);
-  font-size: clamp(0.6rem, 1vw, 0.72rem);
-  font-weight: 600;
+  font-size: clamp(0.6rem, 1vw, 0.95rem);
+  font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--pb-gold);
@@ -154,8 +154,8 @@
 /* Odds — gold multiplier, inline with percentage */
 .prospect-bar__odds {
   font-family: var(--font-display);
-  font-size: clamp(0.85rem, 1.6vw, 1.3rem);
-  font-weight: 700;
+  font-size: clamp(0.85rem, 1.6vw, 1.8rem);
+  font-weight: 800;
   color: var(--pb-gold);
   line-height: 1;
 }

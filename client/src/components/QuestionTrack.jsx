@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './QuestionTrack.css'
 
 /**
@@ -7,13 +7,40 @@ import './QuestionTrack.css'
  */
 export default function QuestionTrack({ team, label, total, actions }) {
   const dots = buildDots(team, total, actions)
+  const prevDotsRef = useRef(null)
+  const [freshIndices, setFreshIndices] = useState(new Set())
+
+  useEffect(() => {
+    const prev = prevDotsRef.current
+    const current = [...dots]
+
+    if (prev !== null) {
+      const fresh = new Set()
+      current.forEach((d, i) => {
+        if (prev[i] === 'empty' && d !== 'empty') fresh.add(i)
+      })
+      if (fresh.size > 0) {
+        setFreshIndices(fresh)
+        const t = setTimeout(() => setFreshIndices(new Set()), 750)
+        prevDotsRef.current = current
+        return () => clearTimeout(t)
+      }
+    }
+
+    prevDotsRef.current = current
+  }, [actions]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className={`q-track q-track--${team}`}>
       {label && <span className="q-track__label">{label}</span>}
       <div className="q-track__dots">
         {dots.map((d, i) => (
-          <span key={i} className={`q-dot q-dot--${d}`} style={{ '--i': i }} title={`Q${i + 1}: ${d}`} />
+          <span
+            key={`${i}-${d}`}
+            className={`q-dot q-dot--${d}${freshIndices.has(i) ? ' q-dot--fresh' : ''}`}
+            style={{ '--i': i }}
+            title={`Q${i + 1}: ${d}`}
+          />
         ))}
       </div>
     </div>

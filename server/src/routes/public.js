@@ -51,7 +51,9 @@ router.get('/matches/history', (req, res) => {
   const matches = db.prepare(`
     SELECT m.*,
            ta.short_name AS team_a_short, ta.country_code AS team_a_cc,
-           tb.short_name AS team_b_short, tb.country_code AS team_b_cc
+           ta.logo_url AS team_a_logo, ta.logo_small_url AS team_a_logo_small,
+           tb.short_name AS team_b_short, tb.country_code AS team_b_cc,
+           tb.logo_url AS team_b_logo, tb.logo_small_url AS team_b_logo_small
     FROM matches m
     JOIN teams ta ON ta.id = m.team_a_id
     JOIN teams tb ON tb.id = m.team_b_id
@@ -80,7 +82,9 @@ router.get('/matches/upcoming', (req, res) => {
   const matches = db.prepare(`
     SELECT m.*,
            ta.short_name AS team_a_short, ta.country_code AS team_a_cc,
+           ta.logo_url AS team_a_logo, ta.logo_small_url AS team_a_logo_small,
            tb.short_name AS team_b_short, tb.country_code AS team_b_cc,
+           tb.logo_url AS team_b_logo, tb.logo_small_url AS team_b_logo_small,
            (SELECT COUNT(*) FROM prospects WHERE match_id = m.id AND prospected_team_id = m.team_a_id) AS votes_a,
            (SELECT COUNT(*) FROM prospects WHERE match_id = m.id AND prospected_team_id = m.team_b_id) AS votes_b
     FROM matches m

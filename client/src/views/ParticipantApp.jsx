@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useParticipantAuth } from '../hooks/useParticipantAuth'
 import { useSocket } from '../hooks/useSocket'
 import './ParticipantApp.css'
 
+const RANK_MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' }
+
 export default function ParticipantApp() {
-  const { participant, refreshParticipant, logout } = useParticipantAuth()
+  const { participant, logout } = useParticipantAuth()
   const socket = useSocket()
 
   const [tab, setTab]           = useState('home')
@@ -13,15 +15,24 @@ export default function ParticipantApp() {
   const [history, setHistory]   = useState([])
   const [notification, setNotification] = useState(null)
   const [me, setMe]             = useState(participant)
-  const [pendingPicks, setPendingPicks] = useState({}) // matchId → teamId
-  const [savedNotif, setSavedNotif] = useState(null)
-  const [prospectError, setProspectError] = useState(null) // { matchId, msg }
-  const [lbPage, setLbPage]     = useState(0)
-  const LB_PAGE_SIZE = 20
+  const [pendingPicks, setPendingPicks] = useState({})
+  const [savedNotif, setSavedNotif]     = useState(null)
+  const [prospectError, setProspectError] = useState(null)
 
+  // Scroll-to-me on leaderboard
+  const meRowRef   = useRef(null)
+  const lbListRef  = useRef(null)
+
+  useEffect(() => { loadAll() }, [])
+
+  // Auto-scroll to current user's row when leaderboard becomes visible
   useEffect(() => {
-    loadAll()
-  }, [])
+    if (tab === 'leaderboard' && meRowRef.current) {
+      setTimeout(() => {
+        meRowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 120)
+    }
+  }, [tab, leaderboard.length])
 
   useEffect(() => {
     if (!socket) return
@@ -57,7 +68,6 @@ export default function ParticipantApp() {
     if (r.ok) {
       const data = await r.json()
       setMatches(data)
-      // Join odds rooms for open matches
       if (socket) data.filter(m => m.status === 'setup').forEach(m => socket.emit('join_odds', m.id))
     }
   }
@@ -97,49 +107,73 @@ export default function ParticipantApp() {
 
   return (
     <div className="p-app">
+
       {notification && (
         <div className="p-app__notification" onClick={() => setNotification(null)}>
-          {notification} ✕
+          {notification} <span className="p-app__notif-close">✕</span>
         </div>
       )}
 
+      {/* ── Header ──────────────────────────────────────────────────────── */}
       <header className="p-app__header">
-        <img src="/assets/petrobowl-logo.png" alt="PetroBowl" className="p-app__logo" />
+        <img
+          src="/assets/images/PETROBOWL 2026 LOGO.png"
+          alt="PetroBowl 2026"
+          className="p-app__header-logo"
+        />
         <div className="p-app__user">
-          <span>{me?.display_name || me?.pin}</span>
-          {me?.country_code && <span className={`fi fi-${me.country_code.toLowerCase()}`} />}
+          {me?.country_code && (
+            <span className={`fi fi-${me.country_code.toLowerCase()} p-app__user-flag`} />
+          )}
+          <span className="p-app__user-name">{me?.display_name || me?.pin}</span>
         </div>
       </header>
 
       {/* ── HOME ──────────────────────────────────────────────────────────── */}
       {tab === 'home' && (
         <div className="p-tab">
+
+          {/* Stats strip */}
           <div className="p-home__stats">
             <div className="p-stat">
               <div className="p-stat__value">{Number(me?.total_points ?? 0).toFixed(1)}</div>
               <div className="p-stat__label">Points</div>
             </div>
-            <div className="p-stat">
+            <div className="p-stat p-stat--rank">
               <div className="p-stat__value">#{me?.rank ?? '—'}</div>
               <div className="p-stat__label">Rank</div>
             </div>
           </div>
 
-          <h2>Upcoming Matches</h2>
-          {matches.length === 0 && <p className="p-empty">No upcoming matches right now.</p>}
+          {/* Section heading */}
+          <div className="p-section-header">
+            <h2 className="p-section-title">Upcoming Matches</h2>
+            <span className="p-section-subtitle">Make your prospects</span>
+          </div>
+
+          {matches.length === 0 && (
+            <p className="p-empty">No upcoming matches right now.</p>
+          )}
+
           {matches.map(m => (
-            <div key={m.id} className={`p-match-card ${m.status === 'live' ? 'p-match-card--live' : ''}`}>
-              <div className="p-match-card__stage">{formatStage(m.stage)}</div>
+            <div key={m.id} className={`p-match-card${m.status === 'live' ? ' p-match-card--live' : ''}`}>
+              <div className="p-match-card__stage">
+                {m.status === 'live' && <span className="p-match-card__live-dot" />}
+                {formatStage(m.stage)}
+              </div>
+
               <div className="p-match-card__teams">
                 <div className="p-match-card__team">
                   <span className={`fi fi-${m.team_a_cc?.toLowerCase()}`} />
-                  <span>{m.team_a_short}</span>
-                  <strong className="p-match-card__odds">{m.odds_a != null ? `${Number(m.odds_a).toFixed(1)}×` : '—'}</strong>
+                  <span className="p-match-card__name">{m.team_a_short}</span>
                 </div>
-                <span className="p-match-card__vs">VS</span>
+                <div className="p-match-card__center">
+                  <span className="p-match-card__odds">{m.odds_a != null ? `${Number(m.odds_a).toFixed(1)}×` : '—'}</span>
+                  <span className="p-match-card__vs">VS</span>
+                  <span className="p-match-card__odds">{m.odds_b != null ? `${Number(m.odds_b).toFixed(1)}×` : '—'}</span>
+                </div>
                 <div className="p-match-card__team p-match-card__team--b">
-                  <strong className="p-match-card__odds">{m.odds_b != null ? `${Number(m.odds_b).toFixed(1)}×` : '—'}</strong>
-                  <span>{m.team_b_short}</span>
+                  <span className="p-match-card__name">{m.team_b_short}</span>
                   <span className={`fi fi-${m.team_b_cc?.toLowerCase()}`} />
                 </div>
               </div>
@@ -148,38 +182,41 @@ export default function ParticipantApp() {
                 <>
                   <div className="p-match-card__buttons">
                     <button
-                      className={`p-prospect-btn ${(pendingPicks[m.id] ?? m.my_prospect) === m.team_a_id ? 'active' : ''}`}
+                      className={`p-prospect-btn${(pendingPicks[m.id] ?? m.my_prospect) === m.team_a_id ? ' p-prospect-btn--active' : ''}`}
                       onClick={() => setPendingPicks(p => ({ ...p, [m.id]: m.team_a_id }))}
                     >{m.team_a_short}</button>
                     <button
-                      className={`p-prospect-btn ${(pendingPicks[m.id] ?? m.my_prospect) === m.team_b_id ? 'active' : ''}`}
+                      className={`p-prospect-btn${(pendingPicks[m.id] ?? m.my_prospect) === m.team_b_id ? ' p-prospect-btn--active' : ''}`}
                       onClick={() => setPendingPicks(p => ({ ...p, [m.id]: m.team_b_id }))}
                     >{m.team_b_short}</button>
                   </div>
                   {pendingPicks[m.id] && (
-                    <button className="p-save-btn" onClick={() => saveProspect(m.id)}>Save Prospect</button>
+                    <button className="p-save-btn" onClick={() => saveProspect(m.id)}>
+                      Save Prospect
+                    </button>
                   )}
                   {prospectError?.matchId === m.id && (
-                    <div className="p-prospect-error">{prospectError.msg}</div>
+                    <div className="p-feedback p-feedback--error">{prospectError.msg}</div>
                   )}
                   {savedNotif === m.id && (
-                    <div className="p-saved-confirm">✓ Prospect saved!</div>
+                    <div className="p-feedback p-feedback--success">Prospect saved</div>
                   )}
                 </>
               )}
+
               {!m.prospecting_open && (
                 <>
                   <div className="p-match-card__buttons">
                     <button
-                      className={`p-prospect-btn p-prospect-btn--locked ${m.my_prospect === m.team_a_id ? 'p-prospect-btn--picked' : ''}`}
+                      className={`p-prospect-btn p-prospect-btn--locked${m.my_prospect === m.team_a_id ? ' p-prospect-btn--picked' : ''}`}
                       disabled
                     >{m.team_a_short}{m.my_prospect === m.team_a_id ? ' ✓' : ''}</button>
                     <button
-                      className={`p-prospect-btn p-prospect-btn--locked ${m.my_prospect === m.team_b_id ? 'p-prospect-btn--picked' : ''}`}
+                      className={`p-prospect-btn p-prospect-btn--locked${m.my_prospect === m.team_b_id ? ' p-prospect-btn--picked' : ''}`}
                       disabled
                     >{m.team_b_short}{m.my_prospect === m.team_b_id ? ' ✓' : ''}</button>
                   </div>
-                  <div className="p-match-card__locked">Prospects Locked</div>
+                  <div className="p-match-card__locked">Prospects locked</div>
                 </>
               )}
             </div>
@@ -188,54 +225,66 @@ export default function ParticipantApp() {
       )}
 
       {/* ── LEADERBOARD ───────────────────────────────────────────────────── */}
-      {tab === 'leaderboard' && (() => {
-        const page = leaderboard.slice(lbPage * LB_PAGE_SIZE, (lbPage + 1) * LB_PAGE_SIZE)
-        const totalPages = Math.ceil(leaderboard.length / LB_PAGE_SIZE)
-        return (
-          <div className="p-tab">
-            <h2>Leaderboard</h2>
-            <table className="p-leaderboard">
-              <thead>
-                <tr><th>#</th><th>Name</th><th>Country</th><th>Points</th></tr>
-              </thead>
-              <tbody>
-                {page.map(row => (
-                  <tr key={row.pin} className={row.isMe ? 'p-leaderboard__me' : ''}>
-                    <td>{row.rank}</td>
-                    <td>{row.display_name}</td>
-                    <td>{row.country_code && <span className={`fi fi-${row.country_code.toLowerCase()}`} />}</td>
-                    <td>{Number(row.total_points).toFixed(1)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {totalPages > 1 && (
-              <div className="p-lb-pagination">
-                <button onClick={() => setLbPage(p => Math.max(0, p - 1))} disabled={lbPage === 0}>‹ Prev</button>
-                <span>{lbPage + 1} / {totalPages}</span>
-                <button onClick={() => setLbPage(p => Math.min(totalPages - 1, p + 1))} disabled={lbPage >= totalPages - 1}>Next ›</button>
-              </div>
-            )}
+      {tab === 'leaderboard' && (
+        <div className="p-tab">
+          <div className="p-section-header">
+            <h2 className="p-section-title">Leaderboard</h2>
+            <span className="p-section-subtitle">{leaderboard.length} participants</span>
           </div>
-        )
-      })()}
+
+          <ol className="p-lb__list" ref={lbListRef}>
+            {leaderboard.map((row, i) => (
+              <li
+                key={row.pin}
+                ref={row.isMe ? meRowRef : null}
+                className={[
+                  'p-lb__row',
+                  row.rank <= 3 ? `p-lb__row--top${row.rank}` : '',
+                  row.isMe    ? 'p-lb__row--me' : '',
+                ].filter(Boolean).join(' ')}
+                style={{ '--row-i': i }}
+              >
+                <span className="p-lb__rank">
+                  {RANK_MEDALS[row.rank] ?? row.rank}
+                </span>
+                <span className="p-lb__flag">
+                  {row.country_code && (
+                    <span className={`fi fi-${row.country_code.toLowerCase()}`} />
+                  )}
+                </span>
+                <span className="p-lb__name">{row.display_name || '—'}</span>
+                <span className="p-lb__pts">{Number(row.total_points).toFixed(1)}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
 
       {/* ── HISTORY ───────────────────────────────────────────────────────── */}
       {tab === 'history' && (
         <div className="p-tab">
-          <h2>My Prospects</h2>
-          {history.length === 0 && <p className="p-empty">No prospects placed yet.</p>}
+          <div className="p-section-header">
+            <h2 className="p-section-title">My Prospects</h2>
+          </div>
+          {history.length === 0 && (
+            <p className="p-empty">No prospects placed yet.</p>
+          )}
           {history.map(p => (
             <div key={p.id} className={`p-history-item p-history-item--${outcomeClass(p)}`}>
-              <div className="p-history-item__match">{p.team_a_short} vs {p.team_b_short}</div>
-              <div className="p-history-item__pick">Picked: {p.prospected_team_id}</div>
-              <div className="p-history-item__result">
-                {p.payout === null
-                  ? 'Pending'
-                  : p.payout === 0
-                    ? (p.match_status === 'finished' && !p.is_draw ? 'Wrong (0 pts)' : 'Void (draw)')
-                    : `+${Number(p.payout).toFixed(1)} pts`
-                }
+              <div className="p-history-item__header">
+                <span className="p-history-item__match">{p.team_a_short} vs {p.team_b_short}</span>
+                <span className="p-history-item__stage">{formatStage(p.stage)}</span>
+              </div>
+              <div className="p-history-item__footer">
+                <span className="p-history-item__pick">Picked: {p.prospected_team_id}</span>
+                <span className="p-history-item__result">
+                  {p.payout === null
+                    ? 'Pending'
+                    : p.payout === 0
+                      ? (p.match_status === 'finished' && !p.is_draw ? '✗ Wrong' : '— Draw')
+                      : `+${Number(p.payout).toFixed(1)} pts`
+                  }
+                </span>
               </div>
             </div>
           ))}
@@ -244,23 +293,48 @@ export default function ParticipantApp() {
 
       {/* ── BOTTOM NAV ────────────────────────────────────────────────────── */}
       <nav className="p-app__nav">
-        <button className={tab === 'home' ? 'active' : ''} onClick={() => setTab('home')}>Home</button>
-        <button className={tab === 'leaderboard' ? 'active' : ''} onClick={() => { setTab('leaderboard'); loadLeaderboard() }}>Leaderboard</button>
-        <button className={tab === 'history' ? 'active' : ''} onClick={() => { setTab('history'); loadHistory() }}>My Bets</button>
-        <button onClick={logout}>Logout</button>
+        <button
+          className={`p-nav-btn${tab === 'home' ? ' p-nav-btn--active' : ''}`}
+          onClick={() => setTab('home')}
+        >
+          <span className="p-nav-btn__icon">⬡</span>
+          <span className="p-nav-btn__label">Home</span>
+        </button>
+        <button
+          className={`p-nav-btn${tab === 'leaderboard' ? ' p-nav-btn--active' : ''}`}
+          onClick={() => { setTab('leaderboard'); loadLeaderboard() }}
+        >
+          <span className="p-nav-btn__icon">◈</span>
+          <span className="p-nav-btn__label">Rankings</span>
+        </button>
+        <button
+          className={`p-nav-btn${tab === 'history' ? ' p-nav-btn--active' : ''}`}
+          onClick={() => { setTab('history'); loadHistory() }}
+        >
+          <span className="p-nav-btn__icon">◎</span>
+          <span className="p-nav-btn__label">My Prospects</span>
+        </button>
+        <button className="p-nav-btn p-nav-btn--logout" onClick={logout}>
+          <span className="p-nav-btn__icon">⏻</span>
+          <span className="p-nav-btn__label">Exit</span>
+        </button>
       </nav>
+
     </div>
   )
 }
 
 function formatStage(s) {
-  const m = { group:'Group Stage', quarterfinal:'Quarterfinal', semifinal:'Semifinal', third_place:'Third Place', final:'Grand Final', tiebreaker:'Tiebreaker' }
+  const m = {
+    group: 'Group Stage', quarterfinal: 'Quarterfinal', semifinal: 'Semifinal',
+    third_place: 'Third Place', final: 'Grand Final', tiebreaker: 'Tiebreaker',
+  }
   return m[s] || s
 }
 
 function outcomeClass(p) {
   if (p.payout === null) return 'pending'
-  if (p.payout > 0) return 'win'
-  if (p.is_draw) return 'void'
+  if (p.payout > 0)     return 'win'
+  if (p.is_draw)        return 'void'
   return 'loss'
 }

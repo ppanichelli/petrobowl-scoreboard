@@ -1,0 +1,111 @@
+/* ── Landing screen ──────────────────────────────────────────────────────── */
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  position: relative;
+}
+
+/* ── Center block: logos + next match ───────────────────────────────────── */
+.landing__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.2rem, 3vw, 2.4rem);
+  flex: 1;
+  justify-content: center;
+}
+
+.landing__pb-logo {
+  height: clamp(100px, 20vw, 240px);
+  object-fit: contain;
+  animation: landingBreathe 4.5s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 40px oklch(40% 0.10 250 / 0.40));
+}
+
+.landing__reg-logo {
+  height: clamp(32px, 5vw, 64px);
+  object-fit: contain;
+  opacity: 0.70;
+  animation: landingBreathe 4.5s ease-in-out 0.6s infinite alternate;
+}
+
+@keyframes landingBreathe {
+  from { transform: scale(0.975); opacity: 0.85; }
+  to   { transform: scale(1.025); opacity: 1.00; }
+}
+
+/* ── Next match line ─────────────────────────────────────────────────────── */
+.landing__next {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  animation: landingFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  margin-top: clamp(0.5rem, 2vw, 1.5rem);
+}
+
+@keyframes landingFadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.landing__next-label {
+  font-family: var(--font-title);
+  font-size: clamp(0.65rem, 1.1vw, 0.85rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--pb-gold);
+}
+
+.landing__next-matchup {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 4rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: oklch(95% 0.008 250);
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  line-height: 1;
+}
+
+.landing__next-vs {
+  font-family: var(--font-title);
+  font-size: 0.38em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: oklch(45% 0.03 250);
+}
+
+/* ── Sponsor strip ───────────────────────────────────────────────────────── */
+.landing__sponsors {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2rem, 6vw, 5rem);
+  padding-bottom: clamp(1.5rem, 4vw, 3rem);
+}
+
+.landing__sponsor-logo {
+  height: clamp(28px, 4vw, 52px);
+  object-fit: contain;
+  opacity: 0.55;
+  transition: opacity 0.2s;
+}
+
+.landing__sponsor-logo:hover {
+  opacity: 0.80;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing__pb-logo,
+  .landing__reg-logo {
+    animation: none;
+  }
+}

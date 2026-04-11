@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSocket } from '../hooks/useSocket'
 import ProspectBar from '../components/ProspectBar'
+import PublicPageShell from '../components/PublicPageShell'
 import './AllMatches.css'
 
 const STAGE_LABEL = {
@@ -9,9 +10,16 @@ const STAGE_LABEL = {
 }
 const fmt = s => STAGE_LABEL[s] || s
 
+const FILTERS = [
+  { key: 'all',      label: 'All' },
+  { key: 'upcoming', label: 'Live & Upcoming' },
+  { key: 'finished', label: 'Completed' },
+]
+
 export default function AllMatches() {
   const [upcoming, setUpcoming] = useState([])
   const [history,  setHistory]  = useState([])
+  const [filter,   setFilter]   = useState('all')
   const socket = useSocket()
 
   useEffect(() => {
@@ -50,24 +58,74 @@ export default function AllMatches() {
     }
   }, [socket])
 
-  return (
-    <div className="all-matches">
-      <section className="all-matches__section">
-        <h2 className="all-matches__heading">Upcoming &amp; Live</h2>
-        {upcoming.length === 0
-          ? <p className="all-matches__empty">No upcoming matches.</p>
-          : upcoming.map((m, i) => <UpcomingCard key={m.id} m={m} index={i} />)
-        }
-      </section>
+  const showUpcoming = filter === 'all' || filter === 'upcoming'
+  const showFinished = filter === 'all' || filter === 'finished'
 
-      <section className="all-matches__section">
-        <h2 className="all-matches__heading">Completed</h2>
-        {history.length === 0
-          ? <p className="all-matches__empty">No completed matches yet.</p>
-          : history.map((m, i) => <HistoryCard key={m.id} m={m} index={i} />)
-        }
-      </section>
+  return (
+    <PublicPageShell>
+    <div className="all-matches">
+
+      {/* Page header */}
+      <div className="all-matches__header">
+        <h1 className="all-matches__title">Matches</h1>
+        <div className="all-matches__filters">
+          {FILTERS.map(f => (
+            <button
+              key={f.key}
+              className={`am-filter${filter === f.key ? ' am-filter--active' : ''}`}
+              onClick={() => setFilter(f.key)}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {showUpcoming && (
+        <section className="all-matches__section">
+          <h2 className="all-matches__heading">Live &amp; Upcoming</h2>
+          <div className="all-matches__grid">
+            {upcoming.length === 0
+              ? <p className="all-matches__empty">No upcoming matches.</p>
+              : upcoming.map((m, i) => <UpcomingCard key={m.id} m={m} index={i} />)
+            }
+          </div>
+        </section>
+      )}
+
+      {showFinished && (
+        <section className="all-matches__section">
+          <h2 className="all-matches__heading">Completed</h2>
+          <div className="all-matches__grid">
+            {history.length === 0
+              ? <p className="all-matches__empty">No completed matches yet.</p>
+              : history.map((m, i) => <HistoryCard key={m.id} m={m} index={i} />)
+            }
+          </div>
+        </section>
+      )}
+
     </div>
+    </PublicPageShell>
+  )
+}
+
+function TeamLogo({ small, full, alt }) {
+  const src = small || full
+  if (!src) return null
+  return (
+    <img
+      className="am-card__logo"
+      src={src}
+      alt={alt}
+      onError={e => {
+        if (full && e.target.src !== full) {
+          e.target.src = full       // try full-size logo
+        } else {
+          e.target.style.display = 'none'   // give up silently
+        }
+      }}
+    />
   )
 }
 
@@ -81,15 +139,19 @@ function UpcomingCard({ m, index }) {
       </div>
       <div className="am-card__row">
         <div className="am-card__team">
-          <span className={`fi fi-${m.team_a_cc?.toLowerCase()}`} />
+          <TeamLogo small={m.team_a_logo_small} full={m.team_a_logo} alt={m.team_a_short} />
           <span className="am-card__name">{m.team_a_short}</span>
-          <span className="am-card__odds">{m.odds_a != null ? `${Number(m.odds_a).toFixed(1)}×` : '—'}</span>
+          <span className={`am-card__flag fi fi-${m.team_a_cc?.toLowerCase()}`} />
         </div>
-        <span className="am-card__vs">VS</span>
-        <div className="am-card__team am-card__team--b">
+        <div className="am-card__center">
+          <span className="am-card__odds">{m.odds_a != null ? `${Number(m.odds_a).toFixed(1)}×` : '—'}</span>
+          <span className="am-card__vs">VS</span>
           <span className="am-card__odds">{m.odds_b != null ? `${Number(m.odds_b).toFixed(1)}×` : '—'}</span>
+        </div>
+        <div className="am-card__team am-card__team--b">
+          <span className={`am-card__flag fi fi-${m.team_b_cc?.toLowerCase()}`} />
           <span className="am-card__name">{m.team_b_short}</span>
-          <span className={`fi fi-${m.team_b_cc?.toLowerCase()}`} />
+          <TeamLogo small={m.team_b_logo_small} full={m.team_b_logo} alt={m.team_b_short} />
         </div>
       </div>
       <div className="am-card__prospects">
@@ -108,23 +170,27 @@ function UpcomingCard({ m, index }) {
 }
 
 function HistoryCard({ m, index }) {
-  const isDraw = m.is_draw
+  const isDraw  = m.is_draw
   const winnerA = !isDraw && m.winner_id === m.team_a_id
   const winnerB = !isDraw && m.winner_id === m.team_b_id
   return (
     <div className="am-card am-card--finished" style={{ '--card-i': index }}>
       <div className="am-card__stage">{fmt(m.stage)}</div>
       <div className="am-card__row">
-        <div className={`am-card__team ${winnerA ? 'am-card__team--winner' : ''}`}>
-          <span className={`fi fi-${m.team_a_cc?.toLowerCase()}`} />
+        <div className={`am-card__team${winnerA ? ' am-card__team--winner' : winnerB ? ' am-card__team--loser' : ''}`}>
+          <TeamLogo small={m.team_a_logo_small} full={m.team_a_logo} alt={m.team_a_short} />
           <span className="am-card__name">{m.team_a_short}</span>
-          <span className="am-card__score">{m.score_a}</span>
+          <span className={`am-card__flag fi fi-${m.team_a_cc?.toLowerCase()}`} />
         </div>
-        <span className="am-card__vs">{isDraw ? 'DRAW' : 'VS'}</span>
-        <div className={`am-card__team am-card__team--b ${winnerB ? 'am-card__team--winner' : ''}`}>
-          <span className="am-card__score">{m.score_b}</span>
+        <div className="am-card__center">
+          <span className={`am-card__score${winnerA ? ' am-card__score--winner' : winnerB ? ' am-card__score--loser' : ''}`}>{m.score_a}</span>
+          <span className="am-card__vs">{isDraw ? 'DRAW' : '–'}</span>
+          <span className={`am-card__score${winnerB ? ' am-card__score--winner' : winnerA ? ' am-card__score--loser' : ''}`}>{m.score_b}</span>
+        </div>
+        <div className={`am-card__team am-card__team--b${winnerB ? ' am-card__team--winner' : winnerA ? ' am-card__team--loser' : ''}`}>
+          <span className={`am-card__flag fi fi-${m.team_b_cc?.toLowerCase()}`} />
           <span className="am-card__name">{m.team_b_short}</span>
-          <span className={`fi fi-${m.team_b_cc?.toLowerCase()}`} />
+          <TeamLogo small={m.team_b_logo_small} full={m.team_b_logo} alt={m.team_b_short} />
         </div>
       </div>
     </div>

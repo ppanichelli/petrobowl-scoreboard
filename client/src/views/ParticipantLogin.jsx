@@ -22,6 +22,7 @@ export default function ParticipantLogin() {
   const [step, setStep]         = useState('pin')  // 'pin' | 'profile'
   const [displayName, setDisplayName] = useState('')
   const [country, setCountry]   = useState('')
+  const [profileError, setProfileError] = useState('')
 
   const handlePin = async (e) => {
     e.preventDefault()
@@ -30,8 +31,6 @@ export default function ParticipantLogin() {
     if (data.isFirstLogin) setStep('profile')
     else navigate('/p')
   }
-
-  const [profileError, setProfileError] = useState('')
 
   const handleProfile = async (e) => {
     e.preventDefault()
@@ -48,14 +47,30 @@ export default function ParticipantLogin() {
 
   return (
     <div className="p-login">
-      <div className="p-login__card">
-        <img src="/assets/petrobowl-logo.png" alt="PetroBowl" className="p-login__logo" />
+
+      {/* Header — same dual-logo pattern as Matches/Leaderboard */}
+      <header className="p-login__header">
+        <img
+          className="p-login__header-logo p-login__header-logo--primary"
+          src="/assets/images/PETROBOWL 2026 LOGO.png"
+          alt="PetroBowl 2026"
+        />
+        <img
+          className="p-login__header-logo p-login__header-logo--regionals"
+          src="/assets/images/The-Regionals.png"
+          alt="The Regionals"
+        />
+      </header>
+
+      {/* Form body */}
+      <div className="p-login__body">
 
         {step === 'pin' && (
-          <>
-            <h1>Enter Your PIN</h1>
-            <p>Your 6-digit PIN code was provided at check-in.</p>
-            <form onSubmit={handlePin}>
+          <div className="p-login__form-wrap">
+            <p className="p-login__eyebrow">Login to place your prospects</p>
+            <h1 className="p-login__title">Enter Your PIN</h1>
+            <p className="p-login__hint">Your 6-digit code was provided at check-in.</p>
+            <form onSubmit={handlePin} className="p-login__form">
               <input
                 type="text"
                 inputMode="numeric"
@@ -65,38 +80,49 @@ export default function ParticipantLogin() {
                 value={pin}
                 onChange={e => setPin(e.target.value)}
                 className="p-login__pin-input"
+                autoFocus
                 required
               />
               {error && <p className="p-login__error">{error}</p>}
-              <button type="submit">Enter</button>
+              <button type="submit" className="p-login__submit">Enter</button>
             </form>
-          </>
+          </div>
         )}
 
         {step === 'profile' && (
-          <>
-            <h1>Welcome!</h1>
-            <p>Enter your name and country to start prospecting.</p>
-            <form onSubmit={handleProfile}>
-              <input
-                type="text"
-                placeholder="Your name"
-                value={displayName}
-                onChange={e => setDisplayName(e.target.value)}
-                maxLength={50}
-                required
-              />
-              <select value={country} onChange={e => setCountry(e.target.value)} required>
-                <option value="">Select country…</option>
-                {COUNTRIES.map(c => (
-                  <option key={c.code} value={c.code}>{c.name}</option>
-                ))}
-              </select>
+          <div className="p-login__form-wrap">
+            <p className="p-login__eyebrow">Almost there</p>
+            <h1 className="p-login__title">Set Up Profile</h1>
+            <p className="p-login__hint">Enter your name and country to start prospecting.</p>
+            <form onSubmit={handleProfile} className="p-login__form">
+              <div className="p-login__field">
+                <label className="p-login__label">Display Name</label>
+                <input
+                  type="text"
+                  placeholder="Your name"
+                  value={displayName}
+                  onChange={e => setDisplayName(e.target.value)}
+                  maxLength={50}
+                  autoFocus
+                  required
+                />
+                <p className="p-login__field-note">Your name cannot be changed later.</p>
+              </div>
+              <div className="p-login__field">
+                <label className="p-login__label">Country</label>
+                <select value={country} onChange={e => setCountry(e.target.value)} required>
+                  <option value="">Select country…</option>
+                  {COUNTRIES.map(c => (
+                    <option key={c.code} value={c.code}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
               {profileError && <p className="p-login__error">{profileError}</p>}
-              <button type="submit">Continue</button>
+              <button type="submit" className="p-login__submit">Continue</button>
             </form>
-          </>
+          </div>
         )}
+
       </div>
     </div>
   )

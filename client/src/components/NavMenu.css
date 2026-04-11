@@ -1,0 +1,149 @@
+/* ── NavMenu — fixed bottom-left slide-up drawer ─────────────────────────── */
+
+.nav-menu {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* ── Trigger button ─────────────────────────────────────────────────────── */
+.nav-menu__btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: oklch(20% 0.04 250 / 0.92);
+  border: 1px solid oklch(35% 0.06 250);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.nav-menu__btn:hover {
+  background: oklch(26% 0.06 250 / 0.96);
+  border-color: oklch(45% 0.08 250);
+}
+
+.nav-menu__btn--open {
+  background: oklch(24% 0.05 250 / 0.96);
+  border-color: var(--pb-gold);
+}
+
+.nav-menu__btn-bar {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: oklch(75% 0.02 250);
+  border-radius: 2px;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity   0.2s,
+              width     0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: center;
+}
+
+/* Animate bars into × when open */
+.nav-menu__btn--open .nav-menu__btn-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-menu__btn--open .nav-menu__btn-bar:nth-child(2) {
+  opacity: 0;
+  width: 0;
+}
+.nav-menu__btn--open .nav-menu__btn-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ── Drawer ──────────────────────────────────────────────────────────────── */
+.nav-menu__drawer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: oklch(16% 0.04 250 / 0.96);
+  border: 1px solid oklch(30% 0.05 250);
+  border-radius: 14px;
+  padding: 8px;
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 8px 32px oklch(5% 0.02 250 / 0.60),
+    0 2px 8px  oklch(5% 0.02 250 / 0.40);
+
+  /* Hidden by default — slide down + fade out */
+  transform: translateY(12px);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity   0.22s ease;
+}
+
+.nav-menu__drawer--open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Nav items ───────────────────────────────────────────────────────────── */
+.nav-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 9px;
+  text-decoration: none;
+  transition: background 0.15s;
+  color: oklch(65% 0.02 250);
+}
+
+.nav-menu__item:hover {
+  background: oklch(24% 0.05 250);
+  color: oklch(88% 0.015 250);
+}
+
+.nav-menu__item--active {
+  background: oklch(22% 0.06 85 / 0.30);
+  color: var(--pb-gold);
+}
+
+.nav-menu__item--active:hover {
+  background: oklch(26% 0.07 85 / 0.38);
+  color: var(--pb-gold);
+}
+
+.nav-menu__icon {
+  font-size: 0.9rem;
+  width: 18px;
+  text-align: center;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.nav-menu__item--active .nav-menu__icon {
+  opacity: 1;
+}
+
+.nav-menu__label {
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-menu__drawer {
+    transition: opacity 0.15s ease;
+    transform: none;
+  }
+}

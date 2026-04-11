@@ -24,5 +24,19 @@ for (const stmt of alterations) {
   try { db.exec(stmt) } catch (e) { /* column already exists — safe to ignore */ }
 }
 
+// Backfill logo_small_url for seeded teams still carrying the generic default.
+// Safe to run multiple times — the WHERE clause only touches rows that haven't been set yet.
+const logoSmallPaths = [
+  { id: 'ufrj', logo_small_url: '/assets/logos/ufrj_small.png' },
+  { id: 'itba', logo_small_url: '/assets/logos/itba_small.png' },
+  { id: 'ug',   logo_small_url: '/assets/logos/ug_small.png'   },
+]
+const updateLogoSmall = db.prepare(
+  `UPDATE teams SET logo_small_url = @logo_small_url
+   WHERE id = @id AND logo_small_url = '/assets/logos/default_small.png'`
+)
+for (const row of logoSmallPaths) updateLogoSmall.run(row)
+console.log('logo_small_url backfill: done')
+
 db.close()
 console.log('Migration complete →', DB_PATH)

@@ -1,14 +1,17 @@
 import React from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
-import Scoreboard      from './views/Scoreboard'
-import NextMatch       from './views/NextMatch'
-import AdminLogin      from './views/AdminLogin'
-import AdminConsole    from './views/AdminConsole'
-import ParticipantLogin from './views/ParticipantLogin'
-import ParticipantApp  from './views/ParticipantApp'
-import ProspectsView   from './views/ProspectsView'
-import AllMatches      from './views/AllMatches'
+import PublicLayout      from './components/PublicLayout'
+import Scoreboard        from './views/Scoreboard'
+import NextMatch         from './views/NextMatch'
+import AllMatches        from './views/AllMatches'
+import PublicLeaderboard from './views/PublicLeaderboard'
+import Landing           from './views/Landing'
+import ProspectsView     from './views/ProspectsView'
+import AdminLogin        from './views/AdminLogin'
+import AdminConsole      from './views/AdminConsole'
+import ParticipantLogin  from './views/ParticipantLogin'
+import ParticipantApp    from './views/ParticipantApp'
 import { AdminAuthProvider, useAdminAuth } from './hooks/useAdminAuth'
 import { ParticipantAuthProvider, useParticipantAuth } from './hooks/useParticipantAuth'
 
@@ -29,11 +32,15 @@ export default function App() {
     <AdminAuthProvider>
       <ParticipantAuthProvider>
         <Routes>
-          {/* Public / LED screens */}
-          <Route path="/"          element={<Scoreboard />} />
-          <Route path="/next"      element={<NextMatch />} />
-          <Route path="/prospects" element={<ProspectsView />} />
-          <Route path="/matches"   element={<AllMatches />} />
+          {/* Public / LED screens — all wrapped in PublicLayout for shared nav */}
+          <Route element={<PublicLayout />}>
+            <Route path="/"            element={<Scoreboard />} />
+            <Route path="/next"        element={<NextMatch />} />
+            <Route path="/matches"     element={<AllMatches />} />
+            <Route path="/leaderboard" element={<PublicLeaderboard />} />
+            <Route path="/landing"     element={<Landing />} />
+            <Route path="/prospects"   element={<ProspectsView />} />
+          </Route>
 
           {/* Admin (timekeeper) */}
           <Route path="/timekeeper/login" element={<AdminLogin />} />

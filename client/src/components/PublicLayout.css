@@ -1,56 +1,14 @@
+/* ── Public layout shell ─────────────────────────────────────────────────── */
 .public-layout {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  background: var(--pb-dark);
-}
 
-.public-nav {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  padding: 0 2rem;
-  height: 52px;
-  flex-shrink: 0;
-  background: rgba(0, 0, 0, 0.5);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.public-nav__logo {
-  height: 36px;
-  opacity: 0.95;
-}
-
-.public-nav__links {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.public-nav__links a {
-  color: rgba(255, 255, 255, 0.5);
-  font-family: var(--font-title);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  text-decoration: none;
-  padding: 0.4rem 0.9rem;
-  border-radius: 6px;
-  transition: color 0.15s, background 0.15s;
-}
-
-.public-nav__links a:hover {
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.public-nav__links a.active {
-  color: var(--pb-gold);
-  background: rgba(242, 169, 0, 0.12);
+  /* Shared stage atmosphere — same as Scoreboard */
+  background:
+    radial-gradient(ellipse 80% 40% at 50% 0%,   oklch(28% 0.06 250) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 30% at 50% 100%,  oklch(18% 0.05 250) 0%, transparent 65%),
+    oklch(12% 0.025 250);
 }
 
 .public-layout__content {

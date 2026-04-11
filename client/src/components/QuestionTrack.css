@@ -26,6 +26,7 @@
 }
 
 .q-dot {
+  position: relative;          /* anchor for ripple ::after */
   width: clamp(18px, 2.5vw, 32px);
   height: clamp(18px, 2.5vw, 32px);
   border-radius: 50%;
@@ -34,11 +35,11 @@
   background: transparent;
 }
 
-/* Entry pop when a dot gets a result */
+/* ── Staggered entrance on initial load ───────────────────────────────────── */
 .q-dot--correct,
 .q-dot--incorrect,
 .q-dot--skip {
-  animation: dotPop 0.22s cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: dotPop 0.28s cubic-bezier(0.23, 1, 0.32, 1) both;
   animation-delay: calc(var(--i, 0) * 18ms);
 }
 
@@ -47,12 +48,79 @@
 .q-dot--skip     { background: var(--pb-gray);  border-color: var(--pb-gray); }
 
 @keyframes dotPop {
-  from { transform: scale(0.5); opacity: 0; }
-  to   { transform: scale(1);   opacity: 1; }
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
 }
 
+/* ── Fresh dots: just resolved live — spring overshoot, no stagger ──────── */
+
+.q-dot--fresh.q-dot--correct {
+  animation: dotSpringCorrect 0.55s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+  animation-delay: 0ms;
+}
+
+.q-dot--fresh.q-dot--incorrect {
+  animation: dotSpringIncorrect 0.50s cubic-bezier(0.22, 1.3, 0.36, 1) both;
+  animation-delay: 0ms;
+}
+
+.q-dot--fresh.q-dot--skip {
+  animation: dotPop 0.30s cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation-delay: 0ms;
+}
+
+/* Single-overshoot pop for correct — lands, one bounce, done */
+@keyframes dotSpringCorrect {
+  0%   { transform: scale(0);    opacity: 0; }
+  55%  { transform: scale(1.30); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+/* Single-overshoot pop for incorrect */
+@keyframes dotSpringIncorrect {
+  0%   { transform: scale(0);    opacity: 0; }
+  55%  { transform: scale(1.22); opacity: 1; }
+  100% { transform: scale(1);    opacity: 1; }
+}
+
+/* ── Ripple ring: expands outward and fades — only on fresh dots ─────────── */
+
+.q-dot--fresh.q-dot--correct::after,
+.q-dot--fresh.q-dot--incorrect::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.q-dot--fresh.q-dot--correct::after {
+  border: 2px solid var(--pb-green);
+  animation: dotRipple 0.75s ease-out 0.10s forwards;
+}
+
+.q-dot--fresh.q-dot--incorrect::after {
+  border: 2px solid var(--pb-red);
+  animation: dotRipple 0.70s ease-out 0.08s forwards;
+}
+
+@keyframes dotRipple {
+  0%   { transform: scale(1.0); opacity: 0.85; }
+  100% { transform: scale(3.4); opacity: 0; }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .q-dot--correct, .q-dot--incorrect, .q-dot--skip {
+  .q-dot--correct,
+  .q-dot--incorrect,
+  .q-dot--skip,
+  .q-dot--fresh.q-dot--correct,
+  .q-dot--fresh.q-dot--incorrect,
+  .q-dot--fresh.q-dot--skip {
+    animation: none;
+  }
+  .q-dot--fresh.q-dot--correct::after,
+  .q-dot--fresh.q-dot--incorrect::after {
     animation: none;
   }
 }

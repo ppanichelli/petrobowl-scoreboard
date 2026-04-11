@@ -13,6 +13,10 @@ export default function Scoreboard() {
   const [nextMatch, setNextMatch] = useState(null)
   const [flashA, setFlashA]   = useState(false)
   const [flashB, setFlashB]   = useState(false)
+  const [plusA, setPlusA]     = useState(false)
+  const [plusB, setPlusB]     = useState(false)
+  const [minusA, setMinusA]   = useState(false)
+  const [minusB, setMinusB]   = useState(false)
   const prevScoreA = useRef(0)
   const prevScoreB = useRef(0)
   const matchIdRef = useRef(null)
@@ -42,10 +46,24 @@ export default function Scoreboard() {
       if (m.score_a !== prevScoreA.current) {
         setFlashA(true)
         setTimeout(() => setFlashA(false), 900)
+        if (m.score_a > prevScoreA.current) {
+          setPlusA(true)
+          setTimeout(() => setPlusA(false), 850)
+        } else {
+          setMinusA(true)
+          setTimeout(() => setMinusA(false), 850)
+        }
       }
       if (m.score_b !== prevScoreB.current) {
         setFlashB(true)
         setTimeout(() => setFlashB(false), 900)
+        if (m.score_b > prevScoreB.current) {
+          setPlusB(true)
+          setTimeout(() => setPlusB(false), 850)
+        } else {
+          setMinusB(true)
+          setTimeout(() => setMinusB(false), 850)
+        }
       }
       prevScoreA.current = m.score_a
       prevScoreB.current = m.score_b
@@ -164,22 +182,30 @@ export default function Scoreboard() {
         {/* Score panel */}
         <div className="score-panel">
           <div className="score-panel__numbers">
-            <div className={[
-              'score-digit',
-              flashA        ? 'score--flash'   : '',
-              isLeadingA    ? 'score--leading'  : '',
-              isLeadingB    ? 'score--trailing' : '',
-            ].filter(Boolean).join(' ')}>
-              {scoreA}
+            <div className="score-digit-wrap">
+              <div className={[
+                'score-digit',
+                flashA        ? 'score--flash'   : '',
+                isLeadingA    ? 'score--leading'  : '',
+                isLeadingB    ? 'score--trailing' : '',
+              ].filter(Boolean).join(' ')}>
+                {scoreA}
+              </div>
+              {plusA  && <span className="score-plus">+10</span>}
+              {minusA && <span className="score-minus">−5</span>}
             </div>
             <div className="score-panel__sep" />
-            <div className={[
-              'score-digit',
-              flashB        ? 'score--flash'   : '',
-              isLeadingB    ? 'score--leading'  : '',
-              isLeadingA    ? 'score--trailing' : '',
-            ].filter(Boolean).join(' ')}>
-              {scoreB}
+            <div className="score-digit-wrap">
+              <div className={[
+                'score-digit',
+                flashB        ? 'score--flash'   : '',
+                isLeadingB    ? 'score--leading'  : '',
+                isLeadingA    ? 'score--trailing' : '',
+              ].filter(Boolean).join(' ')}>
+                {scoreB}
+              </div>
+              {plusB  && <span className="score-plus">+10</span>}
+              {minusB && <span className="score-minus">−5</span>}
             </div>
           </div>
           <div className="score-panel__progress">
@@ -238,6 +264,27 @@ export default function Scoreboard() {
       {match.status === 'finished' && (
         <MatchResult match={match} />
       )}
+
+      {/* Footer: LACSS + sponsor — same as other public screens */}
+      <div className="scoreboard__footer">
+        <div />
+        <div className="scoreboard__footer-center">
+          <img
+            src="/assets/images/LACSS Logo.png"
+            alt="SPE Latin America and Caribbean Student Symposium"
+            className="scoreboard__footer-spe"
+          />
+        </div>
+        <div className="scoreboard__footer-right">
+          <span className="scoreboard__footer-sponsor-label">Sponsor</span>
+          <img
+            src="/assets/images/ypf-logo-white.png"
+            alt="YPF"
+            className="scoreboard__footer-ypf"
+            onError={e => { e.target.style.display = 'none' }}
+          />
+        </div>
+      </div>
     </div>
   )
 }

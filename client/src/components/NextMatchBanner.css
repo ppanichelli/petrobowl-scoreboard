@@ -1,6 +1,6 @@
 /* ── NextMatchBanner ─────────────────────────────────────────────────────── */
 .next-banner {
-  min-height: calc(100vh - 52px);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
