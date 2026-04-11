@@ -164,7 +164,7 @@ export default function AdminConsole() {
   return (
     <div className="admin-console">
       <header className="admin-console__header">
-        <img src="/assets/petrobowl-logo.png" alt="PetroBowl" className="admin-console__logo" />
+        <h4>PETROBOWL ADMIN</h4>
         <nav>
           <button className={tab === 'matches' ? 'active' : ''} onClick={() => setTab('matches')}>Matches</button>
           <button className={tab === 'live'    ? 'active' : ''} onClick={() => setTab('live')}>Live Scoring</button>

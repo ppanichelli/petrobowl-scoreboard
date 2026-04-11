@@ -1,0 +1,33 @@
+# Local installed packages (Docker rebuilds these inside the container)
+node_modules/
+server/node_modules/
+client/node_modules/
+
+# Built frontend artifacts (rebuilt inside Docker)
+server/public/
+dist/
+
+# Local database (must NOT be baked into the image — lives on a volume)
+server/data/
+
+# Git history and CI config (not needed inside the container)
+.git/
+.gitignore
+.github/
+
+# Local environment file (env vars come from Coolify, not a file)
+.env
+.env.*
+!.env.example
+
+# Logs and OS artifacts
+*.log
+.DS_Store
+Thumbs.db
+
+# Documentation and dev tooling (not needed in the container)
+*.md
+CLAUDE.md
+skills-lock.json
+.agents/
+.claude/

@@ -1,0 +1,38 @@
+name: Deploy to Coolify
+
+on:
+  push:
+    branches:
+      - main          # Runs every time you push to the main branch
+
+jobs:
+  deploy:
+    name: Build check + Trigger Coolify
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Get the latest code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: Build the React app — catches broken code before deploying
+      - name: Build client
+        run: npm run build
+
+      # Step 5: Tell Coolify to pull the latest code and redeploy
+      # COOLIFY_WEBHOOK_URL is set in: GitHub repo → Settings → Secrets → Actions
+      - name: Trigger Coolify redeploy
+        run: |
+          curl --fail --silent --show-error \
+            -X GET "${{ secrets.COOLIFY_WEBHOOK_URL }}"
