@@ -186,3 +186,53 @@
   object-fit: contain;
   opacity: 0.82;
 }
+
+/* ── Mobile (iPhone portrait) ────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .next-banner {
+    padding: var(--space-lg) var(--space-sm) var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .next-banner__matchup {
+    gap: clamp(0.4rem, 2vw, 1rem);
+  }
+
+  .next-banner__logo img {
+    width: clamp(44px, 11vw, 64px);
+    height: clamp(44px, 11vw, 64px);
+  }
+
+  .next-banner__short {
+    font-size: clamp(1.4rem, 7vw, 2rem);
+  }
+
+  .next-banner__flag {
+    font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+  }
+
+  .next-banner__full {
+    font-size: clamp(0.6rem, 2vw, 0.75rem);
+    max-width: 14ch;
+  }
+
+  .next-banner__vs-text {
+    font-size: clamp(0.8rem, 2.5vw, 1rem);
+  }
+
+  .next-banner__vs-line {
+    height: clamp(20px, 4vw, 32px);
+  }
+
+  .next-banner__pb-logo {
+    height: clamp(56px, 15vw, 90px);
+  }
+
+  .next-banner__reg-logo {
+    height: clamp(34px, 9vw, 54px);
+  }
+
+  .next-banner__stage {
+    font-size: clamp(1rem, 4vw, 1.4rem);
+  }
+}

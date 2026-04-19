@@ -277,7 +277,7 @@ Application settings → **Environment Variables** → **+ Add** for each:
 
 | Variable | Value | Notes |
 |---|---|---|
-| `NODE_ENV` | `production` | |
+| `NODE_ENV` | `production` | Should not be available at buildtime. Only at runtime |
 | `PORT` | `3000` | |
 | `SESSION_SECRET` | *(generate below)* | Long random string |
 | `ADMIN_PASSWORD` | *(your chosen password)* | Admin login password |
@@ -322,8 +322,8 @@ Every deploy mounts the same volume here, so `pb.db` survives across all updates
 
 Wait 5–30 minutes for DNS to propagate.
 
-**In Coolify:** Application settings → **Domains** → **+ Add Domain**:
-- Enter: `https://scoreboard.yourdomain.com`
+**In Coolify:** Application settings → **Domains** → update name with all domains separated by commas:
+- Enter: https://petrobowl.online, https://www.petrobowl.online 
   (include `https://` — this triggers Let's Encrypt SSL)
 - Click **Save**
 
@@ -333,7 +333,7 @@ Coolify's built-in Traefik handles SSL automatically. No nginx config needed.
 
 ### Step 4.10 — Enable Auto-Deploy and Get the Webhook URL
 
-1. Application settings → **General** → **Auto Deploy** → toggle **ON**
+1. Application settings → **Advanced** → **Auto Deploy** → toggle **ON**
 2. Find the **Webhook** URL — looks like:
    ```
    http://YOUR_VPS_IP:8000/webhooks/deploy?uuid=abc123&token=xyz789
@@ -420,9 +420,9 @@ docker exec -it CONTAINER_ID cat server/data/pins_TIMESTAMP.txt
 
 | URL | Expected |
 |---|---|
-| `https://scoreboard.yourdomain.com` | Landing page loads |
-| `https://scoreboard.yourdomain.com/timekeeper/login` | Admin login page |
-| `https://scoreboard.yourdomain.com/p/login` | Participant PIN login |
+| `https://petrobowl.online` | Landing page loads |
+| `https://petrobowl.online/timekeeper/login` | Admin login page |
+| `https://petrobowl.online/p/login` | Participant PIN login |
 
 Admin login:
 - Username: `admin`
