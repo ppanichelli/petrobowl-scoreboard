@@ -1,9 +1,15 @@
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') })
 
+if (!process.env.SESSION_SECRET) {
+  console.error('FATAL: SESSION_SECRET environment variable is not set')
+  process.exit(1)
+}
+
 const express    = require('express')
 const http       = require('http')
 const { Server } = require('socket.io')
 const session    = require('express-session')
+const rateLimit  = require('express-rate-limit')
 const path       = require('path')
 
 const authRoutes        = require('./routes/auth')
@@ -16,15 +22,31 @@ const { calcOdds }      = require('./lib/odds')
 const app    = express()
 const server = http.createServer(app)
 const io     = new Server(server, {
-  cors: { origin: '*', credentials: true },
+  cors: {
+    origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+    credentials: true,
+  },
 })
 
 // ── Session store ──────────────────────────────────────────────────────────
 const sessionMiddleware = session({
-  secret: process.env.SESSION_SECRET || 'dev-secret-change-me',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 }, // 24 h
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000, // 24 h
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  },
+})
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10,                   // 10 attempts per IP per window
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many login attempts, please try again later' },
 })
 
 app.use(express.json())
@@ -40,6 +62,8 @@ app.use((req, _res, next) => {
 })
 
 // ── Routes ─────────────────────────────────────────────────────────────────
+app.use('/api/admin/login', loginLimiter)
+app.use('/api/participant/login', loginLimiter)
 app.use('/api', authRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/participant', participantRoutes)

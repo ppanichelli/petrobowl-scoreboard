@@ -10,9 +10,10 @@ router.use(requireParticipant)
 // ── Profile update (name + country) ───────────────────────────────────────
 router.put('/profile', (req, res) => {
   const { display_name, country_code } = req.body
+  const name = display_name ? String(display_name).trim().slice(0, 50) : null
   db.prepare(
     'UPDATE participants SET display_name = ?, country_code = ? WHERE pin = ?'
-  ).run(display_name || null, country_code || null, req.session.pin)
+  ).run(name || null, country_code || null, req.session.pin)
   res.json({ ok: true })
 })
 
@@ -136,8 +137,10 @@ router.get('/leaderboard', (req, res) => {
 
   const ranked = rows.map((r, i) => ({
     rank: i + 1,
-    ...r,
-    isMe: r.pin === req.session.pin,
+    display_name: r.display_name,
+    country_code: r.country_code,
+    total_points: r.total_points,
+    isMe: r.pin === req.session.pin,  // computed server-side; PIN never sent to client
   }))
   res.json(ranked)
 })
