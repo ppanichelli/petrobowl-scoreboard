@@ -25,6 +25,7 @@
   display: flex;
   align-items: center;
   gap: clamp(1.5rem, 4vw, 3.5rem);
+  margin-bottom: 30px;
 }
 
 .next-banner__pb-logo {
@@ -160,9 +161,9 @@
 }
 
 .next-banner__spe-logo {
-  height: clamp(36px, 5vw, 56px);
+  height: clamp(100px, 1.5vw, 300px);
   object-fit: contain;
-  opacity: 0.65;
+  opacity: 0.60;
 }
 
 .next-banner__footer-right {
@@ -182,9 +183,9 @@
 }
 
 .next-banner__ypf-logo {
-  height: clamp(24px, 3.5vw, 40px);
+  height: clamp(50px, 1.5vw, 300px);
   object-fit: contain;
-  opacity: 0.82;
+  opacity: 0.80;
 }
 
 /* ── Mobile (iPhone portrait) ────────────────────────────────────────────── */

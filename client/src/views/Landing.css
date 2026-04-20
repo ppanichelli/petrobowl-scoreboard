@@ -19,7 +19,14 @@
   justify-content: center;
 }
 
-.landing__pb-logo {
+.landing__center__logos {
+  display:flex;
+  flex-direction: row;
+  vertical-align: middle;
+  gap: 80px;
+}
+
+.landing__pb-logo, .landing__championship-logo, .landing__buenos-aires {
   height: clamp(100px, 20vw, 240px);
   object-fit: contain;
   animation: landingBreathe 4.5s ease-in-out infinite alternate;

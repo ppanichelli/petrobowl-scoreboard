@@ -17,9 +17,13 @@ export default function PublicPageShell({ children }) {
           src="/assets/images/PETROBOWL 2026 LOGO.png"
           alt="PetroBowl 2026"
         />
+        <div className="scoreboard__header-center">
+          <span className='location__header'>2026 REGIONAL PETROBOWL CHAMPIONSHIP</span>
+          <span className='location__header'>MAY 15th, BUENOS AIRES</span>
+        </div>
         <img
           className="pps__header-logo pps__header-logo--regionals"
-          src="/assets/images/The-Regionals.png"
+          src="/assets/images/BUENOS AIRES.png"
           alt="The Regionals"
         />
       </div>

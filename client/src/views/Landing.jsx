@@ -32,16 +32,23 @@ export default function Landing() {
   return (
     <div className="landing">
       <div className="landing__center">
+        <div className="landing__center__logos">
+        <img
+          className="landing__championship-logo"
+          src="/assets/images/PETROBOWL CHAMPIONSHIP.png"
+          alt="PetroBowl 2026"
+        />
         <img
           className="landing__pb-logo"
           src="/assets/images/PETROBOWL 2026 LOGO.png"
           alt="PetroBowl 2026"
         />
         <img
-          className="landing__reg-logo"
-          src="/assets/images/The-Regionals.png"
-          alt="The Regionals"
+          className="landing__buenos-aires"
+          src="/assets/images/BUENOS AIRES.png"
+          alt="PetroBowl 2026"
         />
+        </div>
 
         {loaded && nextMatch && (
           <div className="landing__next">

@@ -13,6 +13,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-md) var(--space-xl);
+  padding-bottom: 30px;
   border-bottom: 1px solid oklch(30% 0.04 250);
   flex-shrink: 0;
 }
@@ -22,11 +23,12 @@
 }
 
 .pps__header-logo--primary {
-  height: clamp(44px, 5.5vw, 72px);
+  height: clamp(75px, 5.5vw, 200px);
+  margin-left: clamp(0px, 2% ,50px);
 }
 
 .pps__header-logo--regionals {
-  height: clamp(44px, 5vw, 64px);
+  height: clamp(75px, 5vw, 200px);
   opacity: 0.8;
 }
 
@@ -58,9 +60,9 @@
 }
 
 .pps__spe-logo {
-  height: clamp(36px, 5vw, 56px);
+  height: clamp(100px, 1.5vw, 300px);
   object-fit: contain;
-  opacity: 0.65;
+  opacity: 0.60;
 }
 
 .pps__footer-right {
@@ -80,7 +82,7 @@
 }
 
 .pps__ypf-logo {
-  height: clamp(24px, 3.5vw, 40px);
+  height: clamp(50px, 1.5vw, 300px);
   object-fit: contain;
-  opacity: 0.82;
+  opacity: 0.80;
 }

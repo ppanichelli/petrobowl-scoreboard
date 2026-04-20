@@ -249,3 +249,24 @@
     animation: none;
   }
 }
+
+/* ── Mobile: compact confrontation row ───────────────────────────────────── */
+@media (max-width: 520px) {
+  .team-side {
+    gap: 0.3rem;
+    flex-direction: column;
+  }
+
+  .team-side__full {
+    display: none;
+  }
+
+  .team-side__short {
+    font-size: clamp(1.6rem, 8.5vw, 2.8rem);
+    line-height: 1;
+  }
+
+  .team-side__flag {
+    font-size: clamp(0.85rem, 1.8vw, 1.2rem);
+  }
+}

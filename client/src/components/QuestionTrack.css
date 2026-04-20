@@ -17,12 +17,20 @@
   width: 4ch; /* fixed width so dots align between the two rows */
   text-align: right;
   margin-right: 0.4rem;
+  align-self: center;
 }
 
 .q-track__dots {
   display: flex;
+  flex-direction: row;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.q-track__dots-row {
+  display: flex;
   gap: 0.4rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .q-dot {

@@ -42,7 +42,9 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-md) var(--space-lg);
+  padding-bottom: 30px;
   border-bottom: 1px solid oklch(30% 0.04 250);
+  position: relative;
 }
 
 .scoreboard__header-logo {
@@ -51,29 +53,38 @@
 
 /* Primary: PetroBowl 2026 — prominent left anchor */
 .scoreboard__header-logo--primary {
-  height: clamp(44px, 5.5vw, 72px);
+  height: clamp(75px, 5.5vw, 200px);
+  margin-left: clamp(0px, 2% ,50px);
 }
 
 /* The Regionals — right side, legible but secondary */
 .scoreboard__header-logo--regionals {
-  height: clamp(44px, 5vw, 64px);
+  height: clamp(75px, 5vw, 200px);
   opacity: 0.8;
 }
 
 .scoreboard__header-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-xs);
+  pointer-events: none;
 }
 
-.scoreboard__stage {
+.scoreboard__stage, .location__header {
   font-family: var(--font-title);
   font-size: clamp(0.7rem, 1.4vw, 1rem);
   font-weight: 700;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--pb-gold);
+}
+
+.location__header {
+  color: oklch(95% 0.008 250);
 }
 
 /* ── Main confrontation row ─────────────────────────────────────────────── */
@@ -385,7 +396,7 @@
 }
 
 .scoreboard__footer-spe {
-  height: clamp(32px, 4.5vw, 52px);
+  height: clamp(80px, 1.5vw, 300px);
   object-fit: contain;
   opacity: 0.60;
 }
@@ -407,7 +418,7 @@
 }
 
 .scoreboard__footer-ypf {
-  height: clamp(22px, 3vw, 38px);
+  height: clamp(30px, 1.5vw, 300px);
   object-fit: contain;
   opacity: 0.80;
 }
@@ -423,5 +434,57 @@
   .score-plus, .score-minus {
     animation: none;
     opacity: 0;
+  }
+}
+
+/* ── Mobile layout ───────────────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .scoreboard {
+    padding: 0 var(--space-md) var(--space-md);
+    gap: var(--space-md);
+  }
+
+  .scoreboard__header {
+    padding: var(--space-sm) var(--space-md);
+    padding-bottom: 30px;
+  }
+
+  .scoreboard__main {
+    gap: var(--space-xs);
+    padding-bottom: 30px;
+  }
+
+  .score-digit {
+    font-size: clamp(2.2rem, 13vw, 3.5rem);
+    min-width: 1ch;
+  }
+
+  .score-panel__numbers {
+    gap: clamp(0.4rem, 2vw, 0.8rem);
+  }
+
+  .score-panel__sep {
+    height: clamp(36px, 8vw, 60px);
+  }
+
+  .score-panel__progress {
+    font-size: clamp(0.52rem, 1.8vw, 0.7rem);
+  }
+
+  .scoreboard__tracks {
+    margin-bottom: 30px;
+  }
+
+  .streak-badge {
+    font-size: clamp(0.9rem, 4.5vw, 1.4rem);
+    padding: var(--space-xs) var(--space-md);
+  }
+
+  .streak-badge--fire {
+    font-size: clamp(1.4rem, 6vw, 2rem);
+  }
+
+  .location__header { 
+    display: none;
   }
 }

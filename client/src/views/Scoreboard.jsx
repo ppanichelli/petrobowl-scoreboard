@@ -153,11 +153,12 @@ export default function Scoreboard() {
           alt="PetroBowl 2026"
         />
         <div className="scoreboard__header-center">
-          <span className="scoreboard__stage">{formatStage(match.stage)}</span>
+          <span className='location__header'>2026 REGIONAL PETROBOWL CHAMPIONSHIP</span>
+          <span className='location__header'>MAY 15th, BUENOS AIRES</span>
         </div>
         <img
           className="scoreboard__header-logo scoreboard__header-logo--regionals"
-          src="/assets/images/The-Regionals.png"
+          src="/assets/images/BUENOS AIRES.png"
           alt="The Regionals"
         />
       </div>
@@ -181,6 +182,7 @@ export default function Scoreboard() {
 
         {/* Score panel */}
         <div className="score-panel">
+          <span className="scoreboard__stage">{formatStage(match.stage)}</span>
           <div className="score-panel__numbers">
             <div className="score-digit-wrap">
               <div className={[
@@ -189,7 +191,7 @@ export default function Scoreboard() {
                 isLeadingA    ? 'score--leading'  : '',
                 isLeadingB    ? 'score--trailing' : '',
               ].filter(Boolean).join(' ')}>
-                {scoreA}
+                {fmtScore(scoreA)}
               </div>
               {plusA  && <span className="score-plus">+10</span>}
               {minusA && <span className="score-minus">−5</span>}
@@ -202,7 +204,7 @@ export default function Scoreboard() {
                 isLeadingB    ? 'score--leading'  : '',
                 isLeadingA    ? 'score--trailing' : '',
               ].filter(Boolean).join(' ')}>
-                {scoreB}
+                {fmtScore(scoreB)}
               </div>
               {plusB  && <span className="score-plus">+10</span>}
               {minusB && <span className="score-minus">−5</span>}
@@ -314,6 +316,10 @@ function countQuestionsDone(actions) {
     }
   }
   return q
+}
+
+function fmtScore(n) {
+  return n >= 0 && n < 10 ? `0${n}` : String(n)
 }
 
 function formatStage(stage) {
