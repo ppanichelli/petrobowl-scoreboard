@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAdminAuth } from '../hooks/useAdminAuth'
 import { useSocket } from '../hooks/useSocket'
 import './AdminConsole.css'
@@ -7,6 +8,7 @@ const STAGES = ['group','quarterfinal','semifinal','third_place','final','tiebre
 
 export default function AdminConsole() {
   const { logout } = useAdminAuth()
+  const navigate = useNavigate()
   const socket = useSocket()
 
   const [tab, setTab]           = useState('matches')   // 'matches' | 'live' | 'settings'
@@ -170,7 +172,7 @@ export default function AdminConsole() {
           <button className={tab === 'live'    ? 'active' : ''} onClick={() => setTab('live')}>Live Scoring</button>
           <button className={tab === 'settings'? 'active' : ''} onClick={() => setTab('settings')}>Settings</button>
         </nav>
-        <button className="admin-console__logout" onClick={logout}>Logout</button>
+        <button className="admin-console__logout" onClick={() => logout().then(() => navigate('/'))}>Logout</button>
       </header>
 
       {message && <div className="admin-console__toast">{message}</div>}

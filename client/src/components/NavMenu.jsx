@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { to: '/matches',     label: 'Matches',     icon: '▤' },
   { to: '/leaderboard', label: 'Leaderboard', icon: '◇' },
   { to: '/landing',     label: 'Landing',     icon: '◻' },
+  { to: '/p/login',     label: 'Login',       icon: '⬡' },
 ]
 
 export default function NavMenu() {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useParticipantAuth } from '../hooks/useParticipantAuth'
 import { useSocket } from '../hooks/useSocket'
 import './ParticipantApp.css'
@@ -7,6 +8,7 @@ const RANK_MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' }
 
 export default function ParticipantApp() {
   const { participant, logout } = useParticipantAuth()
+  const navigate = useNavigate()
   const socket = useSocket()
 
   const [tab, setTab]           = useState('home')
@@ -314,7 +316,7 @@ export default function ParticipantApp() {
           <span className="p-nav-btn__icon">◎</span>
           <span className="p-nav-btn__label">My Prospects</span>
         </button>
-        <button className="p-nav-btn p-nav-btn--logout" onClick={logout}>
+        <button className="p-nav-btn p-nav-btn--logout" onClick={() => logout().then(() => navigate('/'))}>
           <span className="p-nav-btn__icon">⏻</span>
           <span className="p-nav-btn__label">Exit</span>
         </button>
