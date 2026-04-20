@@ -3,9 +3,11 @@
  * Run:  node server/src/db/seed.snapshot.js
  *
  * Safe to run on an existing database — it wipes all tables first, then
- * re-inserts everything. The 500 participant PINs are regenerated randomly
- * except for the 5 PINs that carry real names / points / prospects, which
- * are preserved exactly.
+ * re-inserts everything. The 500 participant PINs are loaded from
+ * server/data/pins_2026-04-11T05-46-29-064Z.txt — the exact list issued at
+ * the 2026-04-11 tournament. The 5 PINs that carry real names / points /
+ * prospects are inserted first with full profile data; the remaining 495
+ * are inserted as bare PINs.
  */
 
 require('dotenv').config({ path: require('path').resolve(__dirname, '../../../.env') })
@@ -71,19 +73,15 @@ for (const p of knownParticipants) insertParticipant.run(p)
 
 const knownPins = new Set(knownParticipants.map(p => p.pin))
 const insertPin = db.prepare(`INSERT OR IGNORE INTO participants (pin) VALUES (?)`)
-const TARGET = 500
-const generated = new Set()
+const PINS_FILE = path.join(DATA_DIR, 'pins_2026-04-11T05-46-29-064Z.txt')
+const allPins = fs.readFileSync(PINS_FILE, 'utf8').split('\n').map(l => l.trim()).filter(Boolean)
 const fillPins = db.transaction(() => {
-  while (knownPins.size + generated.size < TARGET) {
-    const pin = String(Math.floor(Math.random() * 1_000_000)).padStart(6, '0')
-    if (!knownPins.has(pin) && !generated.has(pin)) {
-      generated.add(pin)
-      insertPin.run(pin)
-    }
+  for (const pin of allPins) {
+    if (!knownPins.has(pin)) insertPin.run(pin)
   }
 })
 fillPins()
-console.log(`Participants: 5 real profiles + ${generated.size} fresh PINs (total: ${TARGET})`)
+console.log(`Participants: 5 real profiles + ${allPins.length - knownPins.size} PINs from file (total: ${allPins.length})`)
 
 // ── Matches ───────────────────────────────────────────────────────────────────
 const matches = [
