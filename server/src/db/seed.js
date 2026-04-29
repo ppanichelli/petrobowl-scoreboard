@@ -16,9 +16,25 @@ db.pragma('foreign_keys = ON')
 
 // ── Teams ──────────────────────────────────────────────────────────────────
 const teams = [
-  { id: 'ufrj', full_name: 'Universidade Federal do Rio de Janeiro', short_name: 'UFRJ', city: 'Rio de Janeiro', country: 'Brazil',    country_code: 'BR', logo_url: '/assets/logos/ufrj.png',       logo_small_url: '/assets/logos/ufrj_small.png'       },
-  { id: 'itba', full_name: 'Instituto Tecnológico de Buenos Aires',   short_name: 'ITBA', city: 'Buenos Aires',   country: 'Argentina', country_code: 'AR', logo_url: '/assets/logos/itba.png',       logo_small_url: '/assets/logos/itba_small.png'       },
-  { id: 'ug',   full_name: 'University of Guyana',                    short_name: 'UG',   city: 'Georgetown',     country: 'Guyana',    country_code: 'GY', logo_url: '/assets/logos/ug.png',         logo_small_url: '/assets/logos/ug_small.png'         },
+  { id: 'uba', full_name: 'Universidad de Buenos Aires', short_name: 'UBA', city: 'Buenos Aires', country: 'Argentina',    country_code: 'AR', logo_url: '/assets/logos/uba.png',   logo_small_url: '/assets/logos/uba_small.png'   },
+  { id: 'itba', full_name: 'Instituto Tecnológico de Buenos Aires',   short_name: 'ITBA', city: 'Buenos Aires',   country: 'Argentina', country_code: 'AR', logo_url: '/assets/logos/itba.png',   logo_small_url: '/assets/logos/itba_small.png'   },
+  { id: 'ug',   full_name: 'University of Guyana', short_name: 'UG',   city: 'Georgetown',     country: 'Guyana',    country_code: 'GY', logo_url: '/assets/logos/ug.png',     logo_small_url: '/assets/logos/ug_small.png'     },
+  { id: 'unp',   full_name: 'Universidad Nacional de Piura', short_name: 'UNP',   city: 'Lima',     country: 'Peru',    country_code: 'PE', logo_url: '/assets/logos/unp.png',     logo_small_url: '/assets/logos/unp_small.png'     },
+  { id: 'uni', full_name: 'Universidad Nacional de Ingenieria', short_name: 'UNI', city: 'Lima', country: 'Peru',    country_code: 'PE', logo_url: '/assets/logos/uni.png',   logo_small_url: '/assets/logos/uni_small.png'   },
+  { id: 'unicamp', full_name: 'Universidade Estadual de Campinas', short_name: 'UNICAMP', city: 'Campinas', country: 'Brazil',    country_code: 'BR', logo_url: '/assets/logos/unicamp.png',   logo_small_url: '/assets/logos/unicamp_small.png'   },
+  { id: 'adekus', full_name: 'Anton de Kom University', short_name: 'ADEKUS', city: 'Paramaribo', country: 'Suriname',    country_code: 'SR', logo_url: '/assets/logos/adekus.png',   logo_small_url: '/assets/logos/adekus_small.png'   },
+  { id: 'uce', full_name: 'Universidad Central del Ecuador', short_name: 'UCE', city: 'Quito', country: 'Ecuador',    country_code: 'EC', logo_url: '/assets/logos/uce.png',   logo_small_url: '/assets/logos/uce_small.png'   },
+  { id: 'ufrj', full_name: 'Universidade Federal do Rio de Janeiro', short_name: 'UFRJ', city: 'Rio de Janeiro', country: 'Brazil',    country_code: 'BR', logo_url: '/assets/logos/ufrj.png',   logo_small_url: '/assets/logos/ufrj_small.png'   },
+  { id: 'uenf', full_name: 'Universidade Estadual do Norte Fluminense', short_name: 'UENF', city: 'Macaé', country: 'Brazil',    country_code: 'BR', logo_url: '/assets/logos/uenf.png',   logo_small_url: '/assets/logos/uenf_small.png'   },
+  { id: 'espol', full_name: 'Escuela Superior Politécnica del Litoral', short_name: 'ESPOL', city: 'Guayaquil', country: 'Ecuador',    country_code: 'EC', logo_url: '/assets/logos/espol.png',   logo_small_url: '/assets/logos/espol_small.png'   },
+  { id: 'epn', full_name: 'Escuela Politécnica Nacional', short_name: 'EPN', city: 'Quito', country: 'Ecuador',    country_code: 'EC', logo_url: '/assets/logos/epn.png',   logo_small_url: '/assets/logos/epn_small.png'   },
+  { id: 'unifei', full_name: 'Universidade Federal de Itajubá', short_name: 'UNIFEI', city: 'Itajubá', country: 'Brazil',    country_code: 'BR', logo_url: '/assets/logos/unifei.png',   logo_small_url: '/assets/logos/unifei_small.png'   },
+  { id: 'udo-mon', full_name: 'Universidad de Oriente (Monagas)', short_name: 'UDO-MON', city: 'Maturín', country: 'Venezuela',    country_code: 'VE', logo_url: '/assets/logos/udo-mon.png',   logo_small_url: '/assets/logos/udo-mon_small.png'   },
+  { id: 'comahue', full_name: 'Universidad Nacional del Comahue', short_name: 'COMAHUE', city: 'Neuquén', country: 'Argentina',    country_code: 'AR', logo_url: '/assets/logos/comahue.png',   logo_small_url: '/assets/logos/comahue_small.png'   },
+  { id: 'uerj', full_name: 'Universidade do Estado do Rio de Janeiro', short_name: 'UERJ', city: 'Rio de Janeiro', country: 'Brazil',    country_code: 'BR', logo_url: '/assets/logos/uerj.png',   logo_small_url: '/assets/logos/uerj_small.png'   },
+  { id: 'udo-anz', full_name: 'Universidad de Oriente (Anzoategui)', short_name: 'UDO-ANZ', city: 'Cumaná', country: 'Venezuela',    country_code: 'VE', logo_url: '/assets/logos/udo-anz.png',   logo_small_url: '/assets/logos/udo-anz_small.png'   },
+  { id: 'iupsm', full_name: 'Politécnico Santiago Mariño', short_name: 'IUPSM', city: 'Mérida', country: 'Venezuela',    country_code: 'VE', logo_url: '/assets/logos/iupsm.png',   logo_small_url: '/assets/logos/iupsm_small.png'   },
+  { id: 'luz', full_name: 'Universidad del Zulia', short_name: 'LUZ', city: 'Maracaibo', country: 'Venezuela',    country_code: 'VE', logo_url: '/assets/logos/luz.png',   logo_small_url: '/assets/logos/luz_small.png'   },
 ]
 
 const insertTeam = db.prepare(`

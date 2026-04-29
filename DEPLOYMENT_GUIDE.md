@@ -392,6 +392,10 @@ After the first successful deploy, populate teams and generate 500 PIN codes.
 node server/src/db/seed.js
 ```
 
+```bash
+node server/src/db/seed.snapshot.js
+```
+
 **Via SSH on the VPS:**
 ```bash
 ssh root@YOUR_VPS_IP
