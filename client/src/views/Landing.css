@@ -110,6 +110,25 @@
   opacity: 0.80;
 }
 
+/* ── Editable announcement line ──────────────────────────────────────────── */
+.landing__announcement {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  color: var(--pb-gold);
+  letter-spacing: 0.05em;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  margin-top: clamp(0.5rem, 2vw, 1.5rem);
+  animation: landingFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: opacity 0.2s;
+}
+
+.landing__announcement:hover {
+  opacity: 0.75;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .landing__pb-logo,
   .landing__reg-logo {

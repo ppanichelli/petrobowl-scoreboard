@@ -1,33 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { useSocket } from '../hooks/useSocket'
+import React, { useState } from 'react'
 import './Landing.css'
 
 export default function Landing() {
-  const [nextMatch, setNextMatch] = useState(null)
-  const [loaded, setLoaded] = useState(false)
-  const socket = useSocket()
+  const [text, setText] = useState('Welcome to PetroBowl 2026')
 
-  useEffect(() => {
-    fetch('/api/matches/next', { cache: 'no-store' })
-      .then(r => r.json())
-      .then(m => { setNextMatch(m); setLoaded(true) })
-  }, [])
-
-  useEffect(() => {
-    if (!socket) return
-    // Clear next match line once it goes live
-    const onStarted = () => setNextMatch(null)
-    // Refetch if a new match is set up
-    const onReconnect = () => {
-      fetch('/api/matches/next', { cache: 'no-store' }).then(r => r.json()).then(setNextMatch)
-    }
-    socket.on('match_started', onStarted)
-    socket.on('connect', onReconnect)
-    return () => {
-      socket.off('match_started', onStarted)
-      socket.off('connect', onReconnect)
-    }
-  }, [socket])
+  function handleClick() {
+    const result = window.prompt('Announcement text:', text)
+    if (result !== null) setText(result)
+  }
 
   return (
     <div className="landing">
@@ -50,16 +30,13 @@ export default function Landing() {
         />
         </div>
 
-        {loaded && nextMatch && (
-          <div className="landing__next">
-            <span className="landing__next-label">Next Match</span>
-            <span className="landing__next-matchup">
-              {nextMatch.team_a_short}
-              <span className="landing__next-vs">vs</span>
-              {nextMatch.team_b_short}
-            </span>
-          </div>
-        )}
+        <div
+          className="landing__announcement"
+          onClick={handleClick}
+          title="Click to edit"
+        >
+          {text}
+        </div>
       </div>
 
       <div className="landing__sponsors">
