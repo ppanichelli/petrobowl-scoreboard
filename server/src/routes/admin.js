@@ -193,6 +193,11 @@ router.post('/matches/:id/action', (req, res) => {
     db.prepare(`UPDATE matches SET status='finished', is_draw=?, winner_id=?, finished_at=datetime('now') WHERE id=?`)
       .run(isDraw ? 1 : 0, winnerId, match.id)
     processPayout(match.id)
+    if (match.parent_match_id && !isDraw) {
+      db.prepare('UPDATE matches SET is_draw = 0, winner_id = ? WHERE id = ?')
+        .run(winnerId, match.parent_match_id)
+      processPayout(match.parent_match_id)
+    }
     saveSnapshot(match.id)
     const finished = getMatchFull(match.id)
     req.io.to(`match:${match.id}`).emit('match_finished', finished)
@@ -271,6 +276,11 @@ router.post('/matches/:id/finish', (req, res) => {
   `).run(isDraw ? 1 : 0, winnerId, match.id)
 
   processPayout(match.id)
+  if (match.parent_match_id && !isDraw) {
+    db.prepare('UPDATE matches SET is_draw = 0, winner_id = ? WHERE id = ?')
+      .run(winnerId, match.parent_match_id)
+    processPayout(match.parent_match_id)
+  }
   saveSnapshot(match.id)
 
   const updated = getMatchFull(match.id)
