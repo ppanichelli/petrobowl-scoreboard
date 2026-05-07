@@ -326,7 +326,26 @@ The mobile-first interface for event attendees:
 - Points earned per match.
 - Running total.
 
-### 7.5 Match History View
+### 7.5 Group Stage Tables View (public + LED screen)
+
+Accessible at `/tables`. Displays one standings card per group, selectable via pill filters.
+
+**Standings table columns per group:** `#` · Team (logo + short name) · MP (matches played) · Pts · `+` (forward points) · `−` (against points) · `+/−` (net)
+
+**Sorting rules:**
+1. Points (3 per win, 1 per draw, 0 per loss) — descending
+2. Forward points (`+`) — descending (tiebreaker a)
+3. Net points (`+/−`) — descending (tiebreaker b)
+4. Head-to-head result — applied only for exactly 2-team ties at step 3
+5. Short name alphabetical — fallback for 3+ way ties
+
+Only `finished` matches count toward standings. Teams with no finished matches appear with all zeros.
+
+Below the standings table, all matches of the selected group are shown as match cards (same format as the Match History view), ordered by creation date.
+
+The admin sets `group_name` (e.g. `A`, `B`) when creating a group-stage match batch.
+
+### 7.6 Match History View
 
 - List of completed matches with teams, scores, stage, and winner/draw status.
 - Prospecting stats: how many prospected A vs B, frozen odds, payout.
@@ -385,6 +404,7 @@ The mobile-first interface for event attendees:
 | frozen_prospects_b | INT NULL | Number of prospects on B at freeze |
 | created_at | TIMESTAMP | |
 | finished_at | TIMESTAMP NULL | |
+| group_name | VARCHAR NULL | Group label (e.g. `A`, `B`); only set for `stage = group` |
 
 ### `actions`
 
@@ -569,12 +589,13 @@ Regardless of method:
 | GET | `/api/matches/next` | Get next match info |
 | GET | `/api/matches/history` | View completed matches |
 | GET | `/api/leaderboard` | View prospecting leaderboard |
+| GET | `/api/tables` | Group stage standings per group (computed from finished matches) |
 
 ---
 
 ## 13. Out of Scope (v1)
 
-- Full tournament bracket and standings tracking.
+- Full tournament bracket visualization.
 - Public team registration or self-service team management.
 - Buzzer hardware integration (admin manually logs who buzzed).
 - Video/audio streaming.

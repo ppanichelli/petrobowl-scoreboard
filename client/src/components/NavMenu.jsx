@@ -8,6 +8,7 @@ const NAV_ITEMS = [
   { to: '/next',        label: 'Next Match',  icon: '◎' },
   { to: '/matches',     label: 'Matches',     icon: '▤' },
   { to: '/leaderboard', label: 'Leaderboard', icon: '◇' },
+  { to: '/tables',      label: 'Tables',      icon: '▦' },
   { to: '/landing',     label: 'Landing',     icon: '◻' },
   { to: '/p/login',     label: 'Login',       icon: '⬡' },
 ]

@@ -64,8 +64,8 @@ router.post('/matches/batch', (req, res) => {
 
   const batchId = uuidv4()
   const insert = db.prepare(`
-    INSERT INTO matches (id, team_a_id, team_b_id, stage, total_questions, batch_id)
-    VALUES (@id, @team_a_id, @team_b_id, @stage, @total_questions, @batch_id)
+    INSERT INTO matches (id, team_a_id, team_b_id, stage, total_questions, batch_id, group_name)
+    VALUES (@id, @team_a_id, @team_b_id, @stage, @total_questions, @batch_id, @group_name)
   `)
 
   const run = db.transaction(() => {
@@ -77,6 +77,7 @@ router.post('/matches/batch', (req, res) => {
         stage: m.stage,
         total_questions: m.total_questions,
         batch_id: batchId,
+        group_name: m.stage === 'group' ? (m.group_name || null) : null,
       })
     }
   })

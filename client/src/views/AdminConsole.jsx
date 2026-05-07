@@ -20,7 +20,7 @@ export default function AdminConsole() {
 
   // Batch form state
   const [batchRows, setBatchRows] = useState([
-    { team_a_id: '', team_b_id: '', stage: 'group', total_questions: 15 }
+    { team_a_id: '', team_b_id: '', stage: 'group', total_questions: 15, group_name: '' }
   ])
 
   // DB reset state
@@ -196,6 +196,11 @@ export default function AdminConsole() {
                 <select value={row.stage} onChange={e => updateRow(i,'stage',e.target.value)}>
                   {STAGES.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
+                {row.stage === 'group' && (
+                  <input type="text" maxLength="4" placeholder="Group…" value={row.group_name}
+                    onChange={e => updateRow(i,'group_name',e.target.value.toUpperCase())}
+                    style={{ width: '68px' }} />
+                )}
                 <input type="number" min="1" max="30" value={row.total_questions}
                   onChange={e => updateRow(i,'total_questions',parseInt(e.target.value))} />
                 <button onClick={() => removeRow(i)}>✕</button>
@@ -377,7 +382,7 @@ export default function AdminConsole() {
   }
 
   function addRow() {
-    setBatchRows(r => [...r, { team_a_id: '', team_b_id: '', stage: 'group', total_questions: 15 }])
+    setBatchRows(r => [...r, { team_a_id: '', team_b_id: '', stage: 'group', total_questions: 15, group_name: '' }])
   }
   function removeRow(i) {
     setBatchRows(r => r.filter((_, idx) => idx !== i))

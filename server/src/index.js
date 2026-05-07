@@ -16,6 +16,7 @@ const authRoutes        = require('./routes/auth')
 const adminRoutes       = require('./routes/admin')
 const participantRoutes = require('./routes/participant')
 const publicRoutes      = require('./routes/public')
+const tablesRoutes      = require('./routes/tables')
 const db                = require('./db/db')
 const { calcOdds }      = require('./lib/odds')
 
@@ -69,6 +70,7 @@ app.use('/api', authRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/participant', participantRoutes)
 app.use('/api', publicRoutes)
+app.use('/api', tablesRoutes)
 
 // ── Serve built React app (production) ────────────────────────────────────
 const PUBLIC_DIR = path.resolve(__dirname, '../public')

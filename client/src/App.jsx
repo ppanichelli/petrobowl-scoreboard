@@ -8,6 +8,7 @@ import AllMatches        from './views/AllMatches'
 import PublicLeaderboard from './views/PublicLeaderboard'
 import Landing           from './views/Landing'
 import ProspectsView     from './views/ProspectsView'
+import Tables            from './views/Tables'
 import AdminLogin        from './views/AdminLogin'
 import AdminConsole      from './views/AdminConsole'
 import ParticipantLogin  from './views/ParticipantLogin'
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="/leaderboard" element={<PublicLeaderboard />} />
             <Route path="/landing"     element={<Landing />} />
             <Route path="/prospects"   element={<ProspectsView />} />
+            <Route path="/tables"      element={<Tables />} />
           </Route>
 
           {/* Admin (timekeeper) */}

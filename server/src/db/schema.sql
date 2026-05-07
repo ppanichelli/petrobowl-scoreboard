@@ -36,7 +36,8 @@ CREATE TABLE IF NOT EXISTS matches (
   frozen_prospects_a  INTEGER,
   frozen_prospects_b  INTEGER,
   created_at          TEXT NOT NULL DEFAULT (datetime('now')),
-  finished_at         TEXT
+  finished_at         TEXT,
+  group_name          TEXT
 );
 
 CREATE TABLE IF NOT EXISTS actions (

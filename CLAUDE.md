@@ -36,7 +36,7 @@ Admin Console → POST /api/admin/* → SQLite update + Socket.IO broadcast → 
 ```
 
 **Three user roles:**
-- **Public** (`/`, `/next`, `/prospects`) — no auth; intended for LED screens and spectators
+- **Public** (`/`, `/next`, `/matches`, `/leaderboard`, `/tables`, `/prospects`) — no auth; intended for LED screens and spectators
 - **Admin** (`/timekeeper/*`) — session-based auth with username/password
 - **Participant** (`/p/*`) — PIN-based auth (6-digit codes); for event attendees who place prospects
 
@@ -64,6 +64,8 @@ Admin Console → POST /api/admin/* → SQLite update + Socket.IO broadcast → 
 | `client/src/hooks/useSocket.js` | Singleton Socket.IO instance shared across views |
 | `client/src/views/AdminConsole.jsx` | Admin control panel |
 | `client/src/views/Scoreboard.jsx` | Main live scoreboard |
+| `server/src/routes/tables.js` | Public group stage standings API (`GET /api/tables`) |
+| `client/src/views/Tables.jsx` | Public group stage tables view (`/tables`) |
 | `vite.config.js` | Vite build config — outDir and dev proxy |
 
 ## Environment

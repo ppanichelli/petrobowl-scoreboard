@@ -19,6 +19,7 @@ db.exec(sql)
 // Add columns that may not exist in older databases
 const alterations = [
   `ALTER TABLE teams ADD COLUMN logo_small_url TEXT NOT NULL DEFAULT '/assets/logos/default_small.png'`,
+  `ALTER TABLE matches ADD COLUMN group_name TEXT`,
 ]
 for (const stmt of alterations) {
   try { db.exec(stmt) } catch (e) { /* column already exists — safe to ignore */ }
