@@ -7,9 +7,9 @@ const NAV_ITEMS = [
   { to: '/',            label: 'Scoreboard',  icon: '◈' },
   { to: '/next',        label: 'Next Match',  icon: '◎' },
   { to: '/matches',     label: 'Matches',     icon: '▤' },
-  { to: '/leaderboard', label: 'Leaderboard', icon: '◇' },
-  { to: '/tables',      label: 'Tables',      icon: '▦' },
+  { to: '/tables',      label: 'Group Tables',      icon: '▦' },
   { to: '/landing',     label: 'Landing',     icon: '◻' },
+  { to: '/leaderboard', label: 'Leaderboard', icon: '◇' },
   { to: '/p/login',     label: 'Login',       icon: '⬡' },
 ]
 
