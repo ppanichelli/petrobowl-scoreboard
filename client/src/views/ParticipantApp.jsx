@@ -2,7 +2,33 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useParticipantAuth } from '../hooks/useParticipantAuth'
 import { useSocket } from '../hooks/useSocket'
+import { usePullToRefresh } from '../hooks/usePullToRefresh'
 import './ParticipantApp.css'
+
+const SNAP_H = 52
+
+function PullIndicator({ pullDistance, isRefreshing }) {
+  const triggered = pullDistance >= 64
+  const height = isRefreshing ? SNAP_H : pullDistance
+  const withTransition = !isRefreshing && pullDistance === 0
+  return (
+    <div
+      className="ptr-indicator"
+      style={{
+        height,
+        transition: withTransition ? 'height 0.22s ease' : 'none',
+      }}
+      aria-hidden="true"
+    >
+      <span
+        className={`ptr-indicator__icon${isRefreshing ? ' ptr-indicator__icon--spin' : ''}`}
+        style={{ transform: !isRefreshing && triggered ? 'rotate(180deg)' : 'rotate(0deg)' }}
+      >
+        {isRefreshing ? '◌' : '↓'}
+      </span>
+    </div>
+  )
+}
 
 const RANK_MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' }
 
@@ -20,6 +46,10 @@ export default function ParticipantApp() {
   const [pendingPicks, setPendingPicks] = useState({})
   const [savedNotif, setSavedNotif]     = useState(null)
   const [prospectError, setProspectError] = useState(null)
+
+  const homePTR      = usePullToRefresh(loadAll)
+  const rankingsPTR  = usePullToRefresh(loadLeaderboard)
+  const historyPTR   = usePullToRefresh(loadHistory)
 
   // Scroll-to-me on leaderboard
   const meRowRef   = useRef(null)
@@ -133,7 +163,8 @@ export default function ParticipantApp() {
 
       {/* ── HOME ──────────────────────────────────────────────────────────── */}
       {tab === 'home' && (
-        <div className="p-tab">
+        <div className="p-tab" ref={homePTR.ref}>
+          <PullIndicator pullDistance={homePTR.pullDistance} isRefreshing={homePTR.isRefreshing} />
 
           {/* Stats strip */}
           <div className="p-home__stats">
@@ -228,7 +259,8 @@ export default function ParticipantApp() {
 
       {/* ── LEADERBOARD ───────────────────────────────────────────────────── */}
       {tab === 'leaderboard' && (
-        <div className="p-tab">
+        <div className="p-tab" ref={rankingsPTR.ref}>
+          <PullIndicator pullDistance={rankingsPTR.pullDistance} isRefreshing={rankingsPTR.isRefreshing} />
           <div className="p-section-header">
             <h2 className="p-section-title">Leaderboard</h2>
             <span className="p-section-subtitle">{leaderboard.length} participants</span>
@@ -264,7 +296,8 @@ export default function ParticipantApp() {
 
       {/* ── HISTORY ───────────────────────────────────────────────────────── */}
       {tab === 'history' && (
-        <div className="p-tab">
+        <div className="p-tab" ref={historyPTR.ref}>
+          <PullIndicator pullDistance={historyPTR.pullDistance} isRefreshing={historyPTR.isRefreshing} />
           <div className="p-section-header">
             <h2 className="p-section-title">My Prospects</h2>
           </div>
