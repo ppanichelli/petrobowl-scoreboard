@@ -126,3 +126,62 @@
     width: 100%;
   }
 }
+
+/* ── Mobile ──────────────────────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  /* Hide ± breakout columns — keep only net (+/−) */
+  .gt-col--hide-mobile {
+    display: none;
+  }
+
+  .gt-th {
+    font-size: 0.7rem;
+    padding: 0.55rem 0.3rem;
+    letter-spacing: 0.06em;
+  }
+
+  .gt-th--team {
+    padding-left: 0.65rem;
+  }
+
+  .gt-th--pos {
+    width: 1.8rem;
+  }
+
+  .gt-th--num {
+    width: 2.4rem;
+  }
+
+  .gt-td {
+    padding: 0.7rem 0.3rem;
+    font-size: 0.9rem;
+  }
+
+  .gt-td--team {
+    padding-left: 0.65rem;
+    gap: 0.4rem;
+  }
+
+  .gt-td--pos {
+    width: 1.8rem;
+    font-size: 0.78rem;
+  }
+
+  .gt-td--num {
+    width: 2.4rem;
+  }
+
+  .gt-td--pts {
+    font-size: 1rem;
+  }
+
+  .gt-logo {
+    width: 24px;
+    height: 24px;
+  }
+
+  .gt-name {
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+}

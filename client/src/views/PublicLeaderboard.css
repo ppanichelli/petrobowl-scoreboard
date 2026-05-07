@@ -76,6 +76,37 @@
   .pub-lb__row { animation: none; }
 }
 
+/* ── Mobile ──────────────────────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .pub-lb {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .pub-lb__row {
+    padding: 0.7rem 0.85rem;
+    grid-template-columns: 2.2rem 1.6rem 1fr auto;
+    gap: 0.5rem;
+  }
+
+  .pub-lb__rank {
+    font-size: 0.95rem;
+  }
+
+  .pub-lb__row--top1 .pub-lb__rank,
+  .pub-lb__row--top2 .pub-lb__rank,
+  .pub-lb__row--top3 .pub-lb__rank {
+    font-size: 1.1rem;
+  }
+
+  .pub-lb__name {
+    font-size: 0.88rem;
+  }
+
+  .pub-lb__pts {
+    font-size: 1rem;
+  }
+}
+
 /* ── Top 3 ───────────────────────────────────────────────────────────────── */
 .pub-lb__row--top1 {
   background: oklch(20% 0.07 85 / 0.30);

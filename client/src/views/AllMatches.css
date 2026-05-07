@@ -261,6 +261,8 @@
 
 /* ── Text elements ───────────────────────────────────────────────────────── */
 .am-card__name {
+  flex: 1;
+  min-width: 0;
   font-family: var(--font-display);
   font-size: clamp(1.1rem, 2.5vw, 1.4rem);
   font-weight: 900;
@@ -309,4 +311,58 @@
 .am-card__prospects .prospect-bar__header,
 .am-card__prospects .prospect-bar__stats {
   display: none;
+}
+
+/* ── Mobile ──────────────────────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .all-matches {
+    padding: 1.5rem 1rem 2rem;
+    gap: 1.5rem;
+  }
+
+  .am-card {
+    padding: 0.85rem 0.9rem;
+  }
+
+  .am-card__row {
+    gap: 0.4rem;
+  }
+
+  .am-card__center {
+    gap: 0.25rem;
+  }
+
+  /* Priority 3: hide country flag first */
+  .am-card__flag {
+    display: none;
+  }
+
+  /* Priority 2: logo shrinks but stays */
+  .am-card__logo {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+  }
+
+  .am-card__name {
+    font-size: 0.88rem;
+  }
+
+  .am-card__score {
+    font-size: 1.15rem;
+    min-width: 1.2rem;
+  }
+
+  /* Tighter odds to give more room to team names */
+  .am-card__odds {
+    font-size: 0.8rem;
+    min-width: 1.4rem;
+  }
+}
+
+/* Below ~380 px: drop logos too — priority 1 (name) must always show */
+@media (max-width: 380px) {
+  .am-card__logo {
+    display: none;
+  }
 }

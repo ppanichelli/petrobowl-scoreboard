@@ -475,6 +475,29 @@
     margin-bottom: 30px;
   }
 
+  /* Header logos */
+  .scoreboard__header-logo--primary {
+    height: 44px;
+    margin-left: 0;
+  }
+
+  .scoreboard__header-logo--regionals {
+    height: 40px;
+  }
+
+  /* Footer logos */
+  .scoreboard__footer {
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .scoreboard__footer-spe {
+    height: 44px;
+  }
+
+  .scoreboard__footer-ypf {
+    height: 28px;
+  }
+
   .streak-badge {
     font-size: clamp(0.9rem, 4.5vw, 1.4rem);
     padding: var(--space-xs) var(--space-md);

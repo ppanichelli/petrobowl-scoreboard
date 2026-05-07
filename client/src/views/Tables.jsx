@@ -48,28 +48,28 @@ export default function Tables() {
               <table className="gt-table">
                 <thead>
                   <tr>
-                    <th className="gt-th gt-th--pos">#</th>
+                    <th className="gt-th gt-th--pos gt-col--hide-mobile">#</th>
                     <th className="gt-th gt-th--team">Team</th>
-                    <th className="gt-th gt-th--num" title="Matches Played">MP</th>
+                    <th className="gt-th gt-th--num gt-col--hide-mobile" title="Matches Played">MP</th>
                     <th className="gt-th gt-th--num" title="Points">Pts</th>
                     <th className="gt-th gt-th--num" title="Points scored">+</th>
-                    <th className="gt-th gt-th--num" title="Points against">−</th>
+                    <th className="gt-th gt-th--num gt-col--hide-mobile" title="Points against">−</th>
                     <th className="gt-th gt-th--num" title="Net points">+/−</th>
                   </tr>
                 </thead>
                 <tbody>
                   {current.standings.map((row, i) => (
                     <tr key={row.team_id} className={`gt-row${i === 0 ? ' gt-row--leader' : ''}`}>
-                      <td className="gt-td gt-td--pos">{i + 1}</td>
+                      <td className="gt-td gt-td--pos gt-col--hide-mobile">{i + 1}</td>
                       <td className="gt-td gt-td--team">
                         <img src={row.logo_small_url} alt={row.short_name} className="gt-logo"
                           onError={e => { e.target.style.display = 'none' }} />
                         <span className="gt-name">{row.short_name}</span>
                       </td>
-                      <td className="gt-td gt-td--num">{row.mp}</td>
+                      <td className="gt-td gt-td--num gt-col--hide-mobile">{row.mp}</td>
                       <td className="gt-td gt-td--num gt-td--pts">{row.pts}</td>
                       <td className="gt-td gt-td--num">{row.plus}</td>
-                      <td className="gt-td gt-td--num">{row.minus}</td>
+                      <td className="gt-td gt-td--num gt-col--hide-mobile">{row.minus}</td>
                       <td className="gt-td gt-td--num gt-td--net">
                         {row.net > 0 ? `+${row.net}` : row.net}
                       </td>
