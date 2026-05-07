@@ -1,0 +1,204 @@
+/* ── Draw admin page ───────────────────────────────────────────────────────── */
+.draw-admin {
+  min-height: 100vh;
+  background: var(--pb-dark);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────────── */
+.draw-admin__header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.8rem 1.5rem;
+  background: rgba(0,59,113,0.7);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-wrap: wrap;
+}
+
+.draw-admin__back {
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  padding: 0.4rem 0.9rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: color 0.15s, border-color 0.15s;
+}
+.draw-admin__back:hover { color: #fff; border-color: rgba(255,255,255,0.4); }
+
+.draw-admin__title {
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--pb-gold);
+  flex: 1;
+}
+
+.draw-admin__controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.draw-admin__label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.6);
+}
+
+.draw-admin__select {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  color: #fff;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.draw-admin__btn-reset {
+  background: transparent;
+  border: 1px solid rgba(220,50,50,0.5);
+  color: rgba(220,100,100,0.9);
+  padding: 0.35rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.draw-admin__btn-reset:hover {
+  background: rgba(220,50,50,0.2);
+  color: #ff9090;
+}
+
+/* ── Toast ──────────────────────────────────────────────────────────────────── */
+.draw-admin__toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: var(--pb-blue-mid);
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  z-index: 999;
+  font-size: 0.95rem;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Group grid ─────────────────────────────────────────────────────────────── */
+.draw-admin__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--group-count, 5), 1fr);
+  gap: 1.25rem;
+  padding: 1.5rem;
+}
+
+/* ── Group card ─────────────────────────────────────────────────────────────── */
+.draw-admin__group {
+  background: oklch(16% 0.04 250 / 0.60);
+  border: 1px solid oklch(26% 0.04 250);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.draw-admin__group-header {
+  font-family: var(--font-title);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pb-gold);
+  padding: 0.65rem 1rem;
+  background: oklch(12% 0.06 250 / 0.70);
+  border-bottom: 1px solid oklch(22% 0.04 250);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.draw-admin__group-count {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.35);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.draw-admin__group-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Slot row ───────────────────────────────────────────────────────────────── */
+.draw-admin__slot {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid oklch(20% 0.03 250);
+}
+.draw-admin__slot:last-child { border-bottom: none; }
+
+.draw-admin__slot-num {
+  font-size: 0.75rem;
+  color: oklch(40% 0.02 250);
+  width: 1.2rem;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.draw-admin__slot-logo {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.draw-admin__slot-flag {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.draw-admin__slot-select {
+  flex: 1;
+  background: oklch(14% 0.04 250 / 0.80);
+  border: 1px solid oklch(28% 0.04 250);
+  border-radius: 6px;
+  color: oklch(82% 0.012 250);
+  padding: 0.35rem 0.5rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+  min-width: 0;
+}
+.draw-admin__slot-select:focus {
+  outline: 2px solid var(--pb-gold);
+  outline-offset: 1px;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+@media (max-width: 1000px) {
+  .draw-admin__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .draw-admin__grid {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+  .draw-admin__header { gap: 0.75rem; }
+  .draw-admin__title { font-size: 0.9rem; }
+}

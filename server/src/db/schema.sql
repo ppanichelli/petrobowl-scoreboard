@@ -79,3 +79,11 @@ CREATE TABLE IF NOT EXISTS leaderboard_snapshots (
   rank              INTEGER NOT NULL,
   created_at        TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+CREATE TABLE IF NOT EXISTS draw_state (
+  id          INTEGER PRIMARY KEY DEFAULT 1,
+  total_teams INTEGER NOT NULL DEFAULT 20,
+  assignments TEXT NOT NULL DEFAULT '{}',
+  updated_at  TEXT DEFAULT (datetime('now'))
+);
+INSERT OR IGNORE INTO draw_state (id, total_teams, assignments) VALUES (1, 20, '{}');

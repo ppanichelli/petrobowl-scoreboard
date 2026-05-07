@@ -9,6 +9,8 @@ import PublicLeaderboard from './views/PublicLeaderboard'
 import Landing           from './views/Landing'
 import ProspectsView     from './views/ProspectsView'
 import Tables            from './views/Tables'
+import Draw              from './views/Draw'
+import DrawAdmin         from './views/DrawAdmin'
 import AdminLogin        from './views/AdminLogin'
 import AdminConsole      from './views/AdminConsole'
 import ParticipantLogin  from './views/ParticipantLogin'
@@ -42,10 +44,14 @@ export default function App() {
             <Route path="/landing"     element={<Landing />} />
             <Route path="/prospects"   element={<ProspectsView />} />
             <Route path="/tables"      element={<Tables />} />
+            <Route path="/draw"        element={<Draw />} />
           </Route>
 
           {/* Admin (timekeeper) */}
           <Route path="/timekeeper/login" element={<AdminLogin />} />
+          <Route path="/timekeeper/draw" element={
+            <AdminRoute><DrawAdmin /></AdminRoute>
+          } />
           <Route path="/timekeeper/*" element={
             <AdminRoute><AdminConsole /></AdminRoute>
           } />

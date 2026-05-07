@@ -1,0 +1,141 @@
+/* ── Draw public page ──────────────────────────────────────────────────────── */
+.draw-page {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.draw-page__header {
+  text-align: center;
+}
+
+.draw-page__title {
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--pb-gold);
+  margin: 0;
+}
+
+/* ── Group grid ─────────────────────────────────────────────────────────────── */
+.draw-page__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--group-count, 5), 1fr);
+  gap: 1.25rem;
+}
+
+/* ── Single group card ──────────────────────────────────────────────────────── */
+.draw-group {
+  background: oklch(16% 0.04 250 / 0.60);
+  border: 1px solid oklch(26% 0.04 250);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.draw-group__header {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--pb-gold);
+  padding: 0.75rem 1.1rem;
+  background: oklch(12% 0.06 250 / 0.70);
+  border-bottom: 1px solid oklch(22% 0.04 250);
+}
+
+.draw-group__body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Individual slot row ────────────────────────────────────────────────────── */
+.draw-slot {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.7rem 1.1rem;
+  border-bottom: 1px solid oklch(20% 0.03 250);
+  min-height: 3.2rem;
+  transition: background 0.15s;
+}
+
+.draw-slot:last-child {
+  border-bottom: none;
+}
+
+.draw-slot--filled {
+  background: oklch(18% 0.05 250 / 0.40);
+}
+
+/* reveal animation — plays once when a team is assigned */
+@keyframes drawReveal {
+  0%   { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  60%  { opacity: 1; transform: translateY(1px) scale(1.01); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.draw-slot--reveal {
+  animation: drawReveal 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+.draw-slot__logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 4px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 4px oklch(5% 0.02 250 / 0.50));
+}
+
+.draw-slot__name {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: oklch(88% 0.012 250);
+  flex: 1;
+}
+
+.draw-slot__flag {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.draw-slot__empty {
+  color: oklch(36% 0.03 250);
+  font-size: 1rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.05em;
+  border: 1px dashed oklch(28% 0.04 250);
+  border-radius: 6px;
+  width: 100%;
+  text-align: center;
+  padding: 0.2rem 0;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .draw-page__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .draw-page__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .draw-page {
+    padding: 1.25rem 1rem 2rem;
+  }
+}
