@@ -4,7 +4,17 @@ import { useAdminAuth } from '../hooks/useAdminAuth'
 import { useSocket } from '../hooks/useSocket'
 import './AdminConsole.css'
 
-const STAGES = ['group','quarterfinal','semifinal','third_place','final','tiebreaker']
+const STAGES = ['group','loser_bracket','quarterfinal','semifinal','third_place','final','tiebreaker']
+
+const DEFAULT_QUESTIONS = {
+  group:         10,
+  loser_bracket: 20,
+  quarterfinal:  20,
+  semifinal:     30,
+  third_place:   40,
+  final:         40,
+  tiebreaker:     5,
+}
 
 export default function AdminConsole() {
   const { logout } = useAdminAuth()
@@ -20,7 +30,7 @@ export default function AdminConsole() {
 
   // Batch form state
   const [batchRows, setBatchRows] = useState([
-    { team_a_id: '', team_b_id: '', stage: 'group', total_questions: 15, group_name: '' }
+    { team_a_id: '', team_b_id: '', stage: 'group', total_questions: 10, group_name: '' }
   ])
 
   // DB reset state
@@ -382,12 +392,20 @@ export default function AdminConsole() {
   }
 
   function addRow() {
-    setBatchRows(r => [...r, { team_a_id: '', team_b_id: '', stage: 'group', total_questions: 15, group_name: '' }])
+    setBatchRows(r => [...r, { team_a_id: '', team_b_id: '', stage: 'group', total_questions: 10, group_name: '' }])
   }
   function removeRow(i) {
     setBatchRows(r => r.filter((_, idx) => idx !== i))
   }
   function updateRow(i, key, value) {
-    setBatchRows(r => r.map((row, idx) => idx === i ? { ...row, [key]: value } : row))
+    setBatchRows(r => r.map((row, idx) => {
+      if (idx !== i) return row
+      const updated = { ...row, [key]: value }
+      if (key === 'stage') {
+        updated.total_questions = DEFAULT_QUESTIONS[value] ?? row.total_questions
+        if (value !== 'group') updated.group_name = ''
+      }
+      return updated
+    }))
   }
 }

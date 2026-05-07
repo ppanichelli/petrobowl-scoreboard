@@ -324,12 +324,13 @@ function fmtScore(n) {
 
 function formatStage(stage) {
   const map = {
-    group:       'Group Stage',
-    quarterfinal:'Quarterfinal',
-    semifinal:   'Semifinal',
-    third_place: 'Third Place',
-    final:       'Grand Final',
-    tiebreaker:  'Tiebreaker',
+    group:         'Group Stage',
+    quarterfinal:  'Quarterfinal',
+    semifinal:     'Semifinal',
+    third_place:   'Third Place',
+    final:         'Grand Final',
+    tiebreaker:    'Tiebreaker',
+    loser_bracket: 'Loser Bracket',
   }
   return map[stage] || stage
 }

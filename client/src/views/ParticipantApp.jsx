@@ -363,6 +363,7 @@ function formatStage(s) {
   const m = {
     group: 'Group Stage', quarterfinal: 'Quarterfinal', semifinal: 'Semifinal',
     third_place: 'Third Place', final: 'Grand Final', tiebreaker: 'Tiebreaker',
+    loser_bracket: 'Loser Bracket',
   }
   return m[s] || s
 }

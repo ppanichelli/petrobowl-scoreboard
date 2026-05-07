@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS matches (
   id                  TEXT PRIMARY KEY,
   team_a_id           TEXT NOT NULL REFERENCES teams(id),
   team_b_id           TEXT NOT NULL REFERENCES teams(id),
-  stage               TEXT NOT NULL CHECK(stage IN ('group','quarterfinal','semifinal','third_place','final','tiebreaker')),
+  stage               TEXT NOT NULL CHECK(stage IN ('group','quarterfinal','semifinal','third_place','final','tiebreaker','loser_bracket')),
   total_questions     INTEGER NOT NULL,
   status              TEXT NOT NULL DEFAULT 'setup' CHECK(status IN ('setup','live','finished')),
   score_a             INTEGER NOT NULL DEFAULT 0,
