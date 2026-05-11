@@ -288,7 +288,7 @@ export default function Scoreboard() {
             className="scoreboard__footer-spe"
           />
           <div className="scoreboard__footer-right">
-            <span className="scoreboard__footer-sponsor-label">Sponsor</span>
+            <span className="scoreboard__footer-sponsor-label">Master<br />Sponsor</span>
             <img
               src="/assets/images/ypf-logo-white.png"
               alt="YPF"

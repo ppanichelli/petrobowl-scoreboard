@@ -82,7 +82,7 @@ export default function NextMatchBanner({ match }) {
             className="next-banner__spe-logo"
           />
           <div className="next-banner__footer-right">
-            <span className="next-banner__sponsor-label">Sponsor</span>
+            <span className="next-banner__sponsor-label">Master<br />Sponsor</span>
             <img
               src="/assets/images/ypf-logo-white.png"
               alt="YPF"

@@ -44,7 +44,7 @@ export default function PublicPageShell({ children }) {
           />
         </div>
         <div className="pps__footer-right">
-          <span className="pps__sponsor-label">Sponsor</span>
+          <span className="pps__sponsor-label">Master<br />Sponsor</span>
           <img
             src="/assets/images/ypf-logo-white.png"
             alt="YPF"
