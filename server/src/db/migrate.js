@@ -20,6 +20,7 @@ db.exec(sql)
 const alterations = [
   `ALTER TABLE teams ADD COLUMN logo_small_url TEXT NOT NULL DEFAULT '/assets/logos/default_small.png'`,
   `ALTER TABLE matches ADD COLUMN group_name TEXT`,
+  `ALTER TABLE matches ADD COLUMN bracket_slot TEXT`,
 ]
 for (const stmt of alterations) {
   try { db.exec(stmt) } catch (e) { /* column already exists — safe to ignore */ }
@@ -50,7 +51,8 @@ if (matchesDef && !matchesDef.sql.includes('loser_bracket')) {
       frozen_prospects_b  INTEGER,
       created_at          TEXT NOT NULL DEFAULT (datetime('now')),
       finished_at         TEXT,
-      group_name          TEXT
+      group_name          TEXT,
+      bracket_slot        TEXT
     );
     INSERT INTO matches_migrated SELECT * FROM matches;
     DROP TABLE matches;
