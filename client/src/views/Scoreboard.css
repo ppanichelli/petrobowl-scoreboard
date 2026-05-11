@@ -392,7 +392,9 @@
 
 .scoreboard__footer-center {
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: var(--space-2xl);
 }
 
 .scoreboard__footer-spe {
@@ -437,8 +439,31 @@
   }
 }
 
+/* Hidden outside broadcast screen */
+.scoreboard__header-live-info {
+  display: none;
+}
+
 /* ── Broadcast screen (1344×672) ─────────────────────────────────────────── */
 @media (min-width: 1000px) and (max-width: 1500px) {
+  /* Suppress location labels; show stage + progress in their place */
+  /*.scoreboard__header .location__header { display: none; }*/
+
+  .scoreboard__header-live-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+
+  /* Hide originals from score panel */
+  .score-panel > .scoreboard__stage,
+  .score-panel > .score-panel__progress { display: none; }
+
+  /* Slightly smaller digits to reclaim vertical space */
+  .score-digit {
+    font-size: clamp(3.5rem, 9vw, 8rem);
+  }
 }
 
 /* ── Mobile layout ───────────────────────────────────────────────────────── */

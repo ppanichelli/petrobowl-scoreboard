@@ -29,14 +29,16 @@
 
 .q-track__dots-row {
   display: flex;
-  gap: 0.4rem;
+  gap: clamp(2px, 0.4rem, 8px);
   flex-wrap: nowrap;
 }
 
 .q-dot {
   position: relative;          /* anchor for ripple ::after */
   width: clamp(18px, 2.5vw, 32px);
-  height: clamp(18px, 2.5vw, 32px);
+  aspect-ratio: 1 / 1;
+  min-width: 8px;              /* absolute floor — prevents invisible dots */
+  flex-shrink: 1;
   border-radius: 50%;
   display: inline-block;
   border: 2px solid rgba(255,255,255,0.15);

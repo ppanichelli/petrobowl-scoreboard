@@ -28,6 +28,7 @@
 /* ── Logo ────────────────────────────────────────────────────────────────── */
 .team-side__logo {
   flex-shrink: 0;
+  opacity: 80%;
   display: flex;
   align-items: center;
 }

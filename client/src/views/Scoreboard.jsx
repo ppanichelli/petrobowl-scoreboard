@@ -8,9 +8,10 @@ import NextMatchBanner from '../components/NextMatchBanner'
 import './Scoreboard.css'
 
 export default function Scoreboard() {
-  const [match, setMatch]     = useState(null)
-  const [actions, setActions] = useState([])
-  const [nextMatch, setNextMatch] = useState(null)
+  const [match, setMatch]           = useState(null)
+  const [actions, setActions]       = useState([])
+  const [nextMatch, setNextMatch]   = useState(null)
+  const [showResult, setShowResult] = useState(true)
   const [flashA, setFlashA]   = useState(false)
   const [flashB, setFlashB]   = useState(false)
   const [plusA, setPlusA]     = useState(false)
@@ -74,6 +75,7 @@ export default function Scoreboard() {
     const handleStarted = (m) => { setMatch(m); setNextMatch(null) }
     const handleFinished = (m) => {
       setMatch(m)
+      setShowResult(true)
       fetch('/api/matches/next', { cache: 'no-store' }).then(r => r.json()).then(nm => {
         setNextMatch(nm)
       })
@@ -155,6 +157,15 @@ export default function Scoreboard() {
         <div className="scoreboard__header-center">
           <span className='location__header'>2026 REGIONAL PETROBOWL CHAMPIONSHIP</span>
           <span className='location__header'>MAY 15th, BUENOS AIRES</span>
+          <div className="scoreboard__header-live-info">
+            <span className="scoreboard__stage">{formatStage(match.stage)}</span>
+            <span className="score-panel__progress">
+              {questionsDone > 0
+                ? `Q ${questionsDone} · ${match.total_questions - questionsDone} remaining`
+                : `${match.total_questions} questions`
+              }
+            </span>
+          </div>
         </div>
         <img
           className="scoreboard__header-logo scoreboard__header-logo--regionals"
@@ -244,8 +255,8 @@ export default function Scoreboard() {
         return (
           <div className={`streak-badge${onFire ? ' streak-badge--fire' : ''}`}>
             {onFire
-              ? <><span className="streak-badge__name">{fireTeam}</span>{' '}ON FIRE</>
-              : <><span className="streak-badge__name">{streakTeam}</span>{' '}on a streak</>
+              ? <><span className="streak-badge__name">{fireTeam}</span>{' '}is ON FIRE!!</>
+              : <><span className="streak-badge__name">{streakTeam}</span>{' '}is on a streak!</>
             }
           </div>
         )
@@ -263,8 +274,8 @@ export default function Scoreboard() {
         />
       )}
 
-      {match.status === 'finished' && (
-        <MatchResult match={match} />
+      {match.status === 'finished' && showResult && (
+        <MatchResult match={match} onClose={() => setShowResult(false)} />
       )}
 
       {/* Footer: LACSS + sponsor — same as other public screens */}
@@ -276,16 +287,17 @@ export default function Scoreboard() {
             alt="SPE Latin America and Caribbean Student Symposium"
             className="scoreboard__footer-spe"
           />
+          <div className="scoreboard__footer-right">
+            <span className="scoreboard__footer-sponsor-label">Sponsor</span>
+            <img
+              src="/assets/images/ypf-logo-white.png"
+              alt="YPF"
+              className="scoreboard__footer-ypf"
+              onError={e => { e.target.style.display = 'none' }}
+            />
+          </div>
         </div>
-        <div className="scoreboard__footer-right">
-          <span className="scoreboard__footer-sponsor-label">Sponsor</span>
-          <img
-            src="/assets/images/ypf-logo-white.png"
-            alt="YPF"
-            className="scoreboard__footer-ypf"
-            onError={e => { e.target.style.display = 'none' }}
-          />
-        </div>
+        <div />
       </div>
     </div>
   )
