@@ -1,0 +1,206 @@
+.ba {
+  padding: var(--space-lg);
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.ba-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ba-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--pb-white);
+}
+
+.ba-error {
+  background: oklch(25% 0.1 25);
+  border: 1px solid var(--pb-red);
+  color: #ff8080;
+  border-radius: 6px;
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.9rem;
+}
+
+.ba-section {
+  background: oklch(12% 0.03 250);
+  border: 1px solid oklch(20% 0.04 250);
+  border-radius: 8px;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.ba-section__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ba-section__title {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: oklch(70% 0.04 250);
+}
+
+/* ── Seed Assignment ───────────────────────────────────────────────────── */
+.ba-seeds {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.ba-qf-pair {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  background: oklch(10% 0.03 250);
+  border-radius: 6px;
+  border: 1px solid oklch(18% 0.04 250);
+}
+
+.ba-qf-label {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: oklch(55% 0.04 250);
+  width: 42px;
+  flex-shrink: 0;
+}
+
+.ba-vs {
+  font-size: 0.75rem;
+  color: oklch(40% 0.04 250);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.ba-seed {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ba-seed__label {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+
+.ba-seed__label strong {
+  color: var(--pb-gold);
+  font-family: var(--font-title);
+  letter-spacing: 0.05em;
+}
+
+.ba-seed__pair {
+  color: oklch(45% 0.04 250);
+  font-size: 0.72rem;
+}
+
+.ba-seed__select {
+  font-size: 0.85rem;
+  padding: 0.3rem 0.5rem;
+}
+
+/* ── Bracket Progress ──────────────────────────────────────────────────── */
+.ba-progress {
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.ba-progress__group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ba-progress__group-label {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: oklch(45% 0.04 250);
+  text-transform: uppercase;
+  padding-bottom: 4px;
+  border-bottom: 1px solid oklch(20% 0.04 250);
+  margin-bottom: 4px;
+}
+
+.ba-mrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 6px 8px;
+  border-radius: 5px;
+  font-size: 0.82rem;
+  background: oklch(10% 0.03 250);
+  border: 1px solid oklch(16% 0.04 250);
+}
+
+.ba-mrow--live {
+  border-color: var(--pb-gold);
+  background: oklch(12% 0.06 75);
+}
+
+.ba-mrow--finished {
+  opacity: 0.8;
+}
+
+.ba-mrow__slot {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  color: var(--pb-gold);
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.ba-mrow__stage {
+  color: oklch(45% 0.04 250);
+  font-size: 0.75rem;
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.ba-mrow__teams {
+  flex: 1;
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.ba-mrow__score {
+  color: var(--pb-gold);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+}
+
+.ba-mrow__winner {
+  color: var(--pb-green);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.ba-mrow--pending .ba-mrow__slot {
+  color: oklch(35% 0.04 250);
+}

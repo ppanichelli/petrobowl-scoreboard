@@ -11,6 +11,8 @@ import ProspectsView     from './views/ProspectsView'
 import Tables            from './views/Tables'
 import Draw              from './views/Draw'
 import DrawAdmin         from './views/DrawAdmin'
+import Bracket          from './views/Bracket'
+import BracketAdmin     from './views/BracketAdmin'
 import AdminLogin        from './views/AdminLogin'
 import AdminConsole      from './views/AdminConsole'
 import ParticipantLogin  from './views/ParticipantLogin'
@@ -45,12 +47,16 @@ export default function App() {
             <Route path="/prospects"   element={<ProspectsView />} />
             <Route path="/tables"      element={<Tables />} />
             <Route path="/draw"        element={<Draw />} />
+            <Route path="/bracket"     element={<Bracket />} />
           </Route>
 
           {/* Admin (timekeeper) */}
           <Route path="/timekeeper/login" element={<AdminLogin />} />
           <Route path="/timekeeper/draw" element={
             <AdminRoute><DrawAdmin /></AdminRoute>
+          } />
+          <Route path="/timekeeper/bracket" element={
+            <AdminRoute><BracketAdmin /></AdminRoute>
           } />
           <Route path="/timekeeper/*" element={
             <AdminRoute><AdminConsole /></AdminRoute>

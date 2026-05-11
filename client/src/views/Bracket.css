@@ -1,0 +1,334 @@
+/* ── Root: exactly fits 1344×672 LED screen ───────────────────────────── */
+.bracket {
+  width: 1344px;
+  height: 672px;
+  overflow: hidden;
+  background: var(--pb-bg);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-title);
+  box-sizing: border-box;
+}
+
+/* ── WINNER BRACKET ────────────────────────────────────────────────────── */
+.wb {
+  height: 440px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.wb-headers {
+  height: 26px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+.wb-hdr {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: oklch(60% 0.04 250);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wb-hdr--qf   { width: 200px; }
+.wb-hdr-spacer { width: 52px; }
+.wb-hdr--semi  { width: 210px; }
+.wb-hdr--finals { flex: 1; padding-left: 52px; }
+.wb-hdr--3p    { width: 200px; padding-right: 20px; text-align: right; color: oklch(55% 0.04 250); }
+
+.wb-body {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  padding: 0 20px;
+  gap: 0;
+}
+
+/* ── Bracket Columns ───────────────────────────────────────────────────── */
+.wb-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.wb-col--qf    { width: 200px; }
+.wb-col--semi  { width: 210px; }
+.wb-col--finals { flex: 1; }
+
+.wb-slot {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.wb-slot--double {
+  flex: 2;
+}
+
+.wb-slot--center {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.wb-slot--3p {
+  border-top: 1px solid oklch(25% 0.04 250);
+}
+
+/* ── Connectors ────────────────────────────────────────────────────────── */
+.wb-connectors {
+  width: 52px;
+  display: flex;
+  flex-direction: column;
+}
+
+.wb-connectors--full {
+  width: 52px;
+}
+
+.conn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.conn__top {
+  flex: 1;
+  border-right: 2px solid oklch(38% 0.06 60);
+  border-bottom: 2px solid oklch(38% 0.06 60);
+  border-radius: 0 0 4px 0;
+}
+
+.conn__bot {
+  flex: 1;
+  border-right: 2px solid oklch(38% 0.06 60);
+  border-top: 2px solid oklch(38% 0.06 60);
+  border-radius: 0 4px 0 0;
+}
+
+/* ── Match Node ────────────────────────────────────────────────────────── */
+.bracket-node {
+  position: relative;
+  width: 200px;
+  background: oklch(14% 0.03 250);
+  border: 1px solid oklch(22% 0.04 250);
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.bracket-node--live {
+  border-color: var(--pb-gold);
+  box-shadow: 0 0 10px oklch(65% 0.18 75 / 0.3);
+}
+
+.bracket-node--empty {
+  opacity: 0.4;
+}
+
+.bn-live-dot {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--pb-green);
+  animation: pulse 1.5s infinite;
+}
+
+/* ── Team Row ──────────────────────────────────────────────────────────── */
+.bn-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 8px;
+  height: 32px;
+  border-bottom: 1px solid oklch(20% 0.03 250);
+  transition: background 0.2s;
+}
+
+.bn-row:last-child {
+  border-bottom: none;
+}
+
+.bn-row--winner {
+  background: oklch(18% 0.07 75);
+}
+
+.bn-row--winner .bn-name,
+.bn-row--winner .bn-score {
+  color: var(--pb-gold);
+  font-weight: 700;
+}
+
+.bn-row--loser {
+  opacity: 0.55;
+}
+
+.bn-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.bn-logo--tbd {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: oklch(25% 0.03 250);
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.bn-name {
+  flex: 1;
+  font-family: var(--font-title);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--pb-white);
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bn-name--tbd {
+  color: oklch(40% 0.03 250);
+}
+
+.bn-score {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pb-white);
+  min-width: 38px;
+  text-align: right;
+  letter-spacing: 0.02em;
+}
+
+/* ── Placement Labels ──────────────────────────────────────────────────── */
+.wb-places {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wb-place {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: oklch(45% 0.04 250);
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 32px;
+}
+
+.wb-place--gold   { color: #FFD700; font-size: 13px; }
+.wb-place--silver { color: #C0C0C0; font-size: 13px; }
+.wb-place--bronze { color: #CD7F32; font-size: 13px; }
+.wb-place--4th    { color: oklch(60% 0.04 250); font-size: 13px; }
+
+/* ── LOSER BRACKET ─────────────────────────────────────────────────────── */
+.lb-divider {
+  height: 22px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-top: 1px solid oklch(20% 0.04 250);
+  flex-shrink: 0;
+}
+
+.lb-divider__label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: oklch(45% 0.04 250);
+  text-transform: uppercase;
+}
+
+.lb {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  padding: 0 20px 8px;
+  gap: 0;
+}
+
+.lb-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.lb-col--final {
+  flex: 1;
+}
+
+.lb-hdr {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: oklch(50% 0.04 250);
+  text-transform: uppercase;
+  padding-bottom: 6px;
+  white-space: nowrap;
+}
+
+.lb-slots {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.lb-slot {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.lb-slots--center {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.lb-conn {
+  width: 52px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 26px; /* offset for .lb-hdr height */
+}
+
+.lb-places {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lb-place {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: oklch(45% 0.04 250);
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 32px;
+}
+
+.lb-place--active {
+  color: oklch(65% 0.05 250);
+  font-size: 13px;
+}

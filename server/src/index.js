@@ -18,6 +18,7 @@ const participantRoutes = require('./routes/participant')
 const publicRoutes      = require('./routes/public')
 const tablesRoutes      = require('./routes/tables')
 const drawRoutes        = require('./routes/draw')
+const bracketRoutes     = require('./routes/bracket')
 const db                = require('./db/db')
 const { calcOdds }      = require('./lib/odds')
 
@@ -74,6 +75,8 @@ app.use('/api', publicRoutes)
 app.use('/api', tablesRoutes)
 app.use('/api', drawRoutes.publicRouter)
 app.use('/api/admin', drawRoutes.adminRouter)
+app.use('/api', bracketRoutes.publicRouter)
+app.use('/api/admin', bracketRoutes.adminRouter)
 
 // ── Serve built React app (production) ────────────────────────────────────
 const PUBLIC_DIR = path.resolve(__dirname, '../public')
@@ -110,8 +113,10 @@ io.on('connection', (socket) => {
   })
   socket.on('leave_match', (matchId) => socket.leave(`match:${matchId}`))
   socket.on('leave_odds',  (matchId) => socket.leave(`odds:${matchId}`))
-  socket.on('join_draw',  () => socket.join('draw'))
-  socket.on('leave_draw', () => socket.leave('draw'))
+  socket.on('join_draw',    () => socket.join('draw'))
+  socket.on('leave_draw',   () => socket.leave('draw'))
+  socket.on('join_bracket',  () => socket.join('bracket'))
+  socket.on('leave_bracket', () => socket.leave('bracket'))
 })
 
 // ── Start ──────────────────────────────────────────────────────────────────
