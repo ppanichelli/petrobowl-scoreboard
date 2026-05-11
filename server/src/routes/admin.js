@@ -7,6 +7,7 @@ const requireAdmin = require('../middleware/requireAdmin')
 const { calcOdds } = require('../lib/odds')
 const { processPayout } = require('../lib/payout')
 const { saveSnapshot }  = require('../lib/snapshot')
+const { tryCreateDownstreamMatches } = require('../lib/bracket')
 
 const router = express.Router()
 router.use(requireAdmin)
@@ -198,11 +199,14 @@ router.post('/matches/:id/action', (req, res) => {
       db.prepare('UPDATE matches SET is_draw = 0, winner_id = ? WHERE id = ?')
         .run(winnerId, match.parent_match_id)
       processPayout(match.parent_match_id)
+      const parent = db.prepare('SELECT bracket_slot FROM matches WHERE id = ?').get(match.parent_match_id)
+      if (parent && parent.bracket_slot) tryCreateDownstreamMatches(parent.bracket_slot, req.io)
     }
     saveSnapshot(match.id)
     const finished = getMatchFull(match.id)
     req.io.to(`match:${match.id}`).emit('match_finished', finished)
     req.io.emit('leaderboard', { type: 'leaderboard_update' })
+    if (match.bracket_slot && winnerId) tryCreateDownstreamMatches(match.bracket_slot, req.io)
     return res.json({ match: finished, actions: allActions, autoFinished: true })
   }
 
@@ -281,12 +285,15 @@ router.post('/matches/:id/finish', (req, res) => {
     db.prepare('UPDATE matches SET is_draw = 0, winner_id = ? WHERE id = ?')
       .run(winnerId, match.parent_match_id)
     processPayout(match.parent_match_id)
+    const parent = db.prepare('SELECT bracket_slot FROM matches WHERE id = ?').get(match.parent_match_id)
+    if (parent && parent.bracket_slot) tryCreateDownstreamMatches(parent.bracket_slot, req.io)
   }
   saveSnapshot(match.id)
 
   const updated = getMatchFull(match.id)
   req.io.to(`match:${match.id}`).emit('match_finished', updated)
   req.io.emit('leaderboard', { type: 'leaderboard_update' })
+  if (match.bracket_slot && winnerId) tryCreateDownstreamMatches(match.bracket_slot, req.io)
 
   res.json(updated)
 })

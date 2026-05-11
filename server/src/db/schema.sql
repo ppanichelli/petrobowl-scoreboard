@@ -87,3 +87,8 @@ CREATE TABLE IF NOT EXISTS draw_state (
   updated_at  TEXT DEFAULT (datetime('now'))
 );
 INSERT OR IGNORE INTO draw_state (id, total_teams, assignments) VALUES (1, 20, '{}');
+
+CREATE TABLE IF NOT EXISTS bracket_slots (
+  slot    TEXT PRIMARY KEY,
+  team_id TEXT REFERENCES teams(id)
+);

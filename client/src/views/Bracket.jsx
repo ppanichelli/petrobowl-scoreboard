@@ -1,0 +1,216 @@
+import React, { useState, useEffect } from 'react'
+import { useSocket } from '../hooks/useSocket'
+import './Bracket.css'
+
+const SLOT_LABELS = {
+  QF1: 'QF 1', QF2: 'QF 2', QF3: 'QF 3', QF4: 'QF 4',
+  WBS1: 'SEMI 1', WBS2: 'SEMI 2',
+  GF: 'GRAND FINAL', '3P': '3RD PLACE',
+  LBS1: 'LB SEMI 1', LBS2: 'LB SEMI 2',
+  LBF: '5TH PLACE',
+}
+
+function TeamRow({ team, score, tbScore, isWinner, isLoser, showScore }) {
+  const scoreStr = tbScore !== null && tbScore !== undefined
+    ? `${score} (${tbScore})`
+    : showScore ? score : '—'
+
+  return (
+    <div className={`bn-row ${isWinner ? 'bn-row--winner' : ''} ${isLoser ? 'bn-row--loser' : ''}`}>
+      {team ? (
+        <>
+          <img className="bn-logo" src={team.logo} alt="" onError={e => { e.target.style.display = 'none' }} />
+          <span className="bn-name">{team.short}</span>
+          <span className="bn-score">{scoreStr}</span>
+        </>
+      ) : (
+        <>
+          <span className="bn-logo bn-logo--tbd" />
+          <span className="bn-name bn-name--tbd">TBD</span>
+          <span className="bn-score">—</span>
+        </>
+      )}
+    </div>
+  )
+}
+
+function BracketNode({ match }) {
+  if (!match) {
+    return (
+      <div className="bracket-node bracket-node--empty">
+        <TeamRow team={null} score={0} tbScore={null} />
+        <TeamRow team={null} score={0} tbScore={null} />
+      </div>
+    )
+  }
+
+  const finished = match.status === 'finished'
+  const live = match.status === 'live'
+  const showScore = live || finished
+  const winnerIsA = finished && match.winner_id === match.team_a_id
+  const winnerIsB = finished && match.winner_id === match.team_b_id
+
+  const teamA = { short: match.team_a_short, logo: match.team_a_logo }
+  const teamB = { short: match.team_b_short, logo: match.team_b_logo }
+
+  return (
+    <div className={`bracket-node ${live ? 'bracket-node--live' : ''} ${finished ? 'bracket-node--finished' : ''}`}>
+      {live && <span className="bn-live-dot" />}
+      <TeamRow team={teamA} score={match.score_a} tbScore={match.tiebreaker_score_a ?? null}
+        isWinner={winnerIsA} isLoser={finished && !winnerIsA} showScore={showScore} />
+      <TeamRow team={teamB} score={match.score_b} tbScore={match.tiebreaker_score_b ?? null}
+        isWinner={winnerIsB} isLoser={finished && !winnerIsB} showScore={showScore} />
+    </div>
+  )
+}
+
+function Conn() {
+  return (
+    <div className="conn">
+      <div className="conn__top" />
+      <div className="conn__bot" />
+    </div>
+  )
+}
+
+export default function Bracket() {
+  const [data, setData] = useState({ slots: {}, matches: [] })
+  const socket = useSocket('join_bracket', 'leave_bracket')
+
+  useEffect(() => {
+    fetch('/api/bracket').then(r => r.json()).then(setData).catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    if (!socket) return
+    const handler = state => setData(state)
+    socket.on('bracket:updated', handler)
+    return () => socket.off('bracket:updated', handler)
+  }, [socket])
+
+  const m = {}
+  for (const match of data.matches || []) m[match.bracket_slot] = match
+
+  const gfFinished  = m.GF?.status === 'finished'
+  const tpFinished  = m['3P']?.status === 'finished'
+  const lbfFinished = m.LBF?.status === 'finished'
+  const gfWinnerA   = gfFinished  && m.GF?.winner_id === m.GF?.team_a_id
+  const tpWinnerA   = tpFinished  && m['3P']?.winner_id === m['3P']?.team_a_id
+  const lbfWinnerA  = lbfFinished && m.LBF?.winner_id === m.LBF?.team_a_id
+
+  return (
+    <div className="bracket">
+
+      {/* ── WINNER BRACKET ─────────────────────────────────────────────── */}
+      <div className="wb">
+        {/* Column headers */}
+        <div className="wb-headers">
+          <div className="wb-hdr wb-hdr--qf">QUARTER FINALS</div>
+          <div className="wb-hdr-spacer" />
+          <div className="wb-hdr wb-hdr--semi">SEMI FINALS</div>
+          <div className="wb-hdr-spacer" />
+          <div className="wb-hdr wb-hdr--finals">GRAND FINAL</div>
+          <div className="wb-hdr wb-hdr--3p">3RD PLACE</div>
+        </div>
+
+        {/* Bracket body */}
+        <div className="wb-body">
+
+          {/* QF column */}
+          <div className="wb-col wb-col--qf">
+            <div className="wb-slot"><BracketNode match={m.QF1} /></div>
+            <div className="wb-slot"><BracketNode match={m.QF2} /></div>
+            <div className="wb-slot"><BracketNode match={m.QF3} /></div>
+            <div className="wb-slot"><BracketNode match={m.QF4} /></div>
+          </div>
+
+          {/* QF → Semi connector */}
+          <div className="wb-connectors">
+            <Conn />
+            <Conn />
+          </div>
+
+          {/* Semi column */}
+          <div className="wb-col wb-col--semi">
+            <div className="wb-slot wb-slot--double">
+              <BracketNode match={m.WBS1} />
+            </div>
+            <div className="wb-slot wb-slot--double">
+              <BracketNode match={m.WBS2} />
+            </div>
+          </div>
+
+          {/* Semi → Finals connector */}
+          <div className="wb-connectors wb-connectors--full">
+            <Conn />
+          </div>
+
+          {/* Finals column: GF top half, 3P bottom half */}
+          <div className="wb-col wb-col--finals">
+            <div className="wb-slot wb-slot--double wb-slot--center">
+              <BracketNode match={m.GF} />
+              <div className="wb-places">
+                <span className={`wb-place ${gfWinnerA ? 'wb-place--gold' : ''}`}>
+                  {gfFinished && gfWinnerA ? `1ST — ${m.GF.team_a_short}` : '1ST'}
+                </span>
+                <span className={`wb-place ${gfFinished && !gfWinnerA ? 'wb-place--silver' : ''}`}>
+                  {gfFinished && !gfWinnerA ? `2ND — ${m.GF.team_b_short}` : '2ND'}
+                </span>
+              </div>
+            </div>
+            <div className="wb-slot wb-slot--double wb-slot--center wb-slot--3p">
+              <BracketNode match={m['3P']} />
+              <div className="wb-places">
+                <span className={`wb-place ${tpWinnerA ? 'wb-place--bronze' : ''}`}>
+                  {tpFinished && tpWinnerA ? `3RD — ${m['3P'].team_a_short}` : '3RD'}
+                </span>
+                <span className={`wb-place ${tpFinished && !tpWinnerA ? 'wb-place--4th' : ''}`}>
+                  {tpFinished && !tpWinnerA ? `4TH — ${m['3P'].team_b_short}` : '4TH'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ── LOSER BRACKET ─────────────────────────────────────────────────── */}
+      <div className="lb-divider">
+        <span className="lb-divider__label">LOSER BRACKET</span>
+      </div>
+
+      <div className="lb">
+        {/* LB Semi column */}
+        <div className="lb-col">
+          <div className="lb-hdr">LB SEMIS</div>
+          <div className="lb-slots">
+            <div className="lb-slot"><BracketNode match={m.LBS1} /></div>
+            <div className="lb-slot"><BracketNode match={m.LBS2} /></div>
+          </div>
+        </div>
+
+        {/* LB connector */}
+        <div className="lb-conn">
+          <Conn />
+        </div>
+
+        {/* 5th/6th column */}
+        <div className="lb-col lb-col--final">
+          <div className="lb-hdr">5TH PLACE</div>
+          <div className="lb-slots lb-slots--center">
+            <BracketNode match={m.LBF} />
+            <div className="lb-places">
+              <span className={`lb-place ${lbfWinnerA ? 'lb-place--active' : ''}`}>
+                {lbfFinished && lbfWinnerA ? `5TH — ${m.LBF.team_a_short}` : '5TH'}
+              </span>
+              <span className={`lb-place ${lbfFinished && !lbfWinnerA ? 'lb-place--active' : ''}`}>
+                {lbfFinished && !lbfWinnerA ? `6TH — ${m.LBF.team_b_short}` : '6TH'}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  )
+}
