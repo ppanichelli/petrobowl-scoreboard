@@ -16,7 +16,7 @@ export default function NextMatchBanner({ match }) {
           />
           <img
             className="next-banner__reg-logo"
-            src="/assets/images/The-Regionals.png"
+            src="/assets/images/PETROBOWL CHAMPIONSHIP.png"
             alt="The Regionals"
           />
         </div>
@@ -81,16 +81,17 @@ export default function NextMatchBanner({ match }) {
             alt="SPE Latin America and Caribbean Student Symposium"
             className="next-banner__spe-logo"
           />
+          <div className="next-banner__footer-right">
+            <span className="next-banner__sponsor-label">Sponsor</span>
+            <img
+              src="/assets/images/ypf-logo-white.png"
+              alt="YPF"
+              className="next-banner__ypf-logo"
+              onError={e => e.target.style.display='none'}
+            />
+          </div>
         </div>
-        <div className="next-banner__footer-right">
-          <span className="next-banner__sponsor-label">Sponsor</span>
-          <img
-            src="/assets/images/ypf-logo-white.png"
-            alt="YPF"
-            className="next-banner__ypf-logo"
-            onError={e => e.target.style.display='none'}
-          />
-        </div>
+        <div className="next-banner__footer-right-placeholder" />
       </div>
 
     </div>

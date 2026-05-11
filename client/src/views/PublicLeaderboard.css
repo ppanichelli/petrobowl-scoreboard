@@ -174,3 +174,25 @@
   letter-spacing: 0.02em;
   white-space: nowrap;
 }
+
+/* Hidden outside broadcast screen */
+.pub-lb__header-logo {
+  display: none;
+}
+
+/* ── Broadcast screen (1344×672) ─────────────────────────────────────────── */
+@media (min-width: 1000px) and (max-width: 1500px) {
+  .pub-lb__header {
+    height: 80px;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .pub-lb__header-logo {
+    display: block;
+    height: 80px;
+    object-fit: contain;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+}

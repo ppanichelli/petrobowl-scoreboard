@@ -88,6 +88,13 @@
   opacity: 0.80;
 }
 
+/* ── Broadcast screen (1344×672) ─────────────────────────────────────────── */
+@media (min-width: 1000px) and (max-width: 1500px) {     
+  .pps__header {
+    display:none;
+  }
+}
+
 /* ── Mobile ──────────────────────────────────────────────────────────────── */
 @media (max-width: 520px) {
   .pps__header {

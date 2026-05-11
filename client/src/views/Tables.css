@@ -127,6 +127,23 @@
   }
 }
 
+/* ── Auto-rotate toggle ──────────────────────────────────────────────────── */
+.gt-auto-toggle {
+  margin-left: 0.5rem;
+  border-left: 1px solid oklch(30% 0.04 250);
+  padding-left: 1.25rem;
+}
+
+.gt-auto-toggle--on {
+  color: var(--pb-green, oklch(72% 0.20 145));
+  border-color: oklch(52% 0.18 145 / 0.50);
+  background: oklch(18% 0.06 145 / 0.20);
+}
+
+/* ── Broadcast screen (1344×672) ─────────────────────────────────────────── */
+@media (min-width: 1000px) and (max-width: 1500px) {
+}
+
 /* ── Mobile ──────────────────────────────────────────────────────────────── */
 @media (max-width: 520px) {
   /* Hide ± breakout columns — keep only net (+/−) */

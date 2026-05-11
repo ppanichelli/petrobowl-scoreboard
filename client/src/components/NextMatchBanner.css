@@ -157,7 +157,9 @@
 
 .next-banner__footer-center {
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: var(--space-2xl);
 }
 
 .next-banner__spe-logo {
@@ -186,6 +188,24 @@
   height: clamp(50px, 1.5vw, 300px);
   object-fit: contain;
   opacity: 0.80;
+}
+
+/* ── Broadcast screen (1344×672) ─────────────────────────────────────────── */
+@media (min-width: 1000px) and (max-width: 1500px) {
+  .next-banner__top {
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+  }
+
+  /* dissolve the wrapper so both logos become direct flex children of __top */
+  .next-banner__event-logos {
+    display: contents;
+  }
+
+  .next-banner__pb-logo  { height: 100px; order: 1; }
+  .next-banner__stage    {                order: 2; }
+  .next-banner__reg-logo { height: 100px; order: 3; }
 }
 
 /* ── Mobile (iPhone portrait) ────────────────────────────────────────────── */

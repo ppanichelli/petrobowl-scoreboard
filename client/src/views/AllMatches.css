@@ -313,6 +313,28 @@
   display: none;
 }
 
+/* Hidden outside broadcast screen */
+.am-header__logo {
+  display: none;
+}
+
+/* ── Broadcast screen (1344×672) ─────────────────────────────────────────── */
+@media (min-width: 1000px) and (max-width: 1500px) {
+  .all-matches__header {
+    height: 80px;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .am-header__logo {
+    display: block;
+    height: 80px;
+    object-fit: contain;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+}
+
 /* ── Mobile ──────────────────────────────────────────────────────────────── */
 @media (max-width: 520px) {
   .all-matches {

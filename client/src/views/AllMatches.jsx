@@ -80,6 +80,11 @@ export default function AllMatches() {
             </button>
           ))}
         </div>
+        <img
+          className="am-header__logo"
+          src="/assets/images/PETROBOWL 2026 LOGO.png"
+          alt="PetroBowl 2026"
+        />
       </div>
 
       {showUpcoming && (

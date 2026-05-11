@@ -123,6 +123,10 @@
   padding: 0.2rem 0;
 }
 
+/* ── Broadcast screen (1344×672) ─────────────────────────────────────────── */
+@media (min-width: 1000px) and (max-width: 1500px) {
+}
+
 /* ── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .draw-page__grid {

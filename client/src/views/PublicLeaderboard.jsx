@@ -27,6 +27,11 @@ export default function PublicLeaderboard() {
       <div className="pub-lb__header">
         <h2 className="pub-lb__title">Leaderboard</h2>
         <span className="pub-lb__subtitle">Top 15 participants</span>
+        <img
+          className="pub-lb__header-logo"
+          src="/assets/images/PETROBOWL 2026 LOGO.png"
+          alt="PetroBowl 2026"
+        />
       </div>
 
       {rows.length === 0 ? (

@@ -135,3 +135,7 @@
     animation: none;
   }
 }
+
+/* ── Broadcast screen (1344×672) ─────────────────────────────────────────── */
+@media (min-width: 1000px) and (max-width: 1500px) {
+}

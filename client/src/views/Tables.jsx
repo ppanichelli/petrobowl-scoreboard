@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PublicPageShell from '../components/PublicPageShell'
 import './AllMatches.css'
 import './Tables.css'
@@ -6,6 +6,8 @@ import './Tables.css'
 export default function Tables() {
   const [groups, setGroups]           = useState([])
   const [activeGroup, setActiveGroup] = useState(null)
+  const [autoRotate, setAutoRotate]   = useState(false)
+  const intervalRef                   = useRef(null)
 
   useEffect(() => {
     fetch('/api/tables').then(r => r.json()).then(data => {
@@ -14,15 +16,29 @@ export default function Tables() {
     })
   }, [])
 
+  useEffect(() => {
+    clearInterval(intervalRef.current)
+    if (!autoRotate || groups.length === 0) return
+    intervalRef.current = setInterval(() => {
+      setActiveGroup(prev => {
+        const idx = groups.findIndex(g => g.group === prev)
+        return groups[(idx + 1) % groups.length].group
+      })
+    }, 10000)
+    return () => clearInterval(intervalRef.current)
+  }, [autoRotate, groups])
+
   const current = groups.find(g => g.group === activeGroup)
 
   return (
     <PublicPageShell>
       <div className="all-matches">
 
-        {/* Header: title + group pills */}
+        {/* Header: title + group pills + auto toggle + logo */}
         <div className="all-matches__header">
-          <h1 className="all-matches__title">Group Stage</h1>
+          <h1 className="all-matches__title">
+            {activeGroup ? `Group ${activeGroup}` : 'Group Stage'}
+          </h1>
           <div className="all-matches__filters">
             {groups.map(g => (
               <button
@@ -33,7 +49,19 @@ export default function Tables() {
                 Group {g.group}
               </button>
             ))}
+            <button
+              className={`am-filter gt-auto-toggle${autoRotate ? ' am-filter--active gt-auto-toggle--on' : ''}`}
+              onClick={() => setAutoRotate(a => !a)}
+              title="Auto-rotate groups every 10 s"
+            >
+              {autoRotate ? 'Auto ●' : 'Auto'}
+            </button>
           </div>
+          <img
+            className="am-header__logo"
+            src="/assets/images/PETROBOWL 2026 LOGO.png"
+            alt="PetroBowl 2026"
+          />
         </div>
 
         {groups.length === 0 && (
