@@ -181,6 +181,8 @@ export default function AdminConsole() {
           <button className={tab === 'matches' ? 'active' : ''} onClick={() => setTab('matches')}>Matches</button>
           <button className={tab === 'live'    ? 'active' : ''} onClick={() => setTab('live')}>Live Scoring</button>
           <button className={tab === 'settings'? 'active' : ''} onClick={() => setTab('settings')}>Settings</button>
+          <button onClick={() => navigate('/timekeeper/draw')}>Draw</button>
+          <button onClick={() => navigate('/timekeeper/bracket')}>Brackets</button>
         </nav>
         <button className="admin-console__logout" onClick={() => logout().then(() => navigate('/'))}>Logout</button>
       </header>

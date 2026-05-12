@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAdminAuth } from '../hooks/useAdminAuth'
 import { useSocket } from '../hooks/useSocket'
+import './AdminConsole.css'
 import './DrawAdmin.css'
 
 function computeGroups(totalTeams) {
@@ -13,6 +15,7 @@ function computeGroups(totalTeams) {
 
 export default function DrawAdmin() {
   const navigate = useNavigate()
+  const { logout } = useAdminAuth()
   const socket   = useSocket()
 
   const [totalTeams,  setTotalTeams]  = useState(20)
@@ -82,11 +85,13 @@ export default function DrawAdmin() {
 
   return (
     <div className="draw-admin">
-      <header className="draw-admin__header">
-        <button className="draw-admin__back" onClick={() => navigate('/timekeeper')}>
-          ← Console
-        </button>
-        <span className="draw-admin__title">Group Draw — Admin</span>
+      <header className="admin-console__header">
+        <h4>PETROBOWL ADMIN</h4>
+        <nav>
+          <button onClick={() => navigate('/timekeeper')}>Console</button>
+          <button className="active">Draw</button>
+          <button onClick={() => navigate('/timekeeper/bracket')}>Brackets</button>
+        </nav>
         <div className="draw-admin__controls">
           <label className="draw-admin__label">
             Total teams
@@ -104,6 +109,7 @@ export default function DrawAdmin() {
             Reset Draw
           </button>
         </div>
+        <button className="admin-console__logout" onClick={() => logout().then(() => navigate('/'))}>Logout</button>
       </header>
 
       {message && <div className="draw-admin__toast">{message}</div>}

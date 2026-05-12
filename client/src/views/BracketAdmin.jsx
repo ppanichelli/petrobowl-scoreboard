@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAdminAuth } from '../hooks/useAdminAuth'
 import { useSocket } from '../hooks/useSocket'
+import './AdminConsole.css'
 import './BracketAdmin.css'
 
 const SEED_SLOTS = [
@@ -28,6 +31,8 @@ const SLOT_INFO = {
 }
 
 export default function BracketAdmin() {
+  const navigate = useNavigate()
+  const { logout } = useAdminAuth()
   const [teams, setTeams]       = useState([])
   const [bracket, setBracket]   = useState({ slots: {}, matches: [] })
   const [error, setError]       = useState(null)
@@ -97,10 +102,16 @@ export default function BracketAdmin() {
 
   return (
     <div className="ba">
-      <div className="ba-header">
-        <h2 className="ba-title">Tournament Bracket</h2>
+      <header className="admin-console__header">
+        <h4>PETROBOWL ADMIN</h4>
+        <nav>
+          <button onClick={() => navigate('/timekeeper')}>Console</button>
+          <button onClick={() => navigate('/timekeeper/draw')}>Draw</button>
+          <button className="active">Brackets</button>
+        </nav>
         <button className="btn-secondary btn-sm" onClick={reset} disabled={busy}>Reset Bracket</button>
-      </div>
+        <button className="admin-console__logout" onClick={() => logout().then(() => navigate('/'))}>Logout</button>
+      </header>
 
       {error && <div className="ba-error">{error}</div>}
 
