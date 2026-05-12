@@ -10,13 +10,13 @@ export default function PublicLeaderboard() {
   const socket = useSocket()
 
   useEffect(() => {
-    fetch('/api/leaderboard').then(r => r.json()).then(r => setRows(r.slice(0, 15)))
+    fetch('/api/leaderboard').then(r => r.json()).then(r => setRows(r))
   }, [])
 
   useEffect(() => {
     if (!socket) return
     const onUpdate = () =>
-      fetch('/api/leaderboard').then(r => r.json()).then(r => setRows(r.slice(0, 15)))
+      fetch('/api/leaderboard').then(r => r.json()).then(r => setRows(r))
     socket.on('leaderboard', onUpdate)
     return () => socket.off('leaderboard', onUpdate)
   }, [socket])
@@ -25,8 +25,7 @@ export default function PublicLeaderboard() {
     <PublicPageShell>
     <div className="pub-lb">
       <div className="pub-lb__header">
-        <h2 className="pub-lb__title">Leaderboard</h2>
-        <span className="pub-lb__subtitle">Top 15 participants</span>
+        <h2 className="pub-lb__title">TOP PROSPECTORS</h2>
         <img
           className="pub-lb__header-logo"
           src="/assets/images/PETROBOWL 2026 LOGO.png"
@@ -37,7 +36,13 @@ export default function PublicLeaderboard() {
       {rows.length === 0 ? (
         <p className="pub-lb__empty">No participants on the board yet.</p>
       ) : (
-        <ol className="pub-lb__list">
+        <div className="pub-lb__list-wrapper">
+          <img
+            className="pub-lb__mascot"
+            src="/assets/images/prospector.png"
+            alt="Prospector mascot"
+          />
+          <ol className="pub-lb__list">
           {rows.map(r => (
             <li
               key={r.pin}
@@ -56,7 +61,8 @@ export default function PublicLeaderboard() {
               <span className="pub-lb__pts">{Number(r.total_points).toFixed(1)}</span>
             </li>
           ))}
-        </ol>
+          </ol>
+        </div>
       )}
     </div>
     </PublicPageShell>

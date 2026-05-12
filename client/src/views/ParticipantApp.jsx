@@ -167,21 +167,31 @@ export default function ParticipantApp() {
           <PullIndicator pullDistance={homePTR.pullDistance} isRefreshing={homePTR.isRefreshing} />
 
           {/* Stats strip */}
-          <div className="p-home__stats">
-            <div className="p-stat">
-              <div className="p-stat__value">{Number(me?.total_points ?? 0).toFixed(1)}</div>
-              <div className="p-stat__label">Points</div>
+          <div className="p-home__stats-wrap">
+            <div className="p-home__stats-left">
+              <h2 className="p-section-title">Your PROSPECTOR RANK</h2>
+              <div className="p-home__stats">
+                <div className="p-stat">
+                  <div className="p-stat__value">{Number(me?.total_points ?? 0).toFixed(1)}</div>
+                  <div className="p-stat__label">Points</div>
+                </div>
+                <div className="p-stat p-stat--rank">
+                  <div className="p-stat__value">#{me?.rank ?? '—'}</div>
+                  <div className="p-stat__label">Rank</div>
+                </div>
+              </div>
             </div>
-            <div className="p-stat p-stat--rank">
-              <div className="p-stat__value">#{me?.rank ?? '—'}</div>
-              <div className="p-stat__label">Rank</div>
-            </div>
+            <img
+              className="p-home__prospector"
+              src="/assets/images/prospector-cropped.png"
+              alt="Prospector mascot"
+            />
           </div>
 
           {/* Section heading */}
           <div className="p-section-header">
             <h2 className="p-section-title">Upcoming Matches</h2>
-            <span className="p-section-subtitle">Make your prospects</span>
+            <span className="p-section-subtitle">Make your prospects!</span>
           </div>
 
           {matches.length === 0 && (

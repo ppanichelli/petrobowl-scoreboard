@@ -133,6 +133,39 @@
 }
 
 /* ── Stats strip ─────────────────────────────────────────────────────────── */
+.p-home__stats-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.p-home__stats-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.p-home__stats-label {
+  font-family: var(--font-title);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pb-gold);
+}
+
+.p-home__prospector {
+  height: 150px;
+  width: auto;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+  align-self: flex-end;
+  padding:0;
+  margin:0;
+}
+
 .p-home__stats {
   display: grid;
   grid-template-columns: 1fr 1fr;

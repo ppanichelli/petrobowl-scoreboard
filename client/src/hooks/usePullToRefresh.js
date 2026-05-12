@@ -22,16 +22,20 @@ export function usePullToRefresh(onRefresh) {
     if (!el) return
 
     function onTouchStart(e) {
-      if (el.scrollTop === 0) {
-        startY.current  = e.touches[0].clientY
-        pulling.current = true
-      }
+      startY.current  = e.touches[0].clientY
+      pulling.current = true
     }
 
     function onTouchMove(e) {
       if (!pulling.current || isRefreshingRef.current) return
-      const delta = e.touches[0].clientY - startY.current
-      if (el.scrollTop > 0 || delta <= 0) {
+      const currentY = e.touches[0].clientY
+      if (el.scrollTop > 0) {
+        // Keep startY current so delta is measured from where scroll topped out
+        startY.current = currentY
+        return
+      }
+      const delta = currentY - startY.current
+      if (delta <= 0) {
         pulling.current  = false
         pullDistRef.current = 0
         setPullDistance(0)

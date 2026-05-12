@@ -24,19 +24,32 @@
   line-height: 1;
 }
 
-.pub-lb__subtitle {
-  font-family: var(--font-title);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--pb-gold);
-}
-
 .pub-lb__empty {
   color: oklch(42% 0.02 250);
   font-size: 0.9rem;
   padding: 1rem 0;
+}
+
+/* ── List wrapper + mascot ───────────────────────────────────────────────── */
+.pub-lb__list-wrapper {
+  position: relative;
+}
+
+.pub-lb__mascot {
+  position: absolute;
+  right: -90px;
+  top: -70px;
+  height: 150px;
+  width: auto;
+  pointer-events: none;
+  image-rendering: pixelated;
+  z-index: 1;
+}
+
+@media (max-width: 820px) {
+  .pub-lb__mascot {
+    display: none;
+  }
 }
 
 /* ── List ────────────────────────────────────────────────────────────────── */
