@@ -1,5 +1,6 @@
 /* ── Public Leaderboard ──────────────────────────────────────────────────── */
 .pub-lb {
+  position: relative;
   max-width: 680px;
   margin: 0 auto;
   padding: 2.5rem 1.5rem 3rem;
@@ -8,6 +9,7 @@
 
 /* ── Header ──────────────────────────────────────────────────────────────── */
 .pub-lb__header {
+  position: relative;
   display: flex;
   align-items: baseline;
   gap: 1rem;
@@ -30,25 +32,30 @@
   padding: 1rem 0;
 }
 
-/* ── List wrapper + mascot ───────────────────────────────────────────────── */
+/* ── List wrapper ────────────────────────────────────────────────────────── */
 .pub-lb__list-wrapper {
   position: relative;
 }
 
+/* ── Mascot ──────────────────────────────────────────────────────────────── */
+/* Default (mobile): out of flow, overlays top-right of the header */
 .pub-lb__mascot {
   position: absolute;
-  right: -90px;
-  top: -70px;
-  height: 150px;
+  right: 0;
+  top: -2.5rem;
+  height: 120px;
   width: auto;
   pointer-events: none;
   image-rendering: pixelated;
   z-index: 1;
 }
 
-@media (max-width: 820px) {
+/* Large screens: anchor to the right of the list */
+@media (min-width: 821px) {
   .pub-lb__mascot {
-    display: none;
+    right: -90px;
+    top: 3rem;
+    height: 150px;
   }
 }
 

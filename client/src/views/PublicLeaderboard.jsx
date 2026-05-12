@@ -27,6 +27,11 @@ export default function PublicLeaderboard() {
       <div className="pub-lb__header">
         <h2 className="pub-lb__title">TOP PROSPECTORS</h2>
         <img
+          className="pub-lb__mascot"
+          src="/assets/images/prospector.png"
+          alt="Prospector mascot"
+        />
+        <img
           className="pub-lb__header-logo"
           src="/assets/images/PETROBOWL 2026 LOGO.png"
           alt="PetroBowl 2026"
@@ -37,11 +42,6 @@ export default function PublicLeaderboard() {
         <p className="pub-lb__empty">No participants on the board yet.</p>
       ) : (
         <div className="pub-lb__list-wrapper">
-          <img
-            className="pub-lb__mascot"
-            src="/assets/images/prospector.png"
-            alt="Prospector mascot"
-          />
           <ol className="pub-lb__list">
           {rows.map(r => (
             <li
