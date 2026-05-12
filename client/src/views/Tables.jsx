@@ -78,10 +78,10 @@ export default function Tables() {
                   <tr>
                     <th className="gt-th gt-th--pos gt-col--hide-mobile">#</th>
                     <th className="gt-th gt-th--team">Team</th>
-                    <th className="gt-th gt-th--num gt-col--hide-mobile" title="Matches Played">MP</th>
+                    <th className="gt-th gt-th--num" title="Matches Played">MP</th>
                     <th className="gt-th gt-th--num" title="Points">Pts</th>
                     <th className="gt-th gt-th--num" title="Points scored">+</th>
-                    <th className="gt-th gt-th--num gt-col--hide-mobile" title="Points against">−</th>
+                    <th className="gt-th gt-th--num" title="Points against">−</th>
                     <th className="gt-th gt-th--num" title="Net points">+/−</th>
                   </tr>
                 </thead>
