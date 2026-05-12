@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import PublicPageShell from '../components/PublicPageShell'
 import './AllMatches.css'
 import './Tables.css'
@@ -141,7 +142,7 @@ function GroupMatchCard({ m, index }) {
   const winnerA    = isFinished && !isDraw && m.winner_id === m.team_a_id
   const winnerB    = isFinished && !isDraw && m.winner_id === m.team_b_id
 
-  return (
+  const card = (
     <div
       className={`am-card${isFinished ? ' am-card--finished' : isLive ? ' am-card--live' : ''}`}
       style={{ '--card-i': index }}
@@ -182,4 +183,7 @@ function GroupMatchCard({ m, index }) {
       </div>
     </div>
   )
+  return isFinished
+    ? <Link to={`/match/${m.id}`} className="am-card-link">{card}</Link>
+    : card
 }

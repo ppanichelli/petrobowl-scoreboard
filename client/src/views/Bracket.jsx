@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useSocket } from '../hooks/useSocket'
 import PublicPageShell from '../components/PublicPageShell'
 import './Bracket.css'
@@ -62,7 +63,7 @@ function BracketNode({ match }) {
   const teamA = match.team_a_short ? { short: match.team_a_short, logo: match.team_a_logo } : null
   const teamB = match.team_b_short ? { short: match.team_b_short, logo: match.team_b_logo } : null
 
-  return (
+  const node = (
     <div className={`bracket-node ${live ? 'bracket-node--live' : ''} ${finished ? 'bracket-node--finished' : ''}`}>
       {live && <span className="bn-live-dot" />}
       <TeamRow team={teamA} score={match.score_a} tbScore={match.tiebreaker_score_a ?? null}
@@ -71,6 +72,10 @@ function BracketNode({ match }) {
         isWinner={winnerIsB} isLoser={finished && !winnerIsB} showScore={showScore} />
     </div>
   )
+
+  return (finished && match.id)
+    ? <Link to={`/match/${match.id}`} style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}>{node}</Link>
+    : node
 }
 
 function Conn() {

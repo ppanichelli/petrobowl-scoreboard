@@ -12,6 +12,7 @@ import Tables            from './views/Tables'
 import Draw              from './views/Draw'
 import DrawAdmin         from './views/DrawAdmin'
 import Bracket          from './views/Bracket'
+import MatchDetail      from './views/MatchDetail'
 import BracketAdmin     from './views/BracketAdmin'
 import AdminLogin        from './views/AdminLogin'
 import AdminConsole      from './views/AdminConsole'
@@ -48,6 +49,7 @@ export default function App() {
             <Route path="/tables"      element={<Tables />} />
             <Route path="/draw"        element={<Draw />} />
             <Route path="/bracket"     element={<Bracket />} />
+            <Route path="/match/:id"   element={<MatchDetail />} />
           </Route>
 
           {/* Admin (timekeeper) */}

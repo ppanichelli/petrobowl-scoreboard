@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useSocket } from '../hooks/useSocket'
 import ProspectBar from '../components/ProspectBar'
 import PublicPageShell from '../components/PublicPageShell'
@@ -180,6 +181,7 @@ function HistoryCard({ m, index }) {
   const winnerA = !isDraw && m.winner_id === m.team_a_id
   const winnerB = !isDraw && m.winner_id === m.team_b_id
   return (
+    <Link to={`/match/${m.id}`} className="am-card-link">
     <div className="am-card am-card--finished" style={{ '--card-i': index }}>
       <div className="am-card__stage">{fmt(m.stage)}</div>
       <div className="am-card__row">
@@ -200,5 +202,6 @@ function HistoryCard({ m, index }) {
         </div>
       </div>
     </div>
+    </Link>
   )
 }

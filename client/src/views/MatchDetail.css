@@ -1,0 +1,197 @@
+.match-detail {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+/* ── Header: back link + stage label ────────────────────────────────────── */
+.md-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.md-back {
+  font-family: var(--font-title);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: oklch(55% 0.03 250);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.md-back:hover {
+  color: oklch(75% 0.04 250);
+}
+
+.md-stage {
+  font-family: var(--font-title);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pb-gold);
+}
+
+/* ── Score card — boost score size on detail page ────────────────────────── */
+.md-score {
+  font-size: clamp(2rem, 5vw, 3rem) !important;
+}
+
+.md-logo {
+  width: 64px !important;
+  height: 64px !important;
+}
+
+/* ── Progress and Questions sections ────────────────────────────────────── */
+.md-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.md-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.md-tracks {
+  background: oklch(16% 0.04 250 / 0.70);
+  border: 1px solid oklch(26% 0.04 250);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Score progression chart ─────────────────────────────────────────────── */
+.md-chart {
+  --chart-grid: oklch(24% 0.04 250 / 0.65);
+  --chart-zero: oklch(40% 0.05 250 / 0.85);
+  --chart-axis: oklch(30% 0.04 250);
+  background: oklch(16% 0.04 250 / 0.70);
+  border: 1px solid oklch(26% 0.04 250);
+  border-radius: 14px;
+  padding: 1rem 1rem 0.25rem;
+  overflow: hidden;
+}
+
+.md-chart__xlabel {
+  font-family: var(--font-title);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  fill: oklch(52% 0.12 85 / 0.75);
+}
+
+.md-chart__legend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.25rem 0.6rem;
+}
+
+.md-chart__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.md-chart__legend-line {
+  display: inline-block;
+  width: 20px;
+  height: 2.5px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.md-chart__legend-line--a { background: var(--pb-blue-mid); }
+.md-chart__legend-line--b { background: var(--pb-gold); }
+
+.md-chart__legend-name {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: oklch(72% 0.01 250);
+}
+
+/* ── Mobile two-column question grid (>20 questions) ─────────────────────── */
+.md-qgrid {
+  display: none;
+}
+
+.md-qgrid__header {
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 1.5rem;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: oklch(55% 0.02 250);
+  margin-bottom: 0.6rem;
+}
+
+.md-qgrid__dots {
+  display: grid;
+  grid-template-columns: auto auto;
+  row-gap: 6px;
+  column-gap: 1.5rem;
+  justify-content: center;
+  justify-items: center;
+}
+
+.md-qgrid .q-dot {
+  width: 20px;
+  height: 20px;
+  min-width: unset;
+  flex-shrink: unset;
+}
+
+@media (max-width: 520px) {
+  /* Hide horizontal tracks when there are many questions */
+  .md-tracks--many {
+    display: none;
+  }
+  /* Show the two-column grid */
+  .md-qgrid {
+    display: block;
+    background: oklch(16% 0.04 250 / 0.70);
+    border: 1px solid oklch(26% 0.04 250);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+  }
+}
+
+/* ── Loading / error ─────────────────────────────────────────────────────── */
+.md-message {
+  color: oklch(48% 0.03 250);
+  font-size: 0.9rem;
+}
+
+/* ── Mobile ──────────────────────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  .match-detail {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .md-logo {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .md-tracks {
+    padding: 1rem;
+  }
+}

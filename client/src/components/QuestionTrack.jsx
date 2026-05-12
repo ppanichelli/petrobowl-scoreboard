@@ -47,7 +47,7 @@ export default function QuestionTrack({ team, label, total, actions }) {
   )
 }
 
-function buildDots(team, total, actions) {
+export function buildDots(team, total, actions) {
   // Build per-question outcome for both teams independently, then return the requested team's array.
   // States: 'empty' | 'correct' | 'incorrect' | 'skip'
   const dotsA = Array(total).fill('empty')
