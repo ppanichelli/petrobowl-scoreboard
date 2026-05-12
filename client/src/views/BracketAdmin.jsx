@@ -71,6 +71,7 @@ export default function BracketAdmin() {
         body: JSON.stringify({ slot, team_id: teamId }),
       })
     }
+    load()
   }
 
   async function generate() {
@@ -80,6 +81,7 @@ export default function BracketAdmin() {
     const data = await r.json()
     if (!r.ok) setError(data.error || 'Failed to generate')
     setBusy(false)
+    load()
   }
 
   async function reset() {
@@ -90,6 +92,7 @@ export default function BracketAdmin() {
     const data = await r.json()
     if (!r.ok) setError(data.error || 'Failed to reset')
     setBusy(false)
+    load()
   }
 
   return (

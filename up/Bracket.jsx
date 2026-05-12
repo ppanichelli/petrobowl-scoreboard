@@ -76,10 +76,8 @@ function BracketNode({ match }) {
 function Conn() {
   return (
     <div className="conn">
-      <div className="conn__spcr" />
       <div className="conn__top" />
       <div className="conn__bot" />
-      <div className="conn__spcr" />
     </div>
   )
 }
@@ -137,7 +135,7 @@ export default function Bracket() {
 
         {/* Page header — matches the GROUP A / LEADERBOARD headers on sibling pages */}
         <div className="bracket__header">
-          <h1 className="bracket__title">Brackets</h1>
+          <h1 className="bracket__title">Bracket</h1>
           <span className="bracket__subtitle">Knockout Stage</span>
         </div>
 
@@ -152,6 +150,8 @@ export default function Bracket() {
               <div className="wb-hdr-spacer" />
               <div className="wb-hdr wb-hdr--semi">SEMI FINALS</div>
               <div className="wb-hdr-spacer" />
+              <div className="wb-hdr wb-hdr--finals">GRAND FINAL</div>
+              <div className="wb-hdr wb-hdr--3p">3RD PLACE</div>
             </div>
 
             {/* Bracket body */}
@@ -173,10 +173,10 @@ export default function Bracket() {
 
               {/* Semi column */}
               <div className="wb-col wb-col--semi">
-                <div className="wb-slot wb-slot--double wb-slot--semifinal">
+                <div className="wb-slot wb-slot--double">
                   <BracketNode match={m.WBS1} />
                 </div>
-                <div className="wb-slot wb-slot--double wb-slot--semifinal">
+                <div className="wb-slot wb-slot--double">
                   <BracketNode match={m.WBS2} />
                 </div>
               </div>
@@ -188,8 +188,7 @@ export default function Bracket() {
 
               {/* Finals column: GF top half, 3P bottom half */}
               <div className="wb-col wb-col--finals">
-                <div className="wb-hdr wb-hdr--finals">GRAND FINAL</div>
-                <div className="wb-slot wb-slot--double wb-slot--center wb-slot--final">
+                <div className="wb-slot wb-slot--double wb-slot--center">
                   <BracketNode match={m.GF} />
                   <div className="wb-places">
                     <span className={`wb-place ${gfWinnerA ? 'wb-place--gold' : ''}`}>
@@ -200,7 +199,6 @@ export default function Bracket() {
                     </span>
                   </div>
                 </div>
-                <div className="wb-hdr wb-hdr--3p">3RD PLACE</div>
                 <div className="wb-slot wb-slot--double wb-slot--center wb-slot--3p">
                   <BracketNode match={m['3P']} />
                   <div className="wb-places">

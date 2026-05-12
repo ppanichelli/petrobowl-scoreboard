@@ -29,12 +29,15 @@ db.prepare('DELETE FROM leaderboard_snapshots').run()
 db.prepare('DELETE FROM prospects').run()
 db.prepare('DELETE FROM actions').run()
 db.prepare('DELETE FROM matches').run()
+db.prepare('DELETE FROM bracket_slots').run()
+db.prepare('DELETE FROM draw_state').run()
 db.prepare('DELETE FROM participants').run()
 db.prepare('DELETE FROM admin_users').run()
 db.prepare('DELETE FROM teams').run()
 console.log('Tables cleared.')
 
 db.pragma('foreign_keys = ON')
+db.prepare("INSERT INTO draw_state (id, total_teams, assignments) VALUES (1, 20, '{}')").run()
 
 // ── Teams ─────────────────────────────────────────────────────────────────────
 const teams = [

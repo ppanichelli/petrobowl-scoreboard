@@ -20,7 +20,7 @@ export function useSocket(joinEvent, leaveEvent, roomId) {
   roomRef.current = roomId
 
   useEffect(() => {
-    if (!joinEvent || !roomRef.current) return
+    if (!joinEvent) return
     socket.emit(joinEvent, roomRef.current)
     return () => {
       if (leaveEvent) socket.emit(leaveEvent, roomRef.current)

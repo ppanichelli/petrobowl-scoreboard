@@ -49,7 +49,7 @@
 
 /* ── Panels — same card grammar as the Standings/Matches blocks ─────────── */
 .bracket__panel {
-  background: oklch(16.05% 0.04098 249.652 / 0.176);
+  background: oklch(16% 0.04 250 / 0.65);
   border: 1px solid oklch(26% 0.04 250);
   border-radius: 14px;
   padding: 1.5rem 1.5rem 1.75rem;
@@ -60,11 +60,6 @@
   animation: bracketPanelEnter 0.4s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 
-.bracket__panel--lb {
-  margin-left: 300px;
-}
-
-
 @keyframes bracketPanelEnter {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -72,7 +67,7 @@
 
 .bracket__panel-heading {
   font-family: var(--font-title);
-  font-size: 2rem;
+  font-size: 0.72rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--pb-gold);
@@ -94,7 +89,7 @@
 
 .wb-hdr {
   font-family: var(--font-title);
-  font-size: 1rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   color: oklch(58% 0.02 250);
@@ -103,10 +98,10 @@
 }
 
 .wb-hdr--qf      { flex: 0 0 220px; }
-.wb-hdr-spacer   { flex: 0 0 80px; }
+.wb-hdr-spacer   { flex: 0 0 60px; }
 .wb-hdr--semi    { flex: 0 0 230px; }
-.wb-hdr--finals  { flex: 1; padding-left: 30px; padding-top:60px; }
-.wb-hdr--3p      { flex: 1; padding-left: 120px; padding-top:60px; }
+.wb-hdr--finals  { flex: 1; padding-left: 60px; }
+.wb-hdr--3p      { flex: 0 0 220px; text-align: right; color: oklch(50% 0.02 250); }
 
 .wb-body {
   display: flex;
@@ -140,10 +135,9 @@
 }
 
 .wb-slot--3p {
-  /* border-top: 1px dashed oklch(24% 0.04 250);*/
-  margin-top: 0px;
-  padding-top: 0px;
-  padding-left: 120px;
+  border-top: 1px dashed oklch(24% 0.04 250);
+  margin-top: 6px;
+  padding-top: 12px;
 }
 
 /* ── Connectors ─────────────────────────────────────────────────────────── */
@@ -151,8 +145,6 @@
   flex: 0 0 60px;
   display: flex;
   flex-direction: column;
-  margin-right: 10px;
-  margin-left: 10px;
 }
 
 .wb-connectors--full { flex: 0 0 60px; }
@@ -166,19 +158,15 @@
 .conn__top {
   flex: 1;
   border-right: 1.5px solid oklch(32% 0.04 250);
-  border-top: 1.5px solid oklch(32% 0.04 250);
-  border-radius: 0 6px 0 0;
+  border-bottom: 1.5px solid oklch(32% 0.04 250);
+  border-radius: 0 0 6px 0;
 }
 
 .conn__bot {
   flex: 1;
   border-right: 1.5px solid oklch(32% 0.04 250);
-  border-bottom: 1.5px solid oklch(32% 0.04 250);
-  border-radius: 0 0 6px 0;
-}
-
-.conn__spcr {
-  height: 25%;
+  border-top: 1.5px solid oklch(32% 0.04 250);
+  border-radius: 0 6px 0 0;
 }
 
 /* ── Match Node ─────────────────────────────────────────────────────────── */
@@ -282,7 +270,7 @@
 .bn-name {
   flex: 1;
   font-family: var(--font-title);
-  font-size: 1.1rem;
+  font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: oklch(90% 0.01 250);
@@ -290,70 +278,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.wb-slot--semifinal .bracket-node,
-.wb-slot--3p .bracket-node {
-  width: 265px;
-}
-
-.wb-slot--semifinal .bn-row,
-.wb-slot--3p .bn-row {
-  height: 46px;
-  padding: 8px 13px;
-  gap: 11px;
-}
-
-.wb-slot--semifinal .bn-logo,
-.wb-slot--3p .bn-logo {
-  width: 28px;
-  height: 28px;
-}
-
-.wb-slot--semifinal .bn-logo--tbd,
-.wb-slot--3p .bn-logo--tbd {
-  width: 28px;
-  height: 28px;
-}
-
-.wb-slot--semifinal .bn-name,
-.wb-slot--3p .bn-name {
-  font-size: 1.35rem;
-}
-
-.wb-slot--semifinal .bn-score,
-.wb-slot--3p .bn-score {
-  font-size: 1.3rem;
-  min-width: 48px;
-}
-
-.wb-slot--final .bracket-node {
-  width: 320px;
-}
-
-.wb-slot--final .bn-row {
-  height: 56px;
-  padding: 10px 16px;
-  gap: 14px;
-}
-
-.wb-slot--final .bn-logo {
-  width: 36px;
-  height: 36px;
-}
-
-.wb-slot--final .bn-logo--tbd {
-  width: 36px;
-  height: 36px;
-}
-
-.wb-slot--final .bn-name {
-  font-size: 2rem;
-}
-
-.wb-slot--final .bn-score {
-  font-size: 1.6rem;
-  min-width: 56px;
 }
 
 .bn-name--tbd {
@@ -364,7 +288,7 @@
 
 .bn-score {
   font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 900;
   color: oklch(92% 0.01 250);
   min-width: 42px;
@@ -399,20 +323,6 @@
 .wb-place--4th    { color: oklch(58% 0.04 250); font-size: 0.78rem; }
 .lb-place--active { color: oklch(72% 0.05 250); font-size: 0.78rem; }
 
-.wb-slot--final .wb-places {
-  gap: 10px;
-}
-
-.wb-slot--final .wb-place {
-  font-size: 1.1rem;
-  line-height: 2.8;
-}
-
-.wb-slot--final .wb-place--gold,
-.wb-slot--final .wb-place--silver {
-  font-size: 1.2rem;
-}
-
 /* ── LOSER BRACKET ──────────────────────────────────────────────────────── */
 .lb-divider {
   display: flex;
@@ -422,7 +332,7 @@
 
 .lb-divider__label {
   font-family: var(--font-title);
-  font-size: 2rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--pb-gold);
@@ -444,38 +354,9 @@
 
 .lb-col--final { flex: 1; }
 
-.lb-col--final .bracket-node {
-  width: 265px;
-}
-
-.lb-col--final .bn-row {
-  height: 46px;
-  padding: 8px 13px;
-  gap: 11px;
-}
-
-.lb-col--final .bn-logo {
-  width: 28px;
-  height: 28px;
-}
-
-.lb-col--final .bn-logo--tbd {
-  width: 28px;
-  height: 28px;
-}
-
-.lb-col--final .bn-name {
-  font-size: 1.35rem;
-}
-
-.lb-col--final .bn-score {
-  font-size: 1.3rem;
-  min-width: 48px;
-}
-
 .lb-hdr {
   font-family: var(--font-title);
-  font-size: 1rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   color: oklch(54% 0.04 250);
@@ -506,8 +387,6 @@
   display: flex;
   flex-direction: column;
   padding-top: 1.6rem;
-  margin-right: 10px;
-  margin-left: 10px;
 }
 
 /* ── Responsive — let the bracket scroll horizontally on narrow viewports ─ */
