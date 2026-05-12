@@ -63,6 +63,27 @@
   cursor: pointer;
 }
 
+.draw-admin__btn-generate {
+  background: var(--pb-gold);
+  border: none;
+  color: var(--pb-dark);
+  padding: 0.35rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s, transform 0.10s;
+}
+.draw-admin__btn-generate:hover:not(:disabled) {
+  filter: brightness(1.10);
+  transform: translateY(-1px);
+}
+.draw-admin__btn-generate:active:not(:disabled) { transform: scale(0.97); }
+.draw-admin__btn-generate:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .draw-admin__btn-reset {
   background: transparent;
   border: 1px solid rgba(220,50,50,0.5);

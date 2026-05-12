@@ -22,6 +22,7 @@ export default function DrawAdmin() {
   const [assignments, setAssignments] = useState({})
   const [teams,       setTeams]       = useState([])
   const [message,     setMessage]     = useState('')
+  const [busy,        setBusy]        = useState(false)
 
   useEffect(() => {
     fetch('/api/draw').then(r => r.json()).then(data => {
@@ -72,6 +73,24 @@ export default function DrawAdmin() {
     }
   }
 
+  async function handleGenerate(force = false) {
+    setBusy(true)
+    const r = await fetch('/api/admin/draw/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ force }),
+    })
+    const data = await r.json()
+    setBusy(false)
+    if (r.status === 409) {
+      if (window.confirm(`${data.match_count} group stage matches already exist. Clear all and regenerate?`))
+        handleGenerate(true)
+      return
+    }
+    if (!r.ok) { toast(data.error || 'Failed to generate'); return }
+    toast(`${data.match_count} group stage matches generated!`)
+  }
+
   async function handleReset() {
     const assigned = Object.keys(assignments).length
     if (assigned === 0) return
@@ -82,6 +101,9 @@ export default function DrawAdmin() {
 
   const groups = computeGroups(totalTeams)
   const assignedTeamIds = new Set(Object.values(assignments).filter(Boolean))
+  const allFilled = groups.every(({ letter, size }) =>
+    Array.from({ length: size }, (_, i) => `${letter}${i + 1}`).every(slot => !!assignments[slot])
+  )
 
   return (
     <div className="draw-admin">
@@ -105,6 +127,13 @@ export default function DrawAdmin() {
               ))}
             </select>
           </label>
+          <button
+            className="draw-admin__btn-generate"
+            onClick={() => handleGenerate()}
+            disabled={!allFilled || busy}
+          >
+            {busy ? 'Generating…' : 'Generate Games'}
+          </button>
           <button className="draw-admin__btn-reset" onClick={handleReset}>
             Reset Draw
           </button>
