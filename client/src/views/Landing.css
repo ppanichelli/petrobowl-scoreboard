@@ -139,3 +139,16 @@
 /* ── Broadcast screen (1344×672) ─────────────────────────────────────────── */
 @media (min-width: 1000px) and (max-width: 1500px) {
 }
+
+/* ── Mobile ──────────────────────────────────────────────────────────────── */
+@media (max-width: 520px) {
+  /* Sponsor strip breaks out of parent side-padding to span edge-to-edge */
+  .landing__sponsors {
+    margin-left: calc(-1 * var(--space-xl));
+    margin-right: calc(-1 * var(--space-xl));
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
+    border-top: 1px solid oklch(22% 0.04 250);
+    padding-top: var(--space-md);
+  }
+}

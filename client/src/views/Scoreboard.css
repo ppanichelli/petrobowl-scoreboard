@@ -516,9 +516,12 @@
     height: 40px;
   }
 
-  /* Footer logos */
+  /* Footer breaks out of parent side-padding to span edge-to-edge */
   .scoreboard__footer {
+    margin-left: calc(-1 * var(--space-md));
+    margin-right: calc(-1 * var(--space-md));
     padding: var(--space-sm) var(--space-md);
+    max-width: none;
   }
 
   .scoreboard__footer-spe {
