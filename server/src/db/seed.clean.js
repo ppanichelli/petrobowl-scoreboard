@@ -60,6 +60,8 @@ const teams = [
   { id: 'udo-anz', full_name: 'Universidad de Oriente (Anzoategui)', short_name: 'UDO-A', city: 'Cumaná', country: 'Venezuela',    country_code: 'VE', logo_url: '/assets/logos/udo-anz.png',   logo_small_url: '/assets/logos/udo-anz_small.png'   },
   { id: 'psm', full_name: 'Politécnico Santiago Mariño', short_name: 'PSM', city: 'Mérida', country: 'Venezuela',    country_code: 'VE', logo_url: '/assets/logos/psm.png',   logo_small_url: '/assets/logos/psm_small.png'   },
   { id: 'luz', full_name: 'Universidad del Zulia', short_name: 'LUZ', city: 'Maracaibo', country: 'Venezuela',    country_code: 'VE', logo_url: '/assets/logos/luz.png',   logo_small_url: '/assets/logos/luz_small.png'   },
+  { id: 'udesc', full_name: 'Universidade do Estado de Santa Catarina', short_name: 'UDESC', city: 'Florianópolis', country: 'Brazil',    country_code: 'BR', logo_url: '/assets/logos/udesc.png',   logo_small_url: '/assets/logos/udesc_small.png'   },
+  { id: 'emi', full_name: 'Escuela Militar de Ingeniería', short_name: 'EMI', city: 'La Paz', country: 'Bolivia',    country_code: 'BO', logo_url: '/assets/logos/emi.png',   logo_small_url: '/assets/logos/emi_small.png'   },
 ]
 
 const insertTeam = db.prepare(`

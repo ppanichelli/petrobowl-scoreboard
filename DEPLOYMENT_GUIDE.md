@@ -568,4 +568,53 @@ df -h                                        # check disk space
 
 ---
 
+## PART 9 — Resetting the Database Between Tournaments
+
+Use this when you want to wipe all match history, scores, bets, and participant profiles — but keep the team list and all 500 PINs intact. This is the clean slate for a new tournament day.
+
+### What gets wiped
+- All matches and scoring actions
+- All prospects (bets)
+- All leaderboard snapshots
+- All bracket and draw assignments
+- All participant display names, country flags, and points
+
+### What is preserved
+- All team names and details
+- All 500 PIN codes (participants can log in again with the same PIN)
+- The admin user and password
+
+---
+
+### Option A — Via Coolify Terminal (easiest, no SSH needed)
+
+1. Go to your Coolify dashboard → **PetroBowl** project → your application
+2. Click the **Terminal** tab (opens a shell inside the running container)
+3. Run:
+   ```bash
+   node server/src/db/seed.clean.js
+   ```
+4. You should see:
+   ```
+   Tables cleared.
+   Teams: 21 inserted
+   Admin user: seeded
+   Participants: 500 PINs added
+   Snapshot seed complete → /app/server/data/pb.db
+   ```
+5. Done — the app is live immediately with a fresh database. No restart needed.
+
+---
+
+### After the reset — verify
+
+| Check | How |
+|---|---|
+| Leaderboard is empty | Visit `https://petrobowl.online/leaderboard` |
+| No matches listed | Visit `https://petrobowl.online/matches` |
+| PINs still work | Go to `https://petrobowl.online/p/login`, enter any old PIN |
+| Admin login works | Go to `https://petrobowl.online/timekeeper/login` |
+
+---
+
 *Guide prepared for PetroBowl Scoreboard v1 — Buenos Aires Regional 2025*

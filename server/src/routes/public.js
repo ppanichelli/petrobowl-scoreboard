@@ -121,4 +121,27 @@ router.get('/matches/open', (req, res) => {
   res.json(withOdds)
 })
 
+// Single match detail (public)
+router.get('/matches/:id', (req, res) => {
+  const match = db.prepare(`
+    SELECT m.*,
+           ta.short_name AS team_a_short, ta.full_name AS team_a_full, ta.country_code AS team_a_cc,
+           ta.logo_url AS team_a_logo, ta.logo_small_url AS team_a_logo_small,
+           tb.short_name AS team_b_short, tb.full_name AS team_b_full, tb.country_code AS team_b_cc,
+           tb.logo_url AS team_b_logo, tb.logo_small_url AS team_b_logo_small
+    FROM matches m
+    JOIN teams ta ON ta.id = m.team_a_id
+    JOIN teams tb ON tb.id = m.team_b_id
+    WHERE m.id = ?
+  `).get(req.params.id)
+
+  if (!match) return res.status(404).json({ error: 'Match not found' })
+
+  const actions = db.prepare(
+    'SELECT action_type, sequence FROM actions WHERE match_id = ? AND is_undone = 0 ORDER BY sequence ASC'
+  ).all(req.params.id)
+
+  res.json({ match, actions })
+})
+
 module.exports = router
