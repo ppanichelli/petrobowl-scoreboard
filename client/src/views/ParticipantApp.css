@@ -65,35 +65,6 @@
   text-overflow: ellipsis;
 }
 
-/* ── Pull-to-refresh indicator ───────────────────────────────────────────── */
-.ptr-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.ptr-indicator__icon {
-  font-size: 1.1rem;
-  color: var(--pb-gold);
-  line-height: 1;
-  transition: transform 0.18s ease;
-  display: block;
-}
-
-.ptr-indicator__icon--spin {
-  animation: ptr-spin 0.75s linear infinite;
-}
-
-@keyframes ptr-spin {
-  to { transform: rotate(360deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ptr-indicator__icon--spin { animation: none; }
-}
-
 /* ── Tab content area ────────────────────────────────────────────────────── */
 .p-tab {
   flex: 1;
