@@ -25,6 +25,18 @@
   align-items: baseline;
   gap: 1rem;
   flex-wrap: wrap;
+  position: relative;
+}
+
+.bracket__header-logo {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+  pointer-events: none;
 }
 
 .bracket__title {
@@ -64,6 +76,34 @@
   margin-left: 300px;
 }
 
+.bracket__wb-regionals {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 250px;
+  height: auto;
+  border-radius: 0 14px 0 0;
+  pointer-events: none;
+  opacity: 0.92;
+}
+
+.bracket__lb-championship {
+  position: absolute;
+  left: -288px;
+  top: 1.25rem;
+  width: 230px;
+  height: auto;
+  pointer-events: none;
+}
+
+.bracket__lb-buenos-aires {
+  position: absolute;
+  left: -288px;
+  top: 190px;
+  width: 230px;
+  height: auto;
+  pointer-events: none;
+}
 
 @keyframes bracketPanelEnter {
   from { opacity: 0; transform: translateY(8px); }

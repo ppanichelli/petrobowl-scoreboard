@@ -139,10 +139,12 @@ export default function Bracket() {
         <div className="bracket__header">
           <h1 className="bracket__title">Brackets</h1>
           <span className="bracket__subtitle">Knockout Stage</span>
+          <img className="bracket__header-logo" src="/assets/images/PETROBOWL 2026 LOGO.png" alt="Petrobowl 2026" />
         </div>
 
         {/* ── WINNER BRACKET ───────────────────────────────────────── */}
         <section className="bracket__panel bracket__panel--wb">
+          <img className="bracket__wb-regionals" src="/assets/images/The-Regionals.png" alt="" />
           <h2 className="bracket__panel-heading">Winner Bracket</h2>
 
           <div className="wb">
@@ -220,6 +222,8 @@ export default function Bracket() {
 
         {/* ── LOSER BRACKET ────────────────────────────────────────── */}
         <section className="bracket__panel bracket__panel--lb">
+          <img className="bracket__lb-championship" src="/assets/images/PETROBOWL CHAMPIONSHIP.png" alt="" />
+          <img className="bracket__lb-buenos-aires" src="/assets/images/BUENOS AIRES.png" alt="" />
           <div className="lb-divider">
             <span className="lb-divider__label">Loser Bracket</span>
           </div>
