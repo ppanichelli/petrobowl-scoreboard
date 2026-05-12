@@ -193,26 +193,30 @@ export default function Bracket() {
                 <div className="wb-hdr wb-hdr--finals">GRAND FINAL</div>
                 <div className="wb-slot wb-slot--double wb-slot--center wb-slot--final">
                   <BracketNode match={m.GF} />
-                  <div className="wb-places">
-                    <span className={`wb-place ${gfWinnerA ? 'wb-place--gold' : ''}`}>
-                      {gfFinished && gfWinnerA ? `1ST — ${m.GF.team_a_short}` : '1ST'}
-                    </span>
-                    <span className={`wb-place ${gfFinished && !gfWinnerA ? 'wb-place--silver' : ''}`}>
-                      {gfFinished && !gfWinnerA ? `2ND — ${m.GF.team_b_short}` : '2ND'}
-                    </span>
-                  </div>
+                  {gfFinished && (
+                    <div className="wb-places">
+                      <span className={`wb-place ${gfWinnerA ? 'wb-place--gold' : 'wb-place--silver'}`}>
+                        {`${gfWinnerA ? '1ST' : '2ND'} — ${m.GF.team_a_short}`}
+                      </span>
+                      <span className={`wb-place ${gfWinnerA ? 'wb-place--silver' : 'wb-place--gold'}`}>
+                        {`${gfWinnerA ? '2ND' : '1ST'} — ${m.GF.team_b_short}`}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="wb-hdr wb-hdr--3p">3RD PLACE</div>
                 <div className="wb-slot wb-slot--double wb-slot--center wb-slot--3p">
                   <BracketNode match={m['3P']} />
-                  <div className="wb-places">
-                    <span className={`wb-place ${tpWinnerA ? 'wb-place--bronze' : ''}`}>
-                      {tpFinished && tpWinnerA ? `3RD — ${m['3P'].team_a_short}` : '3RD'}
-                    </span>
-                    <span className={`wb-place ${tpFinished && !tpWinnerA ? 'wb-place--4th' : ''}`}>
-                      {tpFinished && !tpWinnerA ? `4TH — ${m['3P'].team_b_short}` : '4TH'}
-                    </span>
-                  </div>
+                  {tpFinished && (
+                    <div className="wb-places">
+                      <span className={`wb-place ${tpWinnerA ? 'wb-place--bronze' : 'wb-place--4th'}`}>
+                        {`${tpWinnerA ? '3RD' : '4TH'} — ${m['3P'].team_a_short}`}
+                      </span>
+                      <span className={`wb-place ${tpWinnerA ? 'wb-place--4th' : 'wb-place--bronze'}`}>
+                        {`${tpWinnerA ? '4TH' : '3RD'} — ${m['3P'].team_b_short}`}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -248,14 +252,20 @@ export default function Bracket() {
               <div className="lb-hdr">5TH PLACE</div>
               <div className="lb-slots lb-slots--center">
                 <BracketNode match={m.LBF} />
-                <div className="lb-places">
-                  <span className={`lb-place ${lbfWinnerA ? 'lb-place--active' : ''}`}>
-                    {lbfFinished && lbfWinnerA ? `5TH — ${m.LBF.team_a_short}` : '5TH'}
-                  </span>
-                  <span className={`lb-place ${lbfFinished && !lbfWinnerA ? 'lb-place--active' : ''}`}>
-                    {lbfFinished && !lbfWinnerA ? `6TH — ${m.LBF.team_b_short}` : '6TH'}
-                  </span>
-                </div>
+                {lbfFinished && (
+                  <div className="lb-places">
+                    {lbfWinnerA ? (
+                      <span className="lb-place lb-place--active">{`5TH — ${m.LBF.team_a_short}`}</span>
+                    ) : (
+                      <span className="lb-place lb-place--active">6TH</span>
+                    )}
+                    {!lbfWinnerA ? (
+                      <span className="lb-place lb-place--active">{`5TH — ${m.LBF.team_b_short}`}</span>
+                    ) : (
+                      <span className="lb-place lb-place--active">6TH</span>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>

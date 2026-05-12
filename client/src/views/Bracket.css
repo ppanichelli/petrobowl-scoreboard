@@ -295,16 +295,16 @@
 .bn-row--winner {
   background: linear-gradient(
     108deg,
-    oklch(26% 0.04 228) 0%,
-    oklch(42% 0.05 224) 28%,
-    oklch(63% 0.03 218) 45%,
-    oklch(72% 0.02 215) 50%,
-    oklch(63% 0.03 218) 55%,
-    oklch(40% 0.05 224) 74%,
-    oklch(24% 0.04 228) 100%
+    oklch(14% 0.04 228) 0%,
+    oklch(30% 0.05 224) 28%,
+    oklch(51% 0.03 218) 45%,
+    oklch(60% 0.02 215) 50%,
+    oklch(51% 0.03 218) 55%,
+    oklch(28% 0.05 224) 74%,
+    oklch(12% 0.04 228) 100%
   );
   box-shadow:
-    inset 0 1px 0 oklch(84% 0.02 215 / 0.50),
+    inset 0 1px 0 oklch(72% 0.02 215 / 0.45),
     inset 0 -1px 0 oklch(14% 0.04 228 / 0.60);
 }
 
@@ -408,6 +408,74 @@
 .wb-slot--final .bn-score {
   font-size: 1.6rem;
   min-width: 56px;
+}
+
+/* Grand Final winner — yellow-gold shimmer (aligned with #FFD27A / wb-place--gold) */
+.wb-slot--final .bracket-node .bn-row--winner {
+  background: linear-gradient(
+    108deg,
+    oklch(32% 0.12 80) 0%,
+    oklch(52% 0.18 83) 28%,
+    oklch(72% 0.22 86) 45%,
+    oklch(82% 0.22 87) 50%,
+    oklch(72% 0.22 86) 55%,
+    oklch(50% 0.18 83) 74%,
+    oklch(30% 0.12 80) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 oklch(92% 0.15 87 / 0.55),
+    inset 0 -1px 0 oklch(18% 0.08 80 / 0.65);
+}
+
+.wb-slot--final .bracket-node .bn-row--winner .bn-name,
+.wb-slot--final .bracket-node .bn-row--winner .bn-score {
+  color: oklch(97% 0.018 86);
+}
+
+/* Grand Final loser — silver (more neutral than steel, less opacity dimming) */
+.wb-slot--final .bracket-node .bn-row--loser {
+  opacity: 1;
+  background: linear-gradient(
+    108deg,
+    oklch(24% 0.008 248) 0%,
+    oklch(40% 0.008 248) 28%,
+    oklch(62% 0.006 248) 45%,
+    oklch(74% 0.005 248) 50%,
+    oklch(62% 0.006 248) 55%,
+    oklch(38% 0.008 248) 74%,
+    oklch(22% 0.008 248) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 oklch(86% 0.005 248 / 0.50),
+    inset 0 -1px 0 oklch(12% 0.008 248 / 0.60);
+}
+
+.wb-slot--final .bracket-node .bn-row--loser .bn-name,
+.wb-slot--final .bracket-node .bn-row--loser .bn-score {
+  color: oklch(88% 0.005 248);
+  font-weight: 800;
+}
+
+/* 3rd-place winner — bronze shimmer */
+.wb-slot--3p .bracket-node .bn-row--winner {
+  background: linear-gradient(
+    108deg,
+    oklch(26% 0.08 50) 0%,
+    oklch(42% 0.11 52) 28%,
+    oklch(60% 0.13 55) 45%,
+    oklch(70% 0.14 55) 50%,
+    oklch(60% 0.13 55) 55%,
+    oklch(40% 0.11 52) 74%,
+    oklch(24% 0.08 50) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 oklch(80% 0.09 58 / 0.50),
+    inset 0 -1px 0 oklch(14% 0.06 50 / 0.62);
+}
+
+.wb-slot--3p .bracket-node .bn-row--winner .bn-name,
+.wb-slot--3p .bracket-node .bn-row--winner .bn-score {
+  color: oklch(97% 0.012 60);
 }
 
 .bn-name--tbd {
