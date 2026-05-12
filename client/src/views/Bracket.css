@@ -575,4 +575,13 @@
     overflow-x: auto;
   }
   .wb, .wb-headers, .wb-body, .lb { min-width: 880px; }
+
+  .bracket__wb-regionals, .bracket__lb-championship, .bracket__lb-buenos-aires {
+    display: none;
+  }
+
+  .bracket__panel--lb {
+    margin-left: 0;
+  }
+
 }

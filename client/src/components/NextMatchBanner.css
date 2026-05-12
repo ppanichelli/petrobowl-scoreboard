@@ -249,19 +249,19 @@
 
   /* Logos fill the phone width combined */
   .next-banner__event-logos {
-    width: 100%;
+    width: 60%;
     justify-content: center;
     gap: clamp(0.5rem, 3vw, 1.5rem);
   }
 
   .next-banner__pb-logo {
     height: auto;
-    width: clamp(130px, 45vw, 200px);
+    width: clamp(60px, 20vw, 200px);
   }
 
   .next-banner__reg-logo {
     height: auto;
-    width: clamp(110px, 41vw, 180px);
+    width: clamp(100px, 20vw, 180px);
   }
 
   /* Footer breaks out of parent side-padding to span edge-to-edge */
@@ -271,6 +271,11 @@
     padding-left: var(--space-md);
     padding-right: var(--space-md);
     max-width: none;
+  }
+
+  .next-banner__spe-logo, .next-banner__ypf-logo {
+    height: auto;
+    width: clamp(100px, 20vw, 180px);
   }
 
   .next-banner__stage {

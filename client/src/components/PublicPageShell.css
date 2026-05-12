@@ -114,14 +114,17 @@
   }
 
   .pps__footer {
-    padding: var(--space-sm) var(--space-md);
+    /*padding: var(--space-sm) var(--space-md);*/
   }
 
   .pps__spe-logo {
-    height: 44px;
+    width: clamp(80px, 20vw, 180px);
+    margin-right: 20px;
   }
 
   .pps__ypf-logo {
-    height: 28px;
+    width: clamp(100px, 20vw, 180px);
+    margin-right: 20px;
   }
+
 }

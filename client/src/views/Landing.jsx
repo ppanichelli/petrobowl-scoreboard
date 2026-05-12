@@ -43,12 +43,12 @@ export default function Landing() {
         <img
           src="/assets/images/LACSS Logo.png"
           alt="LACSS"
-          className="landing__sponsor-logo"
+          className="landing__sponsor-logo-spe"
         />
         <img
           src="/assets/images/ypf-logo-white.png"
           alt="YPF"
-          className="landing__sponsor-logo"
+          className="landing__sponsor-logo-ypf"
           onError={e => { e.target.style.display = 'none' }}
         />
       </div>
