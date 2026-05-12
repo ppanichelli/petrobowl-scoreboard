@@ -55,7 +55,7 @@ export default function Tables() {
               onClick={() => setAutoRotate(a => !a)}
               title="Auto-rotate groups every 10 s"
             >
-              {autoRotate ? 'Auto ●' : 'Auto'}
+              {autoRotate ? 'Autoplay ●' : 'Autoplay'}
             </button>
           </div>
           <img
@@ -73,7 +73,6 @@ export default function Tables() {
           <>
             {/* ── Standings table ─────────────────────────────────────────── */}
             <section className="all-matches__section">
-              <h2 className="all-matches__heading">Standings</h2>
               <table className="gt-table">
                 <thead>
                   <tr>

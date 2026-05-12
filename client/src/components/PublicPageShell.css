@@ -95,6 +95,14 @@
   .pps__header {
     display:none;
   }
+
+  .pps__spe-logo {
+    height: clamp(50px, 1.5vw, 300px);
+  }
+
+  .pps__ypf-logo {
+    height: clamp(30px, 1.5vw, 300px);
+  }
 }
 
 /* ── Mobile ──────────────────────────────────────────────────────────────── */

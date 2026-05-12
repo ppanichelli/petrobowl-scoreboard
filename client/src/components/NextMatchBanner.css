@@ -208,6 +208,8 @@
   .next-banner__pb-logo  { height: 100px; order: 1; }
   .next-banner__stage    {                order: 2; }
   .next-banner__reg-logo { height: 100px; order: 3; }
+  .next-banner__ypf-logo { height: 30px; }
+  .next-banner__spe-logo { height: 50px; }
 }
 
 /* ── Mobile (iPhone portrait) ────────────────────────────────────────────── */

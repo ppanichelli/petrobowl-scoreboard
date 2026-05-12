@@ -466,6 +466,13 @@
   .score-digit {
     font-size: clamp(3.5rem, 9vw, 8rem);
   }
+
+  .scoreboard__footer-ypf {
+    height: 30px;
+  }
+  .scoreboard__footer-spe {
+    height: 50px;
+  }
 }
 
 /* ── Mobile layout ───────────────────────────────────────────────────────── */
