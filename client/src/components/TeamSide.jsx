@@ -22,6 +22,14 @@ export default function TeamSide({ side, shortName, fullName, countryCode, logoU
         />
       </div>
 
+      {isOnFire && <>
+        <span className="team-side__embers team-side__embers--1" />
+        <span className="team-side__embers team-side__embers--2" />
+        <span className="team-side__embers team-side__embers--3" />
+        <span className="team-side__embers team-side__embers--4" />
+        <span className="team-side__embers team-side__embers--5" />
+      </>}
+
       <div className="team-side__identity">
         <div className="team-side__namerow">
           <span className="team-side__short">{shortName}</span>

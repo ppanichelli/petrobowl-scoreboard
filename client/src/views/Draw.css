@@ -10,7 +10,17 @@
 }
 
 .draw-page__header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.draw-page__header-logo {
+  height: clamp(2.5rem, 5vw, 4rem);
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .draw-page__title {
@@ -48,7 +58,7 @@
   text-transform: uppercase;
   color: var(--pb-gold);
   padding: 0.75rem 1.1rem;
-  background: oklch(12% 0.06 250 / 0.70);
+  background: oklch(12.601% 0.053 260.558 / 0.177);
   border-bottom: 1px solid oklch(22% 0.04 250);
 }
 
@@ -121,6 +131,34 @@
   width: 100%;
   text-align: center;
   padding: 0.2rem 0;
+}
+
+/* ── Draw rules ─────────────────────────────────────────────────────────────── */
+.draw-rules {
+  margin: 0;
+  padding: 1rem 1.5rem;
+  padding-left: 2rem;
+  background: oklch(14% 0.04 250 / 0.50);
+  border: 1px solid oklch(24% 0.04 250);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  list-style: decimal;
+  font-family: var(--font-body);
+  color: oklch(65% 0.015 250);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+.draw-rules li {
+  padding-left: 0.25rem;
+}
+
+.draw-rules strong {
+  color: var(--pb-gold);
+  font-weight: 700;
 }
 
 /* ── Broadcast screen (1344×672) ─────────────────────────────────────────── */

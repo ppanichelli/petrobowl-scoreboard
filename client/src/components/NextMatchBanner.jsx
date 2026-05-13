@@ -20,6 +20,7 @@ export default function NextMatchBanner({ match }) {
             alt="The Regionals"
           />
         </div>
+        <span className="next-banner__upcoming">Upcoming match</span>
         <span className="next-banner__stage">{formatStage(match.stage)}</span>
       </div>
 

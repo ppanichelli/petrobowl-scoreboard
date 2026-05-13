@@ -4,14 +4,14 @@ import { NavLink, useLocation } from 'react-router-dom'
 import './NavMenu.css'
 
 const NAV_ITEMS = [
-  { to: '/',            label: 'Scoreboard',  icon: '◈' },
-  { to: '/next',        label: 'Next Match',  icon: '◎' },
-  { to: '/matches',     label: 'Matches',     icon: '▤' },
+  { to: '/',            label: 'Scoreboard',   icon: '◈' },
+  { to: '/matches',     label: 'Matches',      icon: '▤' },
   { to: '/tables',      label: 'Group Tables', icon: '▦' },
-  { to: '/bracket',     label: 'Bracket',      icon: '⬙' },
+  { to: '/bracket',     label: 'Brackets',     icon: '⬙' },
   { to: '/landing',     label: 'Landing',      icon: '◻' },
-  { to: '/leaderboard', label: 'Leaderboard', icon: '◇' },
-  { to: '/p/login',     label: 'Login',       icon: '⬡' },
+  { to: '/leaderboard', label: 'Prospectors',  icon: '◇' },
+  { to: '/p/login',     label: 'Login',        icon: '⬡' },
+  { to: '/help',        label: 'Help',         icon: '◉' },
 ]
 
 export default function NavMenu() {

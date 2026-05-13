@@ -66,7 +66,17 @@ export default function Draw() {
     <PublicPageShell>
       <div className="draw-page">
         <div className="draw-page__header">
+          <img
+            src="/assets/images/PETROBOWL 2026 LOGO.png"
+            alt="Petrobowl 2026"
+            className="draw-page__header-logo"
+          />
           <h1 className="draw-page__title">Group Draw</h1>
+          <img
+            src="/assets/images/PETROBOWL CHAMPIONSHIP.png"
+            alt="Petrobowl Championship"
+            className="draw-page__header-logo"
+          />
         </div>
 
         <div className="draw-page__grid" style={{ '--group-count': groups.length }}>
@@ -102,6 +112,11 @@ export default function Draw() {
             </div>
           ))}
         </div>
+
+        <ol className="draw-rules">
+          <li>One <strong>group head</strong> is selected per group by seeding order; its group is assigned randomly. Top 5 seeded teams are UFRJ, LUZ, UBA, ITBA, ADEKUS.</li>
+          <li>Remaining teams are placed <strong>avoiding same-country groupings</strong> where possible, starting from the most-represented country towards the least. Order is: Brazil, Venezuela, Argentina, Ecuador, Peru, Bolivia, Guyana.</li>
+        </ol>
       </div>
     </PublicPageShell>
   )

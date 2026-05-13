@@ -190,49 +190,92 @@
   to   { transform: scale(1.14) translateY(-3%); opacity: 1.00; }
 }
 
-/* ── On Fire: rising ember sparks (::after) ───────────────────────────────── */
+/* ── On Fire: rising ember sparks ─────────────────────────────────────────── */
 /*
-   Two staggered waves baked into the box-shadow field:
-   Wave 1 — sparks at low Y offsets (near bottom of element)
-   Wave 2 — sparks at mid Y offsets (already risen partway)
-   translateY animation lifts both waves; opacity fade hides reset.
+   5 span elements, each offset by 0.36s (= 1.8s / 5).
+   A new batch launches every 0.36s for a continuous stream.
+   Each span carries ~7 particles spread across the full x range.
 */
-.team-side--onfire::after {
-  content: '';
+.team-side__embers {
   position: absolute;
   bottom: 15%;
   left: 48%;
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: oklch(88% 0.26 68);
-  box-shadow:
-    /* Wave 1 — starting near bottom */
-    -78px   -8px  5px 0px oklch(84% 0.24 65 / 0.90),
-    -48px  -32px  3px 1px oklch(78% 0.21 58 / 0.75),
-    -16px  -18px  4px 0px oklch(92% 0.27 72 / 0.85),
-     18px  -44px  3px 0px oklch(72% 0.19 52 / 0.65),
-     56px  -12px  5px 1px oklch(86% 0.25 67 / 0.78),
-     82px  -58px  3px 0px oklch(74% 0.20 55 / 0.62),
-     36px  -88px  4px 0px oklch(90% 0.26 70 / 0.55),
-    -58px -104px  3px 1px oklch(66% 0.17 45 / 0.45),
-    -98px  -68px  4px 0px oklch(80% 0.22 62 / 0.60),
-    -132px -28px  3px 0px oklch(70% 0.18 50 / 0.50),
-    /* Wave 2 — already risen ~120px */
-    -64px -138px  4px 0px oklch(84% 0.24 65 / 0.55),
-    -38px -162px  3px 1px oklch(78% 0.21 58 / 0.40),
-      8px -148px  4px 0px oklch(92% 0.27 72 / 0.50),
-     44px -174px  3px 0px oklch(72% 0.19 52 / 0.35),
-     90px -132px  4px 1px oklch(86% 0.25 67 / 0.42),
-    -22px -190px  3px 0px oklch(74% 0.20 55 / 0.30);
   pointer-events: none;
   z-index: 3;
-  animation: embersRise 2.8s ease-out infinite;
+  animation: embersRise 1.8s ease-out infinite;
+}
+
+.team-side__embers--1 {
+  background: oklch(92% 0.27 72);
+  animation-delay: 0s;
+  box-shadow:
+    -92px  -10px  5px 0px oklch(86% 0.26 66 / 0.92),
+    -52px  -38px  3px 1px oklch(80% 0.23 58 / 0.80),
+    -10px  -16px  5px 0px oklch(93% 0.28 73 / 0.88),
+     30px  -48px  3px 0px oklch(74% 0.21 52 / 0.72),
+     78px  -14px  5px 1px oklch(88% 0.26 68 / 0.85),
+    130px  -32px  4px 0px oklch(76% 0.22 55 / 0.65),
+    -148px -22px  4px 0px oklch(70% 0.20 49 / 0.60);
+}
+
+.team-side__embers--2 {
+  background: oklch(88% 0.26 68);
+  animation-delay: -0.36s;
+  box-shadow:
+    -118px -42px  4px 0px oklch(82% 0.24 62 / 0.75),
+     -68px -20px  5px 1px oklch(90% 0.27 70 / 0.88),
+     -22px -52px  4px 0px oklch(78% 0.22 57 / 0.78),
+      18px -22px  5px 0px oklch(92% 0.27 72 / 0.85),
+      62px -58px  3px 1px oklch(84% 0.25 64 / 0.72),
+     108px -18px  5px 0px oklch(72% 0.20 51 / 0.68),
+    -165px -55px  3px 0px oklch(66% 0.18 45 / 0.55);
+}
+
+.team-side__embers--3 {
+  background: oklch(90% 0.27 70);
+  animation-delay: -0.72s;
+  box-shadow:
+    -138px -12px  5px 1px oklch(84% 0.24 64 / 0.80),
+     -82px -50px  3px 0px oklch(78% 0.22 57 / 0.72),
+     -32px -28px  5px 0px oklch(92% 0.28 73 / 0.85),
+      10px -60px  4px 1px oklch(86% 0.25 66 / 0.75),
+      55px -30px  5px 0px oklch(74% 0.21 53 / 0.70),
+     100px -48px  3px 0px oklch(88% 0.26 68 / 0.80),
+     148px -22px  4px 0px oklch(68% 0.19 47 / 0.58);
+}
+
+.team-side__embers--4 {
+  background: oklch(86% 0.25 66);
+  animation-delay: -1.08s;
+  box-shadow:
+    -105px -35px  4px 0px oklch(90% 0.27 70 / 0.82),
+     -58px -55px  5px 1px oklch(76% 0.22 55 / 0.75),
+     -15px -40px  4px 0px oklch(84% 0.24 64 / 0.80),
+      38px -18px  5px 0px oklch(92% 0.27 72 / 0.88),
+      85px -62px  3px 1px oklch(80% 0.23 60 / 0.72),
+     122px -38px  5px 0px oklch(70% 0.20 50 / 0.65),
+    -162px -40px  3px 0px oklch(64% 0.18 43 / 0.52);
+}
+
+.team-side__embers--5 {
+  background: oklch(84% 0.24 65);
+  animation-delay: -1.44s;
+  box-shadow:
+    -128px -28px  5px 0px oklch(88% 0.26 68 / 0.78),
+     -75px -15px  4px 1px oklch(82% 0.24 62 / 0.85),
+     -40px -62px  5px 0px oklch(92% 0.27 72 / 0.80),
+       5px -35px  3px 0px oklch(78% 0.22 57 / 0.75),
+      48px -52px  5px 1px oklch(86% 0.25 66 / 0.82),
+      95px -25px  4px 0px oklch(72% 0.20 51 / 0.68),
+     140px -50px  4px 0px oklch(66% 0.18 45 / 0.55);
 }
 
 @keyframes embersRise {
   0%   { transform: translateX(-50%) translateY(0px);    opacity: 1; }
-  55%  { opacity: 0.55; }
+  50%  { opacity: 0.60; }
   100% { transform: translateX(-50%) translateY(-200px); opacity: 0; }
 }
 
@@ -254,7 +297,7 @@
 @media (prefers-reduced-motion: reduce) {
   .team-side--streak::before,
   .team-side--onfire::before,
-  .team-side--onfire::after {
+  .team-side__embers {
     animation: none;
   }
 }

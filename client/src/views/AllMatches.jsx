@@ -90,7 +90,7 @@ export default function AllMatches() {
 
       {showUpcoming && (
         <section className="all-matches__section">
-          <h2 className="all-matches__heading">Live &amp; Upcoming</h2>
+          <h2 className="all-matches__heading">Live &amp; Upcoming - Prospect odds shown in yellow</h2>
           <div className="all-matches__grid">
             {upcoming.length === 0
               ? <p className="all-matches__empty">No upcoming matches.</p>

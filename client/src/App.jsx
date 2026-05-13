@@ -18,6 +18,7 @@ import AdminLogin        from './views/AdminLogin'
 import AdminConsole      from './views/AdminConsole'
 import ParticipantLogin  from './views/ParticipantLogin'
 import ParticipantApp    from './views/ParticipantApp'
+import ParticipantHelp   from './views/ParticipantHelp'
 import { AdminAuthProvider, useAdminAuth } from './hooks/useAdminAuth'
 import { ParticipantAuthProvider, useParticipantAuth } from './hooks/useParticipantAuth'
 
@@ -50,6 +51,7 @@ export default function App() {
             <Route path="/draw"        element={<Draw />} />
             <Route path="/bracket"     element={<Bracket />} />
             <Route path="/match/:id"   element={<MatchDetail />} />
+            <Route path="/help"        element={<ParticipantHelp />} />
           </Route>
 
           {/* Admin (timekeeper) */}

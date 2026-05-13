@@ -530,7 +530,7 @@
 /* ── Bottom navigation ───────────────────────────────────────────────────── */
 .p-app__nav {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   border-top: 1px solid oklch(22% 0.04 250);
   background: oklch(10% 0.02 250 / 0.90);
   flex-shrink: 0;
@@ -542,7 +542,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.2rem;
-  padding: 0.6rem 0.25rem 0.55rem;
+  padding: 0.5rem 0.15rem 0.45rem;
   background: transparent;
   border-radius: 0;
   color: oklch(46% 0.02 250);

@@ -328,6 +328,10 @@ export default function ParticipantApp() {
           <span className="p-nav-btn__icon">◎</span>
           <span className="p-nav-btn__label">My Prospects</span>
         </button>
+        <button className="p-nav-btn" onClick={() => navigate('/help')}>
+          <span className="p-nav-btn__icon">◉</span>
+          <span className="p-nav-btn__label">Help</span>
+        </button>
         <button className="p-nav-btn p-nav-btn--logout" onClick={() => logout().then(() => navigate('/'))}>
           <span className="p-nav-btn__icon">⏻</span>
           <span className="p-nav-btn__label">Exit</span>
