@@ -20,7 +20,7 @@ export default function AdminLogin() {
   return (
     <div className="admin-login">
       <div className="admin-login__card">
-        <img src="/assets/petrobowl-logo.png" alt="PetroBowl" className="admin-login__logo" />
+        <img src="/assets/images/PETROBOWL 2026 LOGO.png" alt="PetroBowl" className="admin-login__logo" />
         <h1>Admin Login</h1>
         <form onSubmit={handleSubmit}>
           <input
