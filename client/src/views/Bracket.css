@@ -632,6 +632,33 @@
   margin-left: 10px;
 }
 
+.bracket-rules {
+  margin: 0;
+  padding: 1rem 1.5rem;
+  padding-left: 2rem;
+  background: oklch(14% 0.04 250 / 0.50);
+  border: 1px solid oklch(24% 0.04 250);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  list-style: decimal;
+  font-family: var(--font-body);
+  color: oklch(65% 0.015 250);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+.bracket-rules li {
+  padding-left: 0.25rem;
+}
+
+.bracket-rules strong {
+  color: var(--pb-gold);
+  font-weight: 700;
+}
+
 /* ── Responsive — let the bracket scroll horizontally on narrow viewports ─ */
 @media (max-width: 900px) {
   .bracket {

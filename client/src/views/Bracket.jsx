@@ -276,6 +276,12 @@ export default function Bracket() {
           </div>
         </section>
 
+        <ol className="bracket-rules">
+          <li>The <strong>top team</strong> from each group advances to the quarter-finals. The <strong>three best runners-up</strong> across all groups also advance, for a total of eight qualifiers.</li>
+          <li>Quarter-final seedings (1st–8th) are based on points totals. <strong>Results against the last-placed team in any 5-team group are excluded</strong> to level the field between groups.</li>
+          <li>Tiebreak rules apply when two or more teams finish level on points: Points, Total score (+), Score difference (+/-), Result of match between teams, Tiebreaker match.</li>
+        </ol>
+
       </div>
     </PublicPageShell>
   )
