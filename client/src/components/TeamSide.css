@@ -293,11 +293,232 @@
   opacity: 1;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   UNSTOPPABLE STATE (8–10 consecutive correct)
+   Electric violet corona + lightning sparks
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Unstoppable: electric violet corona ──────────────────────────────────── */
+.team-side--unstoppable::before {
+  content: '';
+  position: absolute;
+  inset: -70% 0;
+  background: radial-gradient(
+    ellipse at center,
+    oklch(55% 0.34 290 / 0.65) 0%,
+    oklch(42% 0.28 280 / 0.40) 30%,
+    oklch(30% 0.20 275 / 0.18) 56%,
+    transparent 72%
+  );
+  pointer-events: none;
+  z-index: 0;
+  animation: unstoppableCorona 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes unstoppableCorona {
+  from { transform: scale(0.90) translateY(5%);  opacity: 0.60; }
+  to   { transform: scale(1.10) translateY(-4%); opacity: 1.00; }
+}
+
+/* ── Unstoppable: electric spark particles ────────────────────────────────── */
+/*
+   5 span elements, each offset by 0.14s (= 0.70s / 5).
+   Sparks shoot upward faster than embers, with lateral scatter.
+*/
+.team-side__sparks {
+  position: absolute;
+  bottom: 20%;
+  left: 48%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+  animation: sparkShoot 0.7s ease-out infinite;
+}
+
+.team-side__sparks--1 {
+  background: oklch(92% 0.30 285);
+  animation-delay: 0s;
+  box-shadow:
+    -88px  -15px  3px 1px oklch(80% 0.34 290 / 0.90),
+    -45px  -40px  2px 0px oklch(95% 0.25 275 / 0.80),
+    -8px   -22px  3px 1px oklch(75% 0.36 295 / 0.85),
+     28px  -52px  2px 0px oklch(88% 0.28 280 / 0.72),
+     72px  -18px  3px 1px oklch(70% 0.32 285 / 0.80),
+    118px  -38px  2px 0px oklch(85% 0.26 270 / 0.65),
+   -138px  -30px  3px 0px oklch(65% 0.30 295 / 0.58);
+}
+
+.team-side__sparks--2 {
+  background: oklch(88% 0.32 280);
+  animation-delay: -0.14s;
+  box-shadow:
+    -112px -45px  2px 0px oklch(78% 0.34 288 / 0.78),
+     -62px -25px  3px 1px oklch(92% 0.28 278 / 0.88),
+     -18px -58px  2px 0px oklch(85% 0.32 292 / 0.75),
+      15px -28px  3px 0px oklch(70% 0.36 285 / 0.80),
+      58px -62px  2px 1px oklch(90% 0.26 272 / 0.70),
+     102px -22px  3px 0px oklch(80% 0.30 280 / 0.65),
+    -158px -55px  2px 0px oklch(62% 0.28 295 / 0.52);
+}
+
+.team-side__sparks--3 {
+  background: oklch(95% 0.24 270);
+  animation-delay: -0.28s;
+  box-shadow:
+    -132px -18px  3px 1px oklch(82% 0.32 285 / 0.82),
+     -78px -52px  2px 0px oklch(75% 0.36 292 / 0.75),
+     -30px -32px  3px 0px oklch(92% 0.28 275 / 0.85),
+       8px -65px  2px 1px oklch(88% 0.26 282 / 0.78),
+      50px -35px  3px 0px oklch(72% 0.34 290 / 0.72),
+      95px -52px  2px 0px oklch(85% 0.28 268 / 0.68),
+     142px -25px  3px 0px oklch(65% 0.30 295 / 0.55);
+}
+
+.team-side__sparks--4 {
+  background: oklch(85% 0.34 288);
+  animation-delay: -0.42s;
+  box-shadow:
+    -100px -38px  3px 0px oklch(90% 0.28 280 / 0.80),
+     -52px -58px  2px 1px oklch(78% 0.32 292 / 0.72),
+     -12px -42px  3px 0px oklch(85% 0.30 275 / 0.82),
+      35px -20px  2px 0px oklch(92% 0.26 285 / 0.85),
+      80px -65px  3px 1px oklch(76% 0.34 288 / 0.70),
+     118px -40px  2px 0px oklch(68% 0.30 278 / 0.62),
+    -155px -42px  2px 0px oklch(60% 0.28 295 / 0.50);
+}
+
+.team-side__sparks--5 {
+  background: oklch(82% 0.30 282);
+  animation-delay: -0.56s;
+  box-shadow:
+    -122px -32px  3px 0px oklch(86% 0.28 285 / 0.78),
+     -70px -18px  2px 1px oklch(80% 0.32 278 / 0.82),
+     -35px -65px  3px 0px oklch(92% 0.26 290 / 0.80),
+       2px -38px  2px 0px oklch(75% 0.36 285 / 0.75),
+      45px -55px  3px 1px oklch(88% 0.28 272 / 0.80),
+      90px -28px  2px 0px oklch(70% 0.32 292 / 0.65),
+     135px -50px  3px 0px oklch(63% 0.28 280 / 0.52);
+}
+
+@keyframes sparkShoot {
+  0%   { transform: translateX(-50%) translateY(0px)    scaleX(1.0); opacity: 1;   }
+  35%  { transform: translateX(-50%) translateY(-80px)  scaleX(0.7); opacity: 0.8; }
+  100% { transform: translateX(-50%) translateY(-180px) scaleX(0.3); opacity: 0;   }
+}
+
+/* Electric glow on team short name when unstoppable */
+.team-side--unstoppable .team-side__short {
+  color: oklch(96% 0.015 285);
+  filter:
+    drop-shadow(0 0 16px oklch(75% 0.34 285 / 0.90))
+    drop-shadow(0 0 50px oklch(55% 0.30 275 / 0.60));
+  transition: color 0.5s ease, filter 0.5s ease;
+}
+
+/* Override trailing opacity — an unstoppable team is never dim */
+.team-side--unstoppable.team-side--trailing {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FROM ANOTHER PLANET STATE (11+ consecutive correct)
+   Cosmic alien-green corona + orbiting orbs
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Planet: slow cosmic corona ───────────────────────────────────────────── */
+.team-side--planet::before {
+  content: '';
+  position: absolute;
+  inset: -70% 0;
+  background: radial-gradient(
+    ellipse at center,
+    oklch(60% 0.28 165 / 0.65) 0%,
+    oklch(48% 0.22 175 / 0.40) 32%,
+    oklch(34% 0.16 170 / 0.18) 58%,
+    transparent 74%
+  );
+  pointer-events: none;
+  z-index: 0;
+  animation: planetCorona 3.0s ease-in-out infinite alternate;
+}
+
+@keyframes planetCorona {
+  from { transform: scale(0.92) translateY(3%);  opacity: 0.55; }
+  to   { transform: scale(1.08) translateY(-2%); opacity: 1.00; }
+}
+
+/* ── Planet: orbiting cosmic orbs ─────────────────────────────────────────── */
+.team-side__orb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+  margin: -3px 0 0 -3px;
+}
+
+.team-side__orb--1 {
+  background: oklch(90% 0.25 165);
+  box-shadow: 0 0 8px 3px oklch(78% 0.28 165 / 0.70);
+  animation: orbitA 2.8s linear infinite;
+}
+
+.team-side__orb--2 {
+  background: oklch(82% 0.22 180);
+  box-shadow: 0 0 6px 2px oklch(68% 0.24 180 / 0.60);
+  animation: orbitA 4.2s linear infinite reverse;
+  animation-delay: -1.4s;
+}
+
+.team-side__orb--3 {
+  background: oklch(95% 0.18 155);
+  box-shadow: 0 0 5px 2px oklch(82% 0.20 155 / 0.55);
+  animation: orbitB 3.5s linear infinite;
+  animation-delay: -0.7s;
+}
+
+@keyframes orbitA {
+  0%   { transform: rotate(0deg)   translateX(55px); opacity: 0.9; }
+  25%  { opacity: 0.5; }
+  50%  { opacity: 0.9; }
+  75%  { opacity: 0.5; }
+  100% { transform: rotate(360deg) translateX(55px); opacity: 0.9; }
+}
+
+@keyframes orbitB {
+  0%   { transform: rotate(0deg)    translateX(38px); opacity: 0.7; }
+  50%  { opacity: 0.4; }
+  100% { transform: rotate(-360deg) translateX(38px); opacity: 0.7; }
+}
+
+/* Alien glow on team short name when from another planet */
+.team-side--planet .team-side__short {
+  color: oklch(96% 0.012 165);
+  filter:
+    drop-shadow(0 0 18px oklch(78% 0.28 165 / 0.90))
+    drop-shadow(0 0 60px oklch(58% 0.24 175 / 0.55));
+  transition: color 0.5s ease, filter 0.5s ease;
+}
+
+/* Override trailing opacity — an otherworldly team is never dim */
+.team-side--planet.team-side--trailing {
+  opacity: 1;
+}
+
 /* ── Reduced motion ────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .team-side--streak::before,
   .team-side--onfire::before,
-  .team-side__embers {
+  .team-side--unstoppable::before,
+  .team-side--planet::before,
+  .team-side__embers,
+  .team-side__sparks,
+  .team-side__orb {
     animation: none;
   }
 }

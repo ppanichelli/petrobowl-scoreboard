@@ -181,6 +181,84 @@
   to   { opacity: 1.0; }
 }
 
+/* ── Unstoppable atmosphere: electric violet haze bleeding from the active side */
+.scoreboard__main--unstoppable-a::before,
+.scoreboard__main--unstoppable-b::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  height: 180%;
+  width: 60%;
+  pointer-events: none;
+  z-index: 0;
+  animation: unstoppableAtmo 2.5s ease-in-out infinite alternate;
+}
+
+.scoreboard__main--unstoppable-a::before {
+  left: -5%;
+  background: radial-gradient(
+    ellipse at 15% 55%,
+    oklch(42% 0.30 285 / 0.38) 0%,
+    oklch(32% 0.24 278 / 0.20) 42%,
+    transparent 68%
+  );
+}
+
+.scoreboard__main--unstoppable-b::before {
+  right: -5%;
+  left: auto;
+  background: radial-gradient(
+    ellipse at 85% 55%,
+    oklch(42% 0.30 285 / 0.38) 0%,
+    oklch(32% 0.24 278 / 0.20) 42%,
+    transparent 68%
+  );
+}
+
+@keyframes unstoppableAtmo {
+  from { opacity: 0.50; transform: scaleX(0.86); }
+  to   { opacity: 1.00; transform: scaleX(1.14); }
+}
+
+/* ── Planet atmosphere: deep cosmic cyan cloud bleeding from the active side */
+.scoreboard__main--planet-a::before,
+.scoreboard__main--planet-b::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  height: 180%;
+  width: 70%;
+  pointer-events: none;
+  z-index: 0;
+  animation: planetAtmo 4.0s ease-in-out infinite alternate;
+}
+
+.scoreboard__main--planet-a::before {
+  left: -5%;
+  background: radial-gradient(
+    ellipse at 12% 55%,
+    oklch(46% 0.26 165 / 0.40) 0%,
+    oklch(36% 0.20 175 / 0.22) 40%,
+    transparent 68%
+  );
+}
+
+.scoreboard__main--planet-b::before {
+  right: -5%;
+  left: auto;
+  background: radial-gradient(
+    ellipse at 88% 55%,
+    oklch(46% 0.26 165 / 0.40) 0%,
+    oklch(36% 0.20 175 / 0.22) 40%,
+    transparent 68%
+  );
+}
+
+@keyframes planetAtmo {
+  from { opacity: 0.45; transform: scaleX(0.90); }
+  to   { opacity: 1.00; transform: scaleX(1.10); }
+}
+
 /* ── Score panel ─────────────────────────────────────────────────────────── */
 .score-panel {
   display: flex;
@@ -342,6 +420,66 @@
 
 .streak-badge__name {
   color: oklch(97% 0.012 250);
+}
+
+/* UNSTOPPABLE variant: electric violet, tighter glow pulse */
+.streak-badge--unstoppable {
+  font-size: clamp(2rem, 4.5vw, 4rem);
+  color: oklch(88% 0.32 285);
+  letter-spacing: 0.08em;
+  filter:
+    drop-shadow(0 0 18px oklch(68% 0.34 285 / 0.85))
+    drop-shadow(0 0 60px oklch(50% 0.28 278 / 0.55));
+  animation:
+    streakAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) both,
+    unstoppableTextBreathe 1.4s ease-in-out infinite alternate;
+}
+
+.streak-badge--unstoppable .streak-badge__name {
+  color: oklch(97% 0.015 285);
+}
+
+@keyframes unstoppableTextBreathe {
+  from {
+    filter:
+      drop-shadow(0 0 14px oklch(65% 0.34 285 / 0.75))
+      drop-shadow(0 0 48px oklch(48% 0.28 278 / 0.45));
+  }
+  to {
+    filter:
+      drop-shadow(0 0 26px oklch(75% 0.36 285 / 1.00))
+      drop-shadow(0 0 90px oklch(56% 0.30 280 / 0.75));
+  }
+}
+
+/* FROM ANOTHER PLANET variant: cosmic alien-green, slow majestic glow */
+.streak-badge--planet {
+  font-size: clamp(2rem, 4.5vw, 4rem);
+  color: oklch(90% 0.26 165);
+  letter-spacing: 0.07em;
+  filter:
+    drop-shadow(0 0 20px oklch(72% 0.28 165 / 0.90))
+    drop-shadow(0 0 70px oklch(55% 0.24 175 / 0.60));
+  animation:
+    streakAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) both,
+    planetTextBreathe 2.5s ease-in-out infinite alternate;
+}
+
+.streak-badge--planet .streak-badge__name {
+  color: oklch(97% 0.015 165);
+}
+
+@keyframes planetTextBreathe {
+  from {
+    filter:
+      drop-shadow(0 0 16px oklch(68% 0.28 165 / 0.80))
+      drop-shadow(0 0 55px oklch(52% 0.24 175 / 0.50));
+  }
+  to {
+    filter:
+      drop-shadow(0 0 28px oklch(80% 0.30 165 / 1.00))
+      drop-shadow(0 0 100px oklch(62% 0.26 175 / 0.75));
+  }
 }
 
 /* ON FIRE variant: larger, amber-hot, pulsing heat glow */

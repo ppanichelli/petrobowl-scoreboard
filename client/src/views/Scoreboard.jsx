@@ -177,8 +177,14 @@ export default function Scoreboard() {
       {/* Main confrontation row */}
       <div className={[
         'scoreboard__main',
-        streakA >= 5 ? 'scoreboard__main--fire-a' : streakA >= 3 ? 'scoreboard__main--streak-a' : '',
-        streakB >= 5 ? 'scoreboard__main--fire-b' : streakB >= 3 ? 'scoreboard__main--streak-b' : '',
+        streakA >= 11 ? 'scoreboard__main--planet-a'      :
+        streakA >= 8  ? 'scoreboard__main--unstoppable-a'  :
+        streakA >= 5  ? 'scoreboard__main--fire-a'         :
+        streakA >= 3  ? 'scoreboard__main--streak-a'       : '',
+        streakB >= 11 ? 'scoreboard__main--planet-b'      :
+        streakB >= 8  ? 'scoreboard__main--unstoppable-b'  :
+        streakB >= 5  ? 'scoreboard__main--fire-b'         :
+        streakB >= 3  ? 'scoreboard__main--streak-b'       : '',
       ].filter(Boolean).join(' ')}>
         <TeamSide
           side="a"
@@ -248,18 +254,24 @@ export default function Scoreboard() {
       </div>
 
       {(streakA >= 3 || streakB >= 3) && (() => {
-        const onFire     = streakA >= 5 || streakB >= 5
-        const teamName   = streakA >= 5 ? match.team_a_short : streakA >= 3 ? match.team_a_short : match.team_b_short
-        const fireTeam   = streakA >= 5 ? match.team_a_short : match.team_b_short
-        const streakTeam = streakA >= 3 ? match.team_a_short : match.team_b_short
-        return (
-          <div className={`streak-badge${onFire ? ' streak-badge--fire' : ''}`}>
-            {onFire
-              ? <><span className="streak-badge__name">{fireTeam}</span>{' '}is ON FIRE!!</>
-              : <><span className="streak-badge__name">{streakTeam}</span>{' '}is on a streak!</>
-            }
-          </div>
-        )
+        const topStreak = Math.max(streakA, streakB)
+        const topTeam   = streakA >= streakB ? match.team_a_short : match.team_b_short
+
+        let cls = 'streak-badge'
+        let msg
+        if (topStreak >= 11) {
+          cls += ' streak-badge--planet'
+          msg = <><span className="streak-badge__name">{topTeam}</span>{' '}is from another planet!</>
+        } else if (topStreak >= 8) {
+          cls += ' streak-badge--unstoppable'
+          msg = <><span className="streak-badge__name">{topTeam}</span>{' '}is UNSTOPPABLE!</>
+        } else if (topStreak >= 5) {
+          cls += ' streak-badge--fire'
+          msg = <><span className="streak-badge__name">{topTeam}</span>{' '}is ON FIRE!!</>
+        } else {
+          msg = <><span className="streak-badge__name">{topTeam}</span>{' '}is on a streak!</>
+        }
+        return <div className={cls}>{msg}</div>
       })()}
 
       {match.status === 'live' && match.frozen_odds_a && (
