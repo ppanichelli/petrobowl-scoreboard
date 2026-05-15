@@ -154,7 +154,7 @@ export default function ParticipantApp() {
             </div>
             <img
               className="p-home__prospector"
-              src="/assets/images/prospector-cropped.png"
+              src="/assets/images/prospector.png"
               alt="Prospector mascot"
             />
           </div>

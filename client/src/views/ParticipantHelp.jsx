@@ -90,7 +90,7 @@ export default function ParticipantHelp() {
         </div>
         <img
           className="p-help__mascot"
-          src="/assets/images/prospector-cropped.png"
+          src="/assets/images/prospector.png"
           alt="Prospector mascot"
         />
       </header>

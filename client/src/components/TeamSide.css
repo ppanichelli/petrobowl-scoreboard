@@ -172,7 +172,7 @@
 .team-side--onfire::before {
   content: '';
   position: absolute;
-  inset: -70% -35%;
+  inset: -70% 0;
   background: radial-gradient(
     ellipse at center,
     oklch(56% 0.24 46 / 0.60) 0%,
@@ -186,8 +186,8 @@
 }
 
 @keyframes fireCorona {
-  from { transform: scale(0.86) translateY(4%);  opacity: 0.65; }
-  to   { transform: scale(1.14) translateY(-3%); opacity: 1.00; }
+  from { transform: scale(0.94) translateY(4%);  opacity: 0.65; }
+  to   { transform: scale(1.06) translateY(-3%); opacity: 1.00; }
 }
 
 /* ── On Fire: rising ember sparks ─────────────────────────────────────────── */

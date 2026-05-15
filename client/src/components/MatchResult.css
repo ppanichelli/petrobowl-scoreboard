@@ -21,8 +21,8 @@
   background:
     radial-gradient(
       ellipse 70% 55% at 50% 50%,
-      oklch(38% 0.18 72 / 0.20) 0%,
-      oklch(26% 0.08 60 / 0.08) 40%,
+      oklch(38% 0.18 72 / 0.28) 0%,
+      oklch(26% 0.08 60 / 0.14) 40%,
       transparent 65%
     ),
     rgba(8, 6, 18, 0.84);
@@ -60,7 +60,7 @@
   align-items: center;
   gap: var(--space-md);
   padding: clamp(2rem, 5vw, 3.5rem) clamp(2.5rem, 7vw, 5rem);
-  width: min(680px, 90vw);
+  width: min(760px, 92vw);
   background: linear-gradient(
     155deg,
     oklch(22% 0.045 250 / 0.88) 0%,
@@ -71,10 +71,11 @@
   border-radius: 20px;
   border: 1px solid oklch(50% 0.06 250 / 0.28);
   box-shadow:
-    0 0 0 1px oklch(72% 0.18 80 / 0.10) inset,
-    0 2px 0 0 oklch(72% 0.18 80 / 0.16) inset,
-    0 32px 80px -8px rgba(0, 0, 0, 0.70),
-    0 8px 24px -4px rgba(0, 0, 0, 0.50);
+    0 0 0 1px oklch(72% 0.18 80 / 0.18) inset,
+    0 2px 0 0 oklch(72% 0.18 80 / 0.26) inset,
+    0 0 120px -10px oklch(60% 0.20 72 / 0.22),
+    0 40px 100px -8px rgba(0, 0, 0, 0.80),
+    0 10px 30px -4px rgba(0, 0, 0, 0.55);
   animation: mrCardIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
 }
 
@@ -143,7 +144,7 @@
 /* ── Winner name (letter-stagger) ──────────────────────────── */
 .match-result__winner-name {
   font-family: var(--font-display);
-  font-size: clamp(4rem, 12vw, 9rem);
+  font-size: clamp(4.5rem, 13vw, 10rem);
   font-weight: 900;
   line-height: 0.9;
   letter-spacing: 0.04em;
@@ -164,7 +165,7 @@
 /* ── "WINS!" label ─────────────────────────────────────────── */
 .match-result__wins-label {
   font-family: var(--font-title);
-  font-size: clamp(1rem, 2.5vw, 1.7rem);
+  font-size: clamp(1.1rem, 2.8vw, 1.9rem);
   font-weight: 700;
   letter-spacing: 0.32em;
   text-transform: uppercase;
@@ -291,6 +292,50 @@
 }
 .match-result__close-btn:active { transform: scale(0.97); }
 
+/* ── Winner logo ───────────────────────────────────────────── */
+.match-result__logo-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: mrLogoReveal 0.50s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.match-result__logo-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background: radial-gradient(
+    ellipse at center,
+    oklch(65% 0.22 72 / 0.28) 0%,
+    oklch(52% 0.18 68 / 0.12) 45%,
+    transparent 70%
+  );
+  animation: mrLogoHalo 2.4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.match-result__logo-wrap::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid oklch(72% 0.22 72 / 0.55);
+  animation: mrLogoRing 1.8s ease-out 700ms both;
+  pointer-events: none;
+}
+
+.match-result__winner-logo {
+  width: clamp(100px, 14vw, 180px);
+  height: clamp(100px, 14vw, 180px);
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0 28px oklch(72% 0.26 72 / 0.70))
+    drop-shadow(0 0 60px oklch(58% 0.22 66 / 0.35));
+  position: relative;
+  z-index: 1;
+}
+
 /* ── Keyframes ─────────────────────────────────────────────── */
 @keyframes mrOverlayIn {
   from { opacity: 0; }
@@ -339,6 +384,22 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes mrLogoReveal {
+  from { opacity: 0; transform: scale(0.55) translateY(-12px); }
+  70%  { transform: scale(1.07) translateY(2px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes mrLogoHalo {
+  from { opacity: 0.7; transform: scale(0.92); }
+  to   { opacity: 1.0; transform: scale(1.08); }
+}
+
+@keyframes mrLogoRing {
+  0%   { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(1.8); }
+}
+
 /* ── Reduced-motion ────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .match-result__overlay,
@@ -346,6 +407,9 @@
   .match-result__card,
   .match-result__stage-badge,
   .match-result__champion-line,
+  .match-result__logo-wrap,
+  .match-result__logo-wrap::before,
+  .match-result__logo-wrap::after,
   .match-result__letter,
   .match-result__wins-label,
   .match-result__draw-text,

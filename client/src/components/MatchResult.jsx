@@ -53,9 +53,12 @@ function useParticles(canvasRef, active) {
     const cx = canvas.width / 2
     const cy = canvas.height * 0.50
 
-    const particles = Array.from({ length: 180 }, () => spawnParticle(cx, cy))
+    const particles = Array.from({ length: 260 }, () => spawnParticle(cx, cy))
     let rafId
     let frame = 0
+    const waveTimer = setTimeout(() => {
+      for (let i = 0; i < 80; i++) particles.push(spawnParticle(cx, cy - 40))
+    }, 400)
 
     function tick() {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -110,6 +113,7 @@ function useParticles(canvasRef, active) {
 
     rafId = requestAnimationFrame(tick)
     return () => {
+      clearTimeout(waveTimer)
       cancelAnimationFrame(rafId)
       ctx.clearRect(0, 0, canvas.width, canvas.height)
     }
@@ -150,11 +154,12 @@ export default function MatchResult({ match, onClose }) {
   useParticles(canvasRef, !isDraw)
 
   const nameLen   = winner ? winner.length : 0
-  const winsDelay = 480 + nameLen * 55 + 20
+  const winsDelay = 560 + nameLen * 55 + 20
   const scoresDelay = winsDelay + 20
   const btnsDelay   = scoresDelay + 180
 
   const isWinnerA = !isDraw && match.winner_id === match.team_a_id
+  const winnerLogo = isWinnerA ? match.team_a_logo : match.team_b_logo
 
   if (isDraw) {
     return (
@@ -206,13 +211,21 @@ export default function MatchResult({ match, onClose }) {
       <div className="match-result__overlay">
         <div className="match-result__card">
           <div className="match-result__stage-badge">{formatStage(match.stage)}</div>
-          <div className="match-result__champion-line" style={{ animationDelay: '380ms' }} />
+          <div className="match-result__champion-line" style={{ animationDelay: '360ms' }} />
+          <div className="match-result__logo-wrap" style={{ animationDelay: '420ms' }}>
+            <img
+              src={winnerLogo}
+              alt={winner}
+              className="match-result__winner-logo"
+              onError={e => { e.target.style.display = 'none' }}
+            />
+          </div>
           <div className="match-result__winner-name">
             {winner.split('').map((ch, i) => (
               <span
                 key={i}
                 className="match-result__letter"
-                style={{ animationDelay: `${480 + i * 55}ms` }}
+                style={{ animationDelay: `${560 + i * 55}ms` }}
               >
                 {ch}
               </span>

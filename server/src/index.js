@@ -53,6 +53,15 @@ const loginLimiter = rateLimit({
   message: { error: 'Too many login attempts, please try again later' },
 })
 
+// Participants share WiFi at the venue → same public IP → need a much higher ceiling
+const participantLoginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many login attempts, please try again later' },
+})
+
 app.use(express.json())
 app.use(sessionMiddleware)
 
@@ -67,7 +76,7 @@ app.use((req, _res, next) => {
 
 // ── Routes ─────────────────────────────────────────────────────────────────
 app.use('/api/admin/login', loginLimiter)
-app.use('/api/participant/login', loginLimiter)
+app.use('/api/participant/login', participantLoginLimiter)
 app.use('/api', authRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/participant', participantRoutes)
