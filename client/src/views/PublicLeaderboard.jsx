@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSocket } from '../hooks/useSocket'
 import PublicPageShell from '../components/PublicPageShell'
+import { useMascot } from '../hooks/useMascot'
 import './PublicLeaderboard.css'
 
 const RANK_MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' }
@@ -8,6 +9,7 @@ const RANK_MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' }
 export default function PublicLeaderboard() {
   const [rows, setRows] = useState([])
   const socket = useSocket()
+  const mascotSrc = useMascot()
 
   useEffect(() => {
     fetch('/api/leaderboard').then(r => r.json()).then(r => setRows(r))
@@ -28,7 +30,7 @@ export default function PublicLeaderboard() {
         <h2 className="pub-lb__title">TOP PROSPECTORS</h2>
         <img
           className="pub-lb__mascot"
-          src="/assets/images/prospector.png"
+          src={mascotSrc}
           alt="Prospector mascot"
         />
         <img

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useMascot } from '../hooks/useMascot'
 import './ParticipantHelp.css'
 
 const STEPS = [
@@ -57,6 +58,7 @@ const STEPS = [
 export default function ParticipantHelp() {
   const navigate = useNavigate()
   const stepRefs = useRef([])
+  const mascotSrc = useMascot()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -90,7 +92,7 @@ export default function ParticipantHelp() {
         </div>
         <img
           className="p-help__mascot"
-          src="/assets/images/prospector.png"
+          src={mascotSrc}
           alt="Prospector mascot"
         />
       </header>

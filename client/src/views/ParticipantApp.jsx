@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useParticipantAuth } from '../hooks/useParticipantAuth'
 import { useSocket } from '../hooks/useSocket'
+import { useMascot } from '../hooks/useMascot'
 import './ParticipantApp.css'
 
 const RANK_MEDALS = { 1: '🥇', 2: '🥈', 3: '🥉' }
@@ -10,6 +11,7 @@ export default function ParticipantApp() {
   const { participant, logout } = useParticipantAuth()
   const navigate = useNavigate()
   const socket = useSocket()
+  const mascotSrc = useMascot()
 
   const [tab, setTab]           = useState('home')
   const [matches, setMatches]   = useState([])
@@ -154,7 +156,7 @@ export default function ParticipantApp() {
             </div>
             <img
               className="p-home__prospector"
-              src="/assets/images/prospector.png"
+              src={mascotSrc}
               alt="Prospector mascot"
             />
           </div>
